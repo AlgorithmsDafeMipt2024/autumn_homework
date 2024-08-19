@@ -1,3 +1,7 @@
 #include <iostream>
 
-int main() { return 0; }
+int main() {
+    int *p;
+    p = new int;
+    return 0;
+}
