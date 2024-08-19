@@ -1,3 +1,8 @@
 #include <iostream>
 
-int main() { return 0; }
+int main() { 
+  int *p = new int;
+  *p = 0;
+  std::cout << *p;
+  return 0; 
+}
