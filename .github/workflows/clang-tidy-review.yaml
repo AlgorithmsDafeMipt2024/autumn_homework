@@ -8,18 +8,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     # Optionally generate compile_commands.json
 
-    - uses: ZedThree/clang-tidy-review@v0.14.0
+    - uses: ZedThree/clang-tidy-review@v0.19.0
       with:
         clang_tidy_checks: '-*,performance-*,bugprone-*,clang-analyzer-*,cppcoreguidelines-*,mpi-*,misc-*,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-avoid-magic-numbers,-clang-diagnostic-error,-misc-no-recursion,-cppcoreguidelines-owning-memory,-bugprone-narrowing-conversions,-bugprone-easily-swappable-parameters,-misc-non-private-member-variables-in-classes,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-special-member-functions,-cppcoreguidelines-init-variables'
         split_workflow: true
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: clang-tidy-review
-        path: |
-          clang-tidy-review-output.json
-          clang-tidy-review-metadata.json
+    # Uploads an artefact containing clang_fixes.json
+    - uses: ZedThree/clang-tidy-review/upload@v0.19.0
+      id: upload-review
+
+    # If there are any comments, fail the check
+    - if: steps.review.outputs.total_comments > 0
+      run: exit 1
