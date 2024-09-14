@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_CXX_STANDARD 23)
+
 file(GLOB_RECURSE lib_source_list "src/*.cpp" "src/*.hpp")
 
 add_library(Utils ${lib_source_list})
