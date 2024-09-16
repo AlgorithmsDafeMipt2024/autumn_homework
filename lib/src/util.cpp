@@ -2,4 +2,6 @@
 
 #include <algorithm>
 
-int Max(const std::list<int>& l) { return std::max(l.begin(), l.end()); }
+int Max(const std::list<int>& l) {
+  return *std::max_element(l.begin(), l.end());
+}
