@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(homeworks)
 
-set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES Off)
+# set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES Off)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
