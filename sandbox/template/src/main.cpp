@@ -1,3 +1,7 @@
 #include <iostream>
 
-int main() { return 0; }
+int main() {
+  if (1) {
+    return 0;
+  }
+}
