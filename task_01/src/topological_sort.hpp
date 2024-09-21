@@ -1,7 +1,10 @@
+#ifndef __TOPOLOG_SORT_H__
+#define __TOPOLOG_SORT_H__
+
 #include <stdexcept>
 #include <vector>
 
-#include "../lib/src/graph.h"
+#include "../../lib/src/graph.hpp"
 
 template <typename T>
 void topological_rec(std::vector<Node<T, int>*>& st, Node<T, int>* n) {
@@ -42,3 +45,5 @@ Graph<T, int>& topological_sort(Graph<T, int>& g) {
   }
   return g;
 }
+
+#endif

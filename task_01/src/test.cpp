@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include "topological_sort.cpp"
+#include "topological_sort.hpp"
 
 template <typename T>
 bool check_graph_sorted(Graph<T, int>& g) {
