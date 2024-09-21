@@ -24,22 +24,31 @@ class Graph {
    * Add a new vertex to the graph
    * @param data
    */
-  void addVertex(const T &data);
+  void AddVertex(const T &data);
 
   /**
    * @brief
-   * Add an edge between two vertices
+   * Add a directed edge between two vertices
    * @param source
    * @param reciever
    */
-  void addEdge(std::shared_ptr<Vertex<T>> source,
-               std::shared_ptr<Vertex<T>> reciever);
+  void AddDirEdge(std::shared_ptr<Vertex<T>> source,
+                  std::shared_ptr<Vertex<T>> reciever);
+
+  /**
+   * @brief
+   * Add a non-directed edge between two vertices
+   * @param source
+   * @param reciever
+   */
+  void AddEdge(std::shared_ptr<Vertex<T>> vertex_1,
+               std::shared_ptr<Vertex<T>> vertex_2);
 
   /**
    * @brief
    * Print the adjacency list of the graph
    */
-  void printGraph() const;
+  void PrintGraph() const;
 
  private:
   std::vector<std::shared_ptr<Vertex<T>>> vertices;
