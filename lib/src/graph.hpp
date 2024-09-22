@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+#include <iostream>
 #include <memory>
 #include <set>
 #include <vector>
@@ -24,14 +26,37 @@ class Graph {
    * Add a new vertex to the graph
    * @param data
    */
-  void AddVertex(const T &data);
+  void AddVertex(const T &data) {
+    vertices.push_back(std::make_shared<Vertex<T>>(data));
+  };
+
+  std::shared_ptr<Vertex<T>> operator[](size_t index) {
+    return vertices[index];
+  }
+  const std::shared_ptr<Vertex<T>> operator[](size_t index) const {
+    return vertices[index];
+  }
 
   /**
    * @brief
    * Delete a vertex from the graph
    * @param vertex
    */
-  void DeleteVertex(std::shared_ptr<Vertex<T>> vertex);
+  void DeleteVertex(std::shared_ptr<Vertex<T>> vertex) {
+    // Find the vertex in the graph
+    auto it = std::find(vertices.begin(), vertices.end(), vertex);
+    if (it == vertices.end()) {
+      // Vertex not found
+      return;
+    }
+
+    // Remove edges pointing to the vertex
+    for (auto &v : vertices[it - vertices.begin()]->adjacent) {
+      DeleteEdge(v, vertices[it - vertices.begin()]);
+    }
+    // Remove the vertex from the graph
+    vertices.erase(it);
+  }
 
   /**
    * @brief
@@ -40,7 +65,9 @@ class Graph {
    * @param target
    */
   void AddDirEdge(std::shared_ptr<Vertex<T>> source,
-                  std::shared_ptr<Vertex<T>> target);
+                  std::shared_ptr<Vertex<T>> target) {
+    source->adjacent.insert(target);
+  }
 
   /**
    * @brief
@@ -49,7 +76,11 @@ class Graph {
    * @param target
    */
   void DeleteDirEdge(std::shared_ptr<Vertex<T>> source,
-                     std::shared_ptr<Vertex<T>> target);
+                     std::shared_ptr<Vertex<T>> target) {
+    source->adjacent.erase(
+        std::find(source->adjacent.begin(), source->adjacent.end(), target));
+  }
+
   /**
    * @brief
    * Add a non-directed edge between two vertices
@@ -57,7 +88,10 @@ class Graph {
    * @param target
    */
   void AddEdge(std::shared_ptr<Vertex<T>> vertex_1,
-               std::shared_ptr<Vertex<T>> vertex_2);
+               std::shared_ptr<Vertex<T>> vertex_2) {
+    AddDirEdge(vertex_1, vertex_2);
+    AddDirEdge(vertex_2, vertex_1);
+  }
 
   /**
    * @brief
@@ -66,13 +100,24 @@ class Graph {
    * @param target
    */
   void DeleteEdge(std::shared_ptr<Vertex<T>> vertex_1,
-                  std::shared_ptr<Vertex<T>> vertex_2);
+                  std::shared_ptr<Vertex<T>> vertex_2) {
+    DeleteDirEdge(vertex_1, vertex_2);
+    DeleteDirEdge(vertex_2, vertex_1);
+  }
 
   /**
    * @brief
    * Print the adjacency list of the graph
    */
-  void PrintGraph() const;
+  void PrintGraph() const {
+    for (const auto &vertex : vertices) {
+      std::cout << vertex->data << " -> ";
+      for (const auto &neighbor : vertex->adjacent) {
+        std::cout << neighbor->data << " ";
+      }
+      std::cout << std::endl;
+    }
+  }
 
  private:
   std::vector<std::shared_ptr<Vertex<T>>> vertices;
