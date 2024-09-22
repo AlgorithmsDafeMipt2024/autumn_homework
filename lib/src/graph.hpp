@@ -1,17 +1,17 @@
 #pragma once
 
-#include <list>
 #include <memory>
+#include <set>
 #include <vector>
 
 /// @brief Graphs vertex
 /// @tparam T
 template <typename T>
 struct Vertex {
-  T data;
-  std::list<std::shared_ptr<Vertex<T>>> adjacent;
-
   Vertex(const T &d) : data(d) {}
+
+  T data;
+  std::set<std::shared_ptr<Vertex<T>>> adjacent;
 };
 
 /// @brief Basic graph
@@ -28,21 +28,45 @@ class Graph {
 
   /**
    * @brief
+   * Delete a vertex from the graph
+   * @param vertex
+   */
+  void DeleteVertex(std::shared_ptr<Vertex<T>> vertex);
+
+  /**
+   * @brief
    * Add a directed edge between two vertices
    * @param source
-   * @param reciever
+   * @param target
    */
   void AddDirEdge(std::shared_ptr<Vertex<T>> source,
-                  std::shared_ptr<Vertex<T>> reciever);
+                  std::shared_ptr<Vertex<T>> target);
 
+  /**
+   * @brief
+   * Delete a directed edge between two vertices
+   * @param source
+   * @param target
+   */
+  void DeleteDirEdge(std::shared_ptr<Vertex<T>> source,
+                     std::shared_ptr<Vertex<T>> target);
   /**
    * @brief
    * Add a non-directed edge between two vertices
    * @param source
-   * @param reciever
+   * @param target
    */
   void AddEdge(std::shared_ptr<Vertex<T>> vertex_1,
                std::shared_ptr<Vertex<T>> vertex_2);
+
+  /**
+   * @brief
+   * Delete a non-directed edge between two vertices
+   * @param source
+   * @param target
+   */
+  void DeleteEdge(std::shared_ptr<Vertex<T>> vertex_1,
+                  std::shared_ptr<Vertex<T>> vertex_2);
 
   /**
    * @brief
