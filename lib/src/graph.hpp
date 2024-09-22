@@ -39,10 +39,10 @@ class Graph {
 
   /**
    * @brief
-   * Delete a vertex from the graph
+   * Remove a vertex from the graph
    * @param vertex
    */
-  void DeleteVertex(std::shared_ptr<Vertex<T>> vertex) {
+  void RemoveVertex(std::shared_ptr<Vertex<T>> vertex) {
     // Find the vertex in the graph
     auto it = std::find(vertices_.begin(), vertices_.end(), vertex);
     if (it == vertices_.end()) {
@@ -52,7 +52,7 @@ class Graph {
 
     // Remove edges pointing to the vertex
     for (auto &v : vertices_[it - vertices_.begin()]->adjacent) {
-      DeleteEdge(v, vertices_[it - vertices_.begin()]);
+      RemoveEdge(v, vertices_[it - vertices_.begin()]);
     }
     // Remove the vertex from the graph
     vertices_.erase(it);
@@ -60,7 +60,7 @@ class Graph {
 
   /**
    * @brief
-   * Add a directed edge between two vertices_
+   * Add a directed edge between two vertices
    * @param source
    * @param target
    */
@@ -71,11 +71,11 @@ class Graph {
 
   /**
    * @brief
-   * Delete a directed edge between two vertices_
+   * Remove a directed edge between two vertices
    * @param source
    * @param target
    */
-  void DeleteDirEdge(std::shared_ptr<Vertex<T>> source,
+  void RemoveDirEdge(std::shared_ptr<Vertex<T>> source,
                      std::shared_ptr<Vertex<T>> target) {
     // std::find(source->adjacent.begin(), source->adjacent.end(), target);
     source->adjacent.erase(
@@ -84,7 +84,7 @@ class Graph {
 
   /**
    * @brief
-   * Add a non-directed edge between two vertices_
+   * Add a non-directed edge between two vertices
    * @param source
    * @param target
    */
@@ -96,14 +96,14 @@ class Graph {
 
   /**
    * @brief
-   * Delete a non-directed edge between two vertices_
+   * Remove a non-directed edge between two vertices
    * @param source
    * @param target
    */
-  void DeleteEdge(std::shared_ptr<Vertex<T>> vertex_1,
+  void RemoveEdge(std::shared_ptr<Vertex<T>> vertex_1,
                   std::shared_ptr<Vertex<T>> vertex_2) {
-    DeleteDirEdge(vertex_1, vertex_2);
-    DeleteDirEdge(vertex_2, vertex_1);
+    RemoveDirEdge(vertex_1, vertex_2);
+    RemoveDirEdge(vertex_2, vertex_1);
   }
 
   /**
