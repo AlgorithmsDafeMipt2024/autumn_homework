@@ -27,14 +27,14 @@ class Graph {
    * @param data
    */
   void AddVertex(const T &data) {
-    vertices.push_back(std::make_shared<Vertex<T>>(data));
+    vertices_.push_back(std::make_shared<Vertex<T>>(data));
   };
 
   std::shared_ptr<Vertex<T>> operator[](size_t index) {
-    return vertices[index];
+    return vertices_[index];
   }
   const std::shared_ptr<Vertex<T>> operator[](size_t index) const {
-    return vertices[index];
+    return vertices_[index];
   }
 
   /**
@@ -44,23 +44,23 @@ class Graph {
    */
   void DeleteVertex(std::shared_ptr<Vertex<T>> vertex) {
     // Find the vertex in the graph
-    auto it = std::find(vertices.begin(), vertices.end(), vertex);
-    if (it == vertices.end()) {
+    auto it = std::find(vertices_.begin(), vertices_.end(), vertex);
+    if (it == vertices_.end()) {
       // Vertex not found
       return;
     }
 
     // Remove edges pointing to the vertex
-    for (auto &v : vertices[it - vertices.begin()]->adjacent) {
-      DeleteEdge(v, vertices[it - vertices.begin()]);
+    for (auto &v : vertices_[it - vertices_.begin()]->adjacent) {
+      DeleteEdge(v, vertices_[it - vertices_.begin()]);
     }
     // Remove the vertex from the graph
-    vertices.erase(it);
+    vertices_.erase(it);
   }
 
   /**
    * @brief
-   * Add a directed edge between two vertices
+   * Add a directed edge between two vertices_
    * @param source
    * @param target
    */
@@ -71,19 +71,20 @@ class Graph {
 
   /**
    * @brief
-   * Delete a directed edge between two vertices
+   * Delete a directed edge between two vertices_
    * @param source
    * @param target
    */
   void DeleteDirEdge(std::shared_ptr<Vertex<T>> source,
                      std::shared_ptr<Vertex<T>> target) {
+    // std::find(source->adjacent.begin(), source->adjacent.end(), target);
     source->adjacent.erase(
-        std::find(source->adjacent.begin(), source->adjacent.end(), target));
+        *std::find(source->adjacent.begin(), source->adjacent.end(), target));
   }
 
   /**
    * @brief
-   * Add a non-directed edge between two vertices
+   * Add a non-directed edge between two vertices_
    * @param source
    * @param target
    */
@@ -95,7 +96,7 @@ class Graph {
 
   /**
    * @brief
-   * Delete a non-directed edge between two vertices
+   * Delete a non-directed edge between two vertices_
    * @param source
    * @param target
    */
@@ -110,7 +111,7 @@ class Graph {
    * Print the adjacency list of the graph
    */
   void PrintGraph() const {
-    for (const auto &vertex : vertices) {
+    for (const auto &vertex : vertices_) {
       std::cout << vertex->data << " -> ";
       for (const auto &neighbor : vertex->adjacent) {
         std::cout << neighbor->data << " ";
@@ -120,5 +121,5 @@ class Graph {
   }
 
  private:
-  std::vector<std::shared_ptr<Vertex<T>>> vertices;
+  std::vector<std::shared_ptr<Vertex<T>>> vertices_;
 };
