@@ -39,6 +39,17 @@ class Graph {
 
   /**
    * @brief
+   * Find vertexes index
+   * @param vertex
+   * @return size_t
+   */
+  size_t Find(const std::shared_ptr<Vertex<T>> &vertex) {
+    return std::find(vertices_.begin(), vertices_.end(), vertex) -
+           vertices_.begin();
+  };
+
+  /**
+   * @brief
    * Remove a vertex from the graph
    * @param vertex
    */
