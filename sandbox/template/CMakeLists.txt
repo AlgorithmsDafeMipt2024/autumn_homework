@@ -17,7 +17,7 @@ list(REMOVE_ITEM test_source_list ${main_source_list})
 list(REMOVE_ITEM source_list ${test_list})
 
 include_directories(${PROJECT_NAME} PUBLIC src)
-include_directories(${PROJECT_NAME} PUBLIC ../lib/src)
+include_directories(${PROJECT_NAME} PUBLIC ../../lib/src)
 
 add_executable(${PROJECT_NAME} ${source_list})
 target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
