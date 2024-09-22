@@ -60,6 +60,13 @@ class Graph {
 
   /**
    * @brief
+   * Returns the number of vertices in the graph
+   * @return size_t
+   */
+  size_t Size() { return vertices_.size(); }
+
+  /**
+   * @brief
    * Add a directed edge between two vertices
    * @param source
    * @param target
