@@ -20,8 +20,7 @@ std::vector<std::string> PackageManager::FindDownloadingOrder(
 
   std::vector<std::string> order;
 
-  std::cout << "Downloading Order for " << target->data
-            << " is:" << std::endl;
+  std::cout << "Downloading Order for " << target->data << " is:" << std::endl;
   while (reverse_order_.size() > 0) {
     order.push_back(reverse_order_.top());
     std::cout << reverse_order_.top() << " ";
