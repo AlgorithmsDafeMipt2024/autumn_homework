@@ -15,9 +15,8 @@ int main() {
   dg_1.AddDirEdge(dg_1[4], dg_1[1]);
   dg_1.AddDirEdge(dg_1[0], dg_1[3]);
 
-  dg_1.PrintGraph();
+  PackageManager packman_1(dg_1);
 
-  dg_1.DeleteDirEdge(dg_1[0], dg_1[1]);
-
-  dg_1.PrintGraph();
+  for (size_t j = 0; j < dg_1.Size(); ++j)
+    packman_1.FindDownloadingOrder(dg_1[j]);
 }
