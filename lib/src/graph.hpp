@@ -78,6 +78,16 @@ class Graph {
 
   /**
    * @brief
+   * Add a directed edge between two vertices via indices
+   * @param source_id
+   * @param target_id
+   */
+  void AddDirEdge(size_t source_id, size_t target_id) {
+    operator[](source_id)->adjacent.insert(operator[](target_id));
+  }
+
+  /**
+   * @brief
    * Add a directed edge between two vertices
    * @param source
    * @param target
@@ -89,22 +99,44 @@ class Graph {
 
   /**
    * @brief
+   * Remove a directed edge between two vertices via indices
+   * @param source_id
+   * @param target_id
+   */
+  void RemoveDirEdge(size_t source_id, size_t target_id) {
+    operator[](source_id)->adjacent.erase(*std::find(
+        operator[](source_id)->adjacent.begin(),
+        operator[](source_id)->adjacent.end(), operator[](target_id)));
+  }
+
+  /**
+   * @brief
    * Remove a directed edge between two vertices
    * @param source
    * @param target
    */
   void RemoveDirEdge(std::shared_ptr<Vertex<T>> source,
                      std::shared_ptr<Vertex<T>> target) {
-    // std::find(source->adjacent.begin(), source->adjacent.end(), target);
     source->adjacent.erase(
         *std::find(source->adjacent.begin(), source->adjacent.end(), target));
   }
 
   /**
    * @brief
+   * Add a non-directed edge between two vertices via indices
+   * @param first_id
+   * @param second_id
+   */
+  void AddEdge(size_t first_id, std::shared_ptr<Vertex<T>> second_id) {
+    AddDirEdge(first_id, second_id);
+    AddDirEdge(second_id, first_id);
+  }
+
+  /**
+   * @brief
    * Add a non-directed edge between two vertices
-   * @param source
-   * @param target
+   * @param vertex_1
+   * @param vertex_2
    */
   void AddEdge(std::shared_ptr<Vertex<T>> vertex_1,
                std::shared_ptr<Vertex<T>> vertex_2) {
@@ -114,9 +146,20 @@ class Graph {
 
   /**
    * @brief
+   * Remove a non-directed edge between two vertices via indices
+   * @param first_id
+   * @param second_id
+   */
+  void RemoveEdge(size_t first_id, size_t second_id) {
+    RemoveDirEdge(first_id, second_id);
+    RemoveDirEdge(second_id, first_id);
+  }
+
+  /**
+   * @brief
    * Remove a non-directed edge between two vertices
-   * @param source
-   * @param target
+   * @param vertex_1
+   * @param vertex_2
    */
   void RemoveEdge(std::shared_ptr<Vertex<T>> vertex_1,
                   std::shared_ptr<Vertex<T>> vertex_2) {
