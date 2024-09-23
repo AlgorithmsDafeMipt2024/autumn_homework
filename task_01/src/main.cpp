@@ -9,11 +9,11 @@ int main() {
   dg_1.AddVertex("Lib_4");
   dg_1.AddVertex("Lib_5");
 
-  dg_1.AddDirEdge(dg_1[0], dg_1[1]);
-  dg_1.AddDirEdge(dg_1[1], dg_1[2]);
-  dg_1.AddDirEdge(dg_1[2], dg_1[3]);
-  dg_1.AddDirEdge(dg_1[4], dg_1[1]);
-  dg_1.AddDirEdge(dg_1[0], dg_1[3]);
+  dg_1.AddDirEdge(0, 1);
+  dg_1.AddDirEdge(0, 2);
+  dg_1.AddDirEdge(2, 3);
+  dg_1.AddDirEdge(3, 1);
+  dg_1.AddDirEdge(0, 3);
 
   PackageManager packman_1(dg_1);
 
