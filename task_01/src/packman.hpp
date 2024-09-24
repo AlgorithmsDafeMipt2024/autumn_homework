@@ -20,8 +20,8 @@ class PackageManager {
    * @param target Needed library
    * @return std::vector<std::string>
    */
-  std::vector<std::string> FindDownloadingOrder(
-      std::shared_ptr<Vertex<std::string>> target);
+  std::vector<std::string> FindDownloadingOrder(/*
+      std::shared_ptr<Vertex<std::string>> target*/);
 
  private:
   void FindingOrderStep(std::shared_ptr<Vertex<std::string>> target);

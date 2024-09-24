@@ -17,6 +17,5 @@ int main() {
 
   PackageManager packman_1(dg_1);
 
-  for (size_t j = 0; j < dg_1.Size(); ++j)
-    packman_1.FindDownloadingOrder(dg_1[j]);
+  packman_1.FindDownloadingOrder();
 }
