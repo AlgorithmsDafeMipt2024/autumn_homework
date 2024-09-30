@@ -105,6 +105,15 @@ class Graph {
   static Graph GraphFromAdjList(
       const std::vector<std::vector<vert_t>>& adj_list);
 
+  /**
+   * @brief Создает новый экземпляр Graph
+   * по списку смежности с указанием вершины-ключа (НЕВЗВЕШЕННЫЙ)
+   * @param adj_list_dict: список смежности с указанием вершины-ключа
+   * @return Graph: новый экземпляр Graph
+   */
+  static Graph GraphFromAdjList(
+      const std::unordered_map<vert_t, std::vector<vert_t>>& adj_list_dict);
+
   /// @brief Проверяет, взвешен ли граф
   bool IsWeighted() const;
 
@@ -158,6 +167,10 @@ class Graph {
 
   /// @return std::vector<std::vector<vert_t>>: список смежности
   std::vector<std::vector<vert_t>> GetAdjList() const;
+
+  /// @return std::unordered_map<vert_t, std::vector<vert_t>>: список смежности
+  /// с указанием вершины-ключа
+  std::unordered_map<vert_t, std::vector<vert_t>> GetAdjListWithKeys() const;
 
   /// @return std::vector<std::vector<vert_t>>: матрица смежности
   std::vector<std::vector<weight_t>> GetAdjMatrix() const;
