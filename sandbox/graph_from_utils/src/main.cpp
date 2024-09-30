@@ -6,7 +6,7 @@ template <typename V, typename W>
 void PrintGraph(Graph<V, W> graph) {
   std::cout << std::endl << graph << std::endl << std::endl;
   graph.PrintAdjList();
-  std::cout << std::endl << graph.GetAdjListWithKeys() << std::endl;
+  std::cout << std::endl << graph.GetAdjList() << std::endl;
 }
 
 int main() {

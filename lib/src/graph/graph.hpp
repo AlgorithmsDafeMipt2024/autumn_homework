@@ -165,14 +165,22 @@ class Graph {
   /// @brief Удаляет из графа ребрами с одинаковым вершинами
   void RemoveDuplicates();
 
-  /// @return std::vector<std::vector<vert_t>>: список смежности
-  std::vector<std::vector<vert_t>> GetAdjList() const;
+  /**
+   * @return std::vector<std::vector<vert_t>>: список смежности
+   * @throw std::logic_error("GetAdjListWithoutKeys: this method is deleted for
+   * std::string.");
+   */
+  std::vector<std::vector<vert_t>> GetAdjListWithoutKeys() const;
 
   /// @return std::unordered_map<vert_t, std::vector<vert_t>>: список смежности
   /// с указанием вершины-ключа
-  std::unordered_map<vert_t, std::vector<vert_t>> GetAdjListWithKeys() const;
+  std::unordered_map<vert_t, std::vector<vert_t>> GetAdjList() const;
 
-  /// @return std::vector<std::vector<vert_t>>: матрица смежности
+  /**
+   * @return std::vector<std::vector<vert_t>>: матрица смежности
+   * @throw std::logic_error("GetAdjMatrix: this method is deleted for
+   * std::string.");
+   */
   std::vector<std::vector<weight_t>> GetAdjMatrix() const;
 
   /**
