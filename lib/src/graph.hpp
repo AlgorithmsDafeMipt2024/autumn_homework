@@ -1,23 +1,23 @@
 #pragma once
 
 #include <cmath>
+#include <list>
 #include <stdexcept>
 #include <vector>
-#include <list>
 
 using std::vector;
 
-template<typename T>
+template <typename T>
 class Graph {
  private:
   int vertices_number;
-  std::list<int>* adjacency_list;
+  std::list<T>* adjacency_list;
 
  public:
   Graph(int number) {
     if (number <= 0) throw std::logic_error("number must be positive!");
     vertices_number = number;
-    adjacency_list = new std::list<int>[vertices_number + 1];
+    adjacency_list = new std::list<T>[vertices_number + 1];
   }
   void AddEdge(int first_verticle, int second_verticle) {
     if (first_verticle < 0 || first_verticle > vertices_number ||
@@ -28,8 +28,23 @@ class Graph {
     adjacency_list[first_verticle].push_back(second_verticle);
   }
   void TopologySortStep(int current_vertice, bool visited_vertices[],
-                        std::list<int>& list);
-  std::list<int> TopologySort();
+                        std::list<int>& list) {
+    visited_vertices[current_vertice] = true;
+    for (typename std::list<T>::iterator i =
+             adjacency_list[current_vertice].begin();
+         i != adjacency_list[current_vertice].end(); i++) {
+      if (!visited_vertices[*i]) TopologySortStep(*i, visited_vertices, list);
+    }
+    list.push_front(current_vertice);
+  }
+  std::list<int> TopologySort() {
+    std::list<T> list;
+    bool* visited_vertices = new bool[vertices_number];
+    for (int i = 0; i < vertices_number; i++) {
+      if (!visited_vertices[i]) TopologySortStep(i, visited_vertices, list);
+    }
+    return list;
+  }
 };
 
 class Weighted_Graph {
@@ -78,44 +93,41 @@ class Weighted_Graph {
     return distances;
   }
   vector<int> BellmanFord_Algorithm(int source) {
-    vector<int> dist(source + 1, pow(2,31));
+    vector<int> dist(source + 1, pow(2, 31));
     dist[source] = 0;
 
     vector<vector<int>> edges_with_extra(table);
     for (int i = 0; i < source; ++i) {
-        edges_with_extra.push_back({source, i, 0});
+      edges_with_extra.push_back({source, i, 0});
     }
 
     for (int i = 0; i < source; ++i) {
-        for (const auto& edge : edges_with_extra) {
-            if (dist[edge[0]] != pow(2,31) && dist[edge[0]] + edge[2] < dist[edge[1]]) {
-                dist[edge[1]] = dist[edge[0]] + edge[2];
-            }
+      for (const auto& edge : edges_with_extra) {
+        if (dist[edge[0]] != pow(2, 31) &&
+            dist[edge[0]] + edge[2] < dist[edge[1]]) {
+          dist[edge[1]] = dist[edge[0]] + edge[2];
         }
+      }
     }
-    return vector<int>(dist.begin(), dist.begin() + V);
-}
-vector<vector<int>> JohnsonAlgorithm(const vector<vector<int>>& graph) {
+    return vector<int>(dist.begin(), dist.begin() + source);
+  }
+  vector<vector<int>> JohnsonAlgorithm(const vector<vector<int>>& graph) {
     int V = graph.size();
     vector<vector<int>> edges;
-    
-    for (int i = 0; i < V; ++i) 
-        for (int j = 0; j < V; ++j) 
-            if (graph[i][j] != 0) 
-                edges.push_back({i, j, graph[i][j]});
-            
-    vector<int> altered_weights = BellmanFord_Algorithm(edges, V);
+
+    for (int i = 0; i < V; ++i)
+      for (int j = 0; j < V; ++j)
+        if (graph[i][j] != 0) edges.push_back({i, j, graph[i][j]});
+
+    vector<int> altered_weights = BellmanFord_Algorithm(V);
     vector<vector<int>> altered_graph(V, vector<int>(V, 0));
 
-    for (int i = 0; i < V; ++i) 
-        for (int j = 0; j < V; ++j) 
-            if (graph[i][j] != 0) 
-                altered_graph[i][j] = graph[i][j] + altered_weights[i] - altered_weights[j];
+    for (int i = 0; i < V; ++i)
+      for (int j = 0; j < V; ++j)
+        if (graph[i][j] != 0)
+          altered_graph[i][j] =
+              graph[i][j] + altered_weights[i] - altered_weights[j];
 
     return altered_graph;
-
-    // for (int source = 0; source < V; ++source) {
-    //     Dijkstra_Algorithm(graph, altered_graph, source);
-    // }
-}
+  }
 };

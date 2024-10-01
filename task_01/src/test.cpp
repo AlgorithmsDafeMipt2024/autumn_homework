@@ -1,23 +1,24 @@
 #include <gtest/gtest.h>
-#include <topology_sort.h>
+
+#include <graph.hpp>
 
 TEST(TopologySort, test1) {
-  Graph g(6);
+  Graph<int> g(6);
   EXPECT_THROW(g.AddEdge(5, 5), std::logic_error);
 }
 
 TEST(TopologySort, test2) {
-  EXPECT_THROW(Graph g(-5), std::logic_error);
-  EXPECT_THROW(Graph g(0), std::logic_error);
+  EXPECT_THROW(Graph<int> g(-5), std::logic_error);
+  EXPECT_THROW(Graph<int> g(0), std::logic_error);
 }
 
 TEST(TopologySort, test3) {
-  Graph g(2);
+  Graph<int> g(2);
   EXPECT_THROW(g.AddEdge(5, 6), std::logic_error);
 }
 
 TEST(TopologySort, test4) {
-  Graph g(6);
+  Graph<int> g(6);
   g.AddEdge(5, 2);
   g.AddEdge(5, 0);
   g.AddEdge(4, 0);
@@ -28,7 +29,7 @@ TEST(TopologySort, test4) {
 }
 
 TEST(TopologySort, test5) {
-  Graph g(15);
+  Graph<int> g(15);
   g.AddEdge(10, 3);
   g.AddEdge(3, 10);
   g.AddEdge(10, 14);

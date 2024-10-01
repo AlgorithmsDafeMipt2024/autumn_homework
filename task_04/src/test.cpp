@@ -1,5 +1,6 @@
-#include <graph.h>
 #include <gtest/gtest.h>
+
+#include <graph.hpp>
 
 TEST(TopologySort, Simple1) {
   std::vector<std::vector<int>> table = {
