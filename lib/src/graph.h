@@ -1,10 +1,13 @@
 #pragma once
 
 #include <cmath>
-#include <list>
 #include <stdexcept>
 #include <vector>
+#include <list>
 
+using std::vector;
+
+template<typename T>
 class Graph {
  private:
   int vertices_number;
@@ -31,11 +34,11 @@ class Graph {
 
 class Weighted_Graph {
  private:
-  std::vector<std::vector<int>> table;
+  vector<vector<int>> table;
   int vertices_number;
 
  public:
-  Weighted_Graph(std::vector<std::vector<int>> table_) {
+  Weighted_Graph(vector<vector<int>> table_) {
     if (table_.empty())
       throw std::logic_error(
           "the graph was not created because the input table is empty");
@@ -47,16 +50,16 @@ class Weighted_Graph {
     vertices_number = table.size();
   }
 
-  int MinDistance(std::vector<int> distances, bool is_shortest[]) {
+  int MinDistance(vector<int> distances, bool is_shortest[]) {
     int min_distance = 2 ^ 31 - 1, min_index;
     for (int i = 0; i < vertices_number; i++)
       if (!is_shortest[i] && distances[i] < min_distance)
         min_distance = distances[i], min_index = i;
     return min_index;
   };
-  std::vector<int> Dijkstra_algo(int source) {
+  vector<int> Dijkstra_algo(int source) {
     source -= 1;
-    std::vector<int> distances;
+    vector<int> distances;
     bool is_shortest[vertices_number];
     for (int i = 0; i < vertices_number; i++) {
       distances.push_back(std::pow(2, 31) - 1);
@@ -74,4 +77,45 @@ class Weighted_Graph {
     }
     return distances;
   }
+  vector<int> BellmanFord_Algorithm(int source) {
+    vector<int> dist(source + 1, pow(2,31));
+    dist[source] = 0;
+
+    vector<vector<int>> edges_with_extra(table);
+    for (int i = 0; i < source; ++i) {
+        edges_with_extra.push_back({source, i, 0});
+    }
+
+    for (int i = 0; i < source; ++i) {
+        for (const auto& edge : edges_with_extra) {
+            if (dist[edge[0]] != pow(2,31) && dist[edge[0]] + edge[2] < dist[edge[1]]) {
+                dist[edge[1]] = dist[edge[0]] + edge[2];
+            }
+        }
+    }
+    return vector<int>(dist.begin(), dist.begin() + V);
+}
+vector<vector<int>> JohnsonAlgorithm(const vector<vector<int>>& graph) {
+    int V = graph.size();
+    vector<vector<int>> edges;
+    
+    for (int i = 0; i < V; ++i) 
+        for (int j = 0; j < V; ++j) 
+            if (graph[i][j] != 0) 
+                edges.push_back({i, j, graph[i][j]});
+            
+    vector<int> altered_weights = BellmanFord_Algorithm(edges, V);
+    vector<vector<int>> altered_graph(V, vector<int>(V, 0));
+
+    for (int i = 0; i < V; ++i) 
+        for (int j = 0; j < V; ++j) 
+            if (graph[i][j] != 0) 
+                altered_graph[i][j] = graph[i][j] + altered_weights[i] - altered_weights[j];
+
+    return altered_graph;
+
+    // for (int source = 0; source < V; ++source) {
+    //     Dijkstra_Algorithm(graph, altered_graph, source);
+    // }
+}
 };
