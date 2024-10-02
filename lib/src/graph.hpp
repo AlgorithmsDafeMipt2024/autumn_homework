@@ -66,18 +66,56 @@ class Weighted_Graph {
   }
 
   int MinDistance(vector<int> distances, bool is_shortest[]) {
-    int min_distance = 2 ^ 31 - 1, min_index;
+    int min_distance = std::numeric_limits<int>::max(), min_index;
     for (int i = 0; i < vertices_number; i++)
       if (!is_shortest[i] && distances[i] < min_distance)
         min_distance = distances[i], min_index = i;
     return min_index;
   };
+  vector<int> BellmanFord_Algorithm(const vector<vector<int>>& edges) {
+    vector<int> dist(vertices_number + 1, std::numeric_limits<int>::max());
+    dist[vertices_number] = 0;
+
+    vector<vector<int>> edges_with_extra = edges;
+    for (int i = 0; i < vertices_number; ++i) {
+      edges_with_extra.push_back({vertices_number, i, 0});
+    }
+
+    for (int i = 0; i < vertices_number; ++i) {
+      for (const auto& edge : edges_with_extra) {
+        if (dist[edge[0]] != std::numeric_limits<int>::max() &&
+            dist[edge[0]] + edge[2] < dist[edge[1]]) {
+          dist[edge[1]] = dist[edge[0]] + edge[2];
+        }
+      }
+    }
+    return vector<int>(dist.begin(), dist.begin() + vertices_number);
+  }
+  vector<vector<int>> JohnsonAlgorithm() {
+    vector<vector<int>> edges;
+
+    for (int i = 0; i < vertices_number; ++i)
+      for (int j = 0; j < vertices_number; ++j)
+        if (table[i][j] != 0) edges.push_back({i, j, table[i][j]});
+
+    vector<int> altered_weights = BellmanFord_Algorithm(edges);
+    vector<vector<int>> altered_graph(vertices_number,
+                                      vector<int>(vertices_number, 0));
+
+    for (int i = 0; i < vertices_number; ++i)
+      for (int j = 0; j < vertices_number; ++j)
+        if (table[i][j] != 0)
+          altered_graph[i][j] =
+              table[i][j] + altered_weights[i] - altered_weights[j];
+
+    return altered_graph;
+  }
   vector<int> Dijkstra_algo(int source) {
     source -= 1;
     vector<int> distances;
     bool is_shortest[vertices_number];
     for (int i = 0; i < vertices_number; i++) {
-      distances.push_back(std::pow(2, 31) - 1);
+      distances.push_back(std::numeric_limits<int>::max());
       is_shortest[i] = false;
     }
     distances[source] = 0;
@@ -86,49 +124,11 @@ class Weighted_Graph {
       is_shortest[min_distance] = true;
       for (int j = 0; j < vertices_number; j++)
         if (!is_shortest[j] && table[min_distance][j] &&
-            distances[j] != (2 ^ 31 - 1) &&
+            distances[j] != std::numeric_limits<int>::max() &&
             distances[min_distance] + table[min_distance][j] < distances[j])
           distances[j] = distances[min_distance] + table[min_distance][j];
     }
     return distances;
-  }
-  vector<int> BellmanFord_Algorithm(int source) {
-    vector<int> dist(source + 1, pow(2, 31));
-    dist[source] = 0;
-
-    vector<vector<int>> edges_with_extra(table);
-    for (int i = 0; i < source; ++i) {
-      edges_with_extra.push_back({source, i, 0});
-    }
-
-    for (int i = 0; i < source; ++i) {
-      for (const auto& edge : edges_with_extra) {
-        if (dist[edge[0]] != pow(2, 31) &&
-            dist[edge[0]] + edge[2] < dist[edge[1]]) {
-          dist[edge[1]] = dist[edge[0]] + edge[2];
-        }
-      }
-    }
-    return vector<int>(dist.begin(), dist.begin() + source);
-  }
-  vector<vector<int>> JohnsonAlgorithm(const vector<vector<int>>& graph) {
-    int V = graph.size();
-    vector<vector<int>> edges;
-
-    for (int i = 0; i < V; ++i)
-      for (int j = 0; j < V; ++j)
-        if (graph[i][j] != 0) edges.push_back({i, j, graph[i][j]});
-
-    vector<int> altered_weights = BellmanFord_Algorithm(V);
-    vector<vector<int>> altered_graph(V, vector<int>(V, 0));
-
-    for (int i = 0; i < V; ++i)
-      for (int j = 0; j < V; ++j)
-        if (graph[i][j] != 0)
-          altered_graph[i][j] =
-              graph[i][j] + altered_weights[i] - altered_weights[j];
-
-    return altered_graph;
   }
 };
 
