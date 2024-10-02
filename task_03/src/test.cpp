@@ -3,7 +3,7 @@
 
 #include <graph.hpp>
 
-TEST(TopologySort, test1) {
+TEST(JohnsonAlgorithm, test1) {
   vector<vector<int>> g = {
       {0, -5, 2, 3}, {0, 0, 4, 0}, {0, 0, 0, 1}, {0, 0, 0, 0}};
 
@@ -14,7 +14,7 @@ TEST(TopologySort, test1) {
   ASSERT_EQ(wg.JohnsonAlgorithm(), shortest_paths);
 }
 
-TEST(TopologySort, test2) {
+TEST(JohnsonAlgorithm, test2) {
   vector<vector<int>> g = {{0, 1, 0, 5, 1},
                            {0, 0, 0, 0, 0},
                            {0, 0, -3, 0, 5},
@@ -31,7 +31,7 @@ TEST(TopologySort, test2) {
   ASSERT_EQ(wg.JohnsonAlgorithm(), shortest_paths);
 }
 
-TEST(TopologySort, test3) {
+TEST(JohnsonAlgorithm, test3) {
   vector<vector<int>> g = {{0, 0, 0, 0, 0},
                            {0, 0, 0, 0, 0},
                            {0, 0, 0, 0, 0},
@@ -48,7 +48,7 @@ TEST(TopologySort, test3) {
   ASSERT_EQ(wg.JohnsonAlgorithm(), shortest_paths);
 }
 
-TEST(TopologySort, test4) {
+TEST(JohnsonAlgorithm, test4) {
   vector<vector<int>> g = {
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},
@@ -59,13 +59,13 @@ TEST(TopologySort, test4) {
   EXPECT_THROW(Weighted_Graph wg(g), std::logic_error);
 }
 
-TEST(TopologySort, test5) {
+TEST(JohnsonAlgorithm, test5) {
   vector<vector<int>> g = {};
 
   EXPECT_THROW(Weighted_Graph wg(g), std::logic_error);
 }
 
-TEST(TopologySort, test6) {
+TEST(JohnsonAlgorithm, test6) {
   vector<vector<int>> g = {{}, {}, {1, 3, 4}};
 
   EXPECT_THROW(Weighted_Graph wg(g), std::logic_error);

@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "algo.hpp"
+#include "lca.hpp"
 
-TEST(TopologySort, test1) {
+TEST(LCATest, test1) {
   vector<vector<int>> tree(10);
   tree[0] = {1, 2};
   tree[1] = {0, 3, 4};
@@ -24,7 +24,7 @@ TEST(TopologySort, test1) {
   ASSERT_EQ(lca.Query(8, 9), 4);
 }
 
-TEST(TopologySort, test2) {
+TEST(LCATest, test2) {
   vector<vector<int>> tree(7);
   tree[0] = {1, 2};
   tree[1] = {0, 3, 4};
@@ -43,7 +43,7 @@ TEST(TopologySort, test2) {
   ASSERT_EQ(lca.Query(1, 2), 0);
 }
 
-TEST(TopologySort, test3) {
+TEST(LCATest, test3) {
   vector<vector<int>> tree(9);
   tree[0] = {1, 2};
   tree[1] = {0, 3, 4};
@@ -64,7 +64,7 @@ TEST(TopologySort, test3) {
   ASSERT_EQ(lca.Query(8, 4), 4);
 }
 
-TEST(TopologySort, test4) {
+TEST(LCATest, test4) {
   vector<vector<int>> tree(4);
   tree[0] = {1, 2};
   tree[1] = {0, 3};
@@ -76,7 +76,7 @@ TEST(TopologySort, test4) {
   EXPECT_THROW(lca.Query(-1, 2), std::out_of_range);
 }
 
-TEST(TopologySort, test5) {
+TEST(LCATest, test5) {
   vector<vector<int>> tree(4);
   tree[0] = {1, 2};
   tree[1] = {0, 3};
@@ -88,7 +88,7 @@ TEST(TopologySort, test5) {
   EXPECT_THROW(lca.Query(0, 4), std::out_of_range);
 }
 
-TEST(TopologySort, test6) {
+TEST(LCATest, test6) {
   vector<vector<int>> tree(4);
   tree[0] = {1, 2};
   tree[1] = {0, 3};
@@ -97,7 +97,7 @@ TEST(TopologySort, test6) {
   EXPECT_THROW(LCA lca(tree, 0), std::logic_error);
 }
 
-TEST(TopologySort, test7) {
+TEST(LCATest, test7) {
   vector<vector<int>> tree;
 
   EXPECT_THROW(LCA lca(tree, 0), std::logic_error);

@@ -5,7 +5,7 @@
 
 using std::pair;
 
-TEST(StackTest, test1) {
+TEST(BridgeGraphTest, test1) {
   BridgeGraph<int> g(5);
 
   g.AddEdge(1, 2);
@@ -22,7 +22,7 @@ TEST(StackTest, test1) {
   ASSERT_EQ(g.GivePoints(), articulation_points);
 }
 
-TEST(StackTest, test2) {
+TEST(BridgeGraphTest, test2) {
   BridgeGraph<int> g(5);
 
   g.AddEdge(1, 5);
@@ -40,7 +40,7 @@ TEST(StackTest, test2) {
   ASSERT_EQ(g.GivePoints(), articulation_points);
 }
 
-TEST(StackTest, test3) {
+TEST(BridgeGraphTest, test3) {
   BridgeGraph<int> g(8);
 
   g.AddEdge(1, 2);
@@ -61,12 +61,12 @@ TEST(StackTest, test3) {
   ASSERT_EQ(g.GivePoints(), articulation_points);
 }
 
-TEST(StackTest, test4) {
+TEST(BridgeGraphTest, test4) {
   EXPECT_THROW(BridgeGraph<int> g(-5), std::logic_error);
   EXPECT_THROW(BridgeGraph<int> g(0), std::logic_error);
 }
 
-TEST(StackTest, test5) {
+TEST(BridgeGraphTest, test5) {
   BridgeGraph<int> g(2);
   EXPECT_THROW(g.AddEdge(5, 6), std::logic_error);
   EXPECT_THROW(g.AddEdge(5, -4), std::logic_error);

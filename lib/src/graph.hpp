@@ -64,14 +64,6 @@ class Weighted_Graph {
     table = table_;
     vertices_number = table.size();
   }
-
-  int MinDistance(vector<int> distances, bool is_shortest[]) {
-    int min_distance = std::numeric_limits<int>::max(), min_index;
-    for (int i = 0; i < vertices_number; i++)
-      if (!is_shortest[i] && distances[i] < min_distance)
-        min_distance = distances[i], min_index = i;
-    return min_index;
-  };
   vector<int> BellmanFord_Algorithm(const vector<vector<int>>& edges) {
     vector<int> dist(vertices_number + 1, std::numeric_limits<int>::max());
     dist[vertices_number] = 0;
@@ -110,6 +102,13 @@ class Weighted_Graph {
 
     return altered_graph;
   }
+  int MinDistance(vector<int> distances, bool is_shortest[]) {
+    int min_distance = std::numeric_limits<int>::max(), min_index;
+    for (int i = 0; i < vertices_number; i++)
+      if (!is_shortest[i] && distances[i] < min_distance)
+        min_distance = distances[i], min_index = i;
+    return min_index;
+  };
   vector<int> Dijkstra_algo(int source) {
     source -= 1;
     vector<int> distances;
@@ -124,7 +123,7 @@ class Weighted_Graph {
       is_shortest[min_distance] = true;
       for (int j = 0; j < vertices_number; j++)
         if (!is_shortest[j] && table[min_distance][j] &&
-            distances[j] != std::numeric_limits<int>::max() &&
+            distances[j] != (std::numeric_limits<int>::max() - 1) &&
             distances[min_distance] + table[min_distance][j] < distances[j])
           distances[j] = distances[min_distance] + table[min_distance][j];
     }
