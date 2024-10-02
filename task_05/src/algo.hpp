@@ -4,6 +4,11 @@
 
 using std::vector;
 
+/*
+Один из самых быстрых реализаций алгоритма RMQ
+Выдает запрос за O(1), предобработка структуры данных - O(n)
+*/
+
 template <typename T>
 struct RMQ {
   vector<T> data;
