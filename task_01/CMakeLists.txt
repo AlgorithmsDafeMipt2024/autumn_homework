@@ -22,9 +22,11 @@ add_executable(${PROJECT_NAME} ${source_list})
 # Locate GTest
 enable_testing()
 find_package(GTest REQUIRED)
-find_library(Utils ../)
 
 include_directories(${GTEST_INCLUDE_DIRS})
+
+find_library(Utils ../)
+target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(${PROJECT_NAME}_tests ${test_source_list})
