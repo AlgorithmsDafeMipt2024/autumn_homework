@@ -18,4 +18,6 @@ int main() {
   PackageManager packman_1(dg_1);
 
   packman_1.FindDownloadingOrder();
+
+  return 0;
 }
