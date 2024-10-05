@@ -18,7 +18,6 @@ list(REMOVE_ITEM source_list ${test_list})
 include_directories(${PROJECT_NAME} PUBLIC src)
 
 add_executable(${PROJECT_NAME} ${source_list})
-target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
 # Locate GTest
 enable_testing()
@@ -28,8 +27,6 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 find_library(Utils ../)
 target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
-
-find_library(Utils ../)
 
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(${PROJECT_NAME}_tests ${test_source_list})
