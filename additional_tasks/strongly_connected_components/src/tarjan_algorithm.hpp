@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <stack>
+#include <stdexcept>
 
 #include "graph/graph.hpp"
 
@@ -12,9 +13,7 @@ static void StronglyConnectedComponentsStep(
     std::unordered_map<vert_t, size_t>& low_links,
     std::unordered_map<vert_t, bool>& is_on_stack,
     std::unordered_map<vert_t, std::vector<vert_t>>& adj_list,
-    std::vector<std::vector<vert_t>>& strongly_connected_components)
-
-{
+    std::vector<std::vector<vert_t>>& strongly_connected_components) {
   // в curr_index храним количество ранее обработанных вершин,
   // indexes[v] - это "время входа" в вершину v
   indexes[v] = curr_index;
@@ -62,9 +61,23 @@ static void StronglyConnectedComponentsStep(
   }
 }
 
+/**
+ * @brief Поиск компонент сильной связности в ориентированного графа по
+ * алгоритму Тарьяна
+ * @tparam vert_t: тип вершин
+ * @tparam weight_t: тип весов
+ * @param graph: исходный граф
+ * @throw std::invalid_argument("StronglyConnectedComponents: graph is not
+ * directed.");
+ * @return std::vector<std::vector<vert_t>>: компоненты сильной связности
+ */
 template <typename vert_t, typename weight_t>
 std::vector<std::vector<vert_t>> StronglyConnectedComponents(
     Graph<vert_t, weight_t> graph) {
+  if (!graph.IsDirected())
+    throw std::invalid_argument(
+        "StronglyConnectedComponents: graph is not directed.");
+
   std::vector<std::vector<vert_t>> strongly_connected_component{};
 
   std::stack<vert_t> verts_stack;
