@@ -3,7 +3,10 @@ project(Utils)
 
 set(CMAKE_CXX_STANDARD 23)
 
-file(GLOB_RECURSE lib_source_list "src/*.cpp" "src/*.hpp")
+file(GLOB_RECURSE lib_source_list "src/*.cpp")
+
+SET(BASEPATH "${CMAKE_SOURCE_DIR}")
+INCLUDE_DIRECTORIES("${BASEPATH}")
 
 add_library(${PROJECT_NAME} ${lib_source_list})
 
