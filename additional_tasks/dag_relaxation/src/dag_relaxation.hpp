@@ -1,7 +1,6 @@
 #pragma once
 
 #include <limits>
-#include <queue>
 
 #include "topological_sort.hpp"
 
@@ -14,6 +13,7 @@
  * @param start_vert: начальная вершина, от которой вычисляются расстояния.
  * @throw std::invalid_argument("DAGRelaxation: there is no such start
  * vertice.")
+ * @throw std::invalid_argument("DAGRelaxation: graph is not directed.");
  * @return std::unordered_map<vert_t, weight_t>: словарь, где ключ - вершина, а
  * значение - кратчайшее расстояние от start_vert до этой вершины
  * (если до вершины нет пути, то значение будет равно
@@ -25,7 +25,10 @@ std::unordered_map<vert_t, weight_t> DAGRelaxation(
   if (std::find(graph.Verts().begin(), graph.Verts().end(), start_vert) ==
       graph.Verts().end())
     throw std::invalid_argument(
-        "DAGRelaxation: there is no such start vertice.");
+        "DAGRelaxation: there is no such start vertice in graph.");
+
+  if (!graph.IsDirected())
+    throw std::invalid_argument("DAGRelaxation: graph is not directed.");
 
   std::unordered_map<vert_t, weight_t> distances;
 
@@ -41,15 +44,23 @@ std::unordered_map<vert_t, weight_t> DAGRelaxation(
   for (const auto& u_vert : sorted_verts)
     for (size_t i = 0; i < graph.GetAdjList()[u_vert].size(); i++) {
       auto vert = graph.GetAdjList()[u_vert][i];
+
       // (нас не интересует бесконечное расстояние от start до u_vert)
       if (distances[u_vert] == std::numeric_limits<weight_t>::max()) continue;
 
+      weight_t u_v_edge_weight;
+
+      try {
+        u_v_edge_weight = graph.GetWeightOfEdge({u_vert, vert});
+      } catch (const std::logic_error& e) {
+        // GetWeightOfEdge: graph is not weighted.
+        u_v_edge_weight = 1;
+      }
+
       // релаксируем ребро, если текущее расстояние до vert больше, чем
       // расстояние до u_vert плюс вес ребра
-      if (distances[vert] >
-          distances[u_vert] + graph.GetWeightOfEdge({u_vert, vert}))
-        distances[vert] =
-            distances[u_vert] + graph.GetWeightOfEdge({u_vert, vert});
+      if (distances[vert] > distances[u_vert] + u_v_edge_weight)
+        distances[vert] = distances[u_vert] + u_v_edge_weight;
     }
 
   return distances;
