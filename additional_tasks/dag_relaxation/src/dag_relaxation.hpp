@@ -30,14 +30,15 @@ std::unordered_map<vert_t, weight_t> DAGRelaxation(
   if (!graph.IsDirected())
     throw std::invalid_argument("DAGRelaxation: graph is not directed.");
 
-  std::unordered_map<vert_t, weight_t> distances;
+  /// @brief хеш-таблица расстояний от start_vert до каждой вершины
+  std::unordered_map<vert_t, weight_t> dists;
 
-  // инициализация расстояний до бесконечности
+  // инициализация расстояний от start_vert до каждой вершины бесконечностями
   for (const auto& vert : graph.Verts())
-    distances[vert] = std::numeric_limits<weight_t>::max();
+    dists[vert] = std::numeric_limits<weight_t>::max();
 
   // расстояние от начальной вершины до самой себя равно 0
-  distances[start_vert] = 0;
+  dists[start_vert] = 0;
 
   std::vector<vert_t> sorted_verts = TopologicalSort(graph);
 
@@ -46,22 +47,17 @@ std::unordered_map<vert_t, weight_t> DAGRelaxation(
       auto vert = graph.GetAdjList()[u_vert][i];
 
       // (нас не интересует бесконечное расстояние от start до u_vert)
-      if (distances[u_vert] == std::numeric_limits<weight_t>::max()) continue;
+      if (dists[u_vert] == std::numeric_limits<weight_t>::max()) continue;
 
-      weight_t u_v_edge_weight;
-
-      try {
-        u_v_edge_weight = graph.GetWeightOfEdge({u_vert, vert});
-      } catch (const std::logic_error& e) {
-        // GetWeightOfEdge: graph is not weighted.
-        u_v_edge_weight = 1;
-      }
+      // если граф не взвешен, то задаем расстояние единицей
+      weight_t u_v_dist = 1;
+      if (graph.IsWeighted()) u_v_dist = graph.GetWeightOfEdge({u_vert, vert});
 
       // релаксируем ребро, если текущее расстояние до vert больше, чем
-      // расстояние до u_vert плюс вес ребра
-      if (distances[vert] > distances[u_vert] + u_v_edge_weight)
-        distances[vert] = distances[u_vert] + u_v_edge_weight;
+      // расстояние до u_vert + расстояние между вершинами (вес их ребра)
+      if (dists[vert] > dists[u_vert] + u_v_dist)
+        dists[vert] = dists[u_vert] + u_v_dist;
     }
 
-  return distances;
+  return dists;
 }
