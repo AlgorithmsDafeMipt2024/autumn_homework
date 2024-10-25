@@ -3,6 +3,7 @@
 #include "WeightedGraph.h"
 #include "WeightedOrientedGraph.h"
 #include "WeightedNonOrientedGraph.h"
+#include "WeightedOrientedGraphWithZeroWeight.h"
 #include "Graph.h"
 #include "OrientedGraph.h"
 #include "NonOrientedGraph.h"
