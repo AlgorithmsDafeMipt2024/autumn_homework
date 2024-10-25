@@ -206,7 +206,7 @@ class Graph {
    * @param edge: ребро
    * @return weight_t: вес
    * @throw std::logic_error("GetWeightOfEdge: graph is not weighted.");
-   * @throw std::invalid_argument("GetWeightOfEdge: there is no edge: ");
+   * @throw std::invalid_argument("GetWeightOfEdge: there is no such edge:");
    */
   weight_t GetWeightOfEdge(const std::pair<vert_t, vert_t>& edge) const;
 
