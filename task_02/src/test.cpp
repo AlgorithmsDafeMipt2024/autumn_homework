@@ -78,6 +78,7 @@ TEST(FindBridgesTest, ComplexGraph) {
   graph.MakeUndirected();
 
   auto bridges = FindBridges(graph);
-  std::cout << bridges << std::endl;
-  ASSERT_EQ(bridges.size(), 4);
+  std::vector<std::pair<size_t, size_t>> answer = {{3, 4}, {6, 7}};
+
+  ASSERT_EQ(bridges, answer);
 }
