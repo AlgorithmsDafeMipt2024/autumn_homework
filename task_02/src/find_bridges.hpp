@@ -27,9 +27,9 @@ inline void FindBridgesStep(
       FindBridgesStep(u_vert, vert, curr_index, indexes, low_links, visited,
                       adj_list, bridges);
 
-      low_links[vert] = std::min(low_links[vert], low_links[u_vert]);
+      low_links[vert] = std::min(low_links[vert], indexes[u_vert]);
 
-      // если время низкой связи vert больше, чем время входа в u_vert,
+      // если время входа в vert меньше, чем время низкой связи u_vert,
       // то ребро {u_vert->vert} - это мост
       if (low_links[u_vert] > indexes[vert]) bridges.push_back({vert, u_vert});
     } else if (u_vert !=
@@ -71,6 +71,8 @@ inline std::vector<std::pair<vert_t, vert_t>> FindBridges(
     if (!visited[vert])
       FindBridgesStep(vert, vert, curr_index, indexes, low_links, visited,
                       adj_list, bridges);
+
+  std::reverse(bridges.begin(), bridges.end());
 
   return bridges;
 }
