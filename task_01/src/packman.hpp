@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stack>
 #include <string>
 
@@ -25,7 +27,7 @@ class PackageManager {
 
  private:
   void FindingOrderStep(std::shared_ptr<Vertex<std::string>> target);
-  DependencyGraph& dependencies_;
-  std::vector<bool> is_visited_;
-  std::stack<std::string> reverse_order_;
+  DependencyGraph dependencies_;
+  std::vector<bool> is_visited_{};
+  std::stack<std::string> reverse_order_{};
 };
