@@ -1,25 +1,43 @@
 #include <gtest/gtest.h>
 
-#include <sstream>
+#include <algorithm>
+#include <set>
 
 #include "network.hpp"
 
-class NetworkTest : public ::testing::Test {
- protected:
-  Network network;
-};
-
-// Helper function to capture cout output
-std::string CaptureCoutOutput(std::function<void()> func) {
-  std::stringstream buffer;
-  std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
-  func();
-  std::cout.rdbuf(old);
-  return buffer.str();
+// Helper function to check if a bridge exists
+bool BridgeExists(const std::vector<std::pair<int, int>>& bridges, int u,
+                  int v) {
+  return std::find_if(bridges.begin(), bridges.end(),
+                      [u, v](const auto& bridge) {
+                        return (bridge.first == u && bridge.second == v) ||
+                               (bridge.first == v && bridge.second == u);
+                      }) != bridges.end();
 }
 
-TEST_F(NetworkTest, SimpleTriangleWithBridge) {
-  // Create a triangle with a single bridge
+// Helper function to check if returned bridges are correct
+void CheckBridges(const std::vector<std::pair<int, int>>& bridges,
+                  const std::vector<std::pair<int, int>>& expected_bridges) {
+  EXPECT_EQ(bridges.size(), expected_bridges.size());
+  for (const auto& bridge : expected_bridges)
+    EXPECT_TRUE(BridgeExists(bridges, bridge.first, bridge.second));
+}
+
+// Helper function to check if two sets of integers are equal
+bool SetsEqual(const std::vector<int>& vec1, const std::vector<int>& vec2) {
+  std::set<int> set1(vec1.begin(), vec1.end());
+  std::set<int> set2(vec2.begin(), vec2.end());
+  return set1 == set2;
+}
+
+//  Helper function to check if returned cut vertices are correct
+void CheckCutVertices(const std::vector<int>& cut_vertices,
+                      const std::vector<int>& expected_cut_vertices) {
+  EXPECT_TRUE(SetsEqual(cut_vertices, expected_cut_vertices));
+}
+
+TEST(NetworkTest, SimpleTriangleWithBridge) {
+  Network network;
   network.AddVertex(0);
   network.AddVertex(1);
   network.AddVertex(2);
@@ -30,17 +48,17 @@ TEST_F(NetworkTest, SimpleTriangleWithBridge) {
   network.AddEdge(2, 0);
   network.AddEdge(2, 3);  // This is a bridge
 
-  std::string output =
-      CaptureCoutOutput([&]() { network.FindBridgesAndCutVertices(); });
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
 
-  // Check if bridge 2-3 is detected
-  EXPECT_TRUE(output.find("2 -- 3") != std::string::npos);
-  // Vertex 2 should be a cut vertex
-  EXPECT_TRUE(output.find("Cut vertices:\n2") != std::string::npos);
+  std::vector<std::pair<int, int>> excepted_bridges = {{2, 3}};
+  std::vector<int> excepted_cut_vertices = {2};
+
+  CheckBridges(bridges, excepted_bridges);
+  CheckCutVertices(cut_vertices, excepted_cut_vertices);
 }
 
-TEST_F(NetworkTest, NoBridgesOrCutVertices) {
-  // Create a complete graph with 3 vertices (triangle)
+TEST(NetworkTest, NoBridgesOrCutVertices) {
+  Network network;
   network.AddVertex(0);
   network.AddVertex(1);
   network.AddVertex(2);
@@ -49,16 +67,17 @@ TEST_F(NetworkTest, NoBridgesOrCutVertices) {
   network.AddEdge(1, 2);
   network.AddEdge(2, 0);
 
-  std::string output =
-      CaptureCoutOutput([&]() { network.FindBridgesAndCutVertices(); });
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
 
-  // Should not find any bridges or cut vertices
-  EXPECT_TRUE(output.find("Bridges:\n") != std::string::npos);
-  EXPECT_TRUE(output.find("Cut vertices:\n") != std::string::npos);
+  std::vector<std::pair<int, int>> excepted_bridges = {};
+  std::vector<int> excepted_cut_vertices = {};
+
+  CheckBridges(bridges, excepted_bridges);
+  CheckCutVertices(cut_vertices, excepted_cut_vertices);
 }
 
-TEST_F(NetworkTest, LineGraph) {
-  // Create a line graph where all edges are bridges
+TEST(NetworkTest, LineGraph) {
+  Network network;
   network.AddVertex(0);
   network.AddVertex(1);
   network.AddVertex(2);
@@ -66,50 +85,45 @@ TEST_F(NetworkTest, LineGraph) {
   network.AddEdge(0, 1);
   network.AddEdge(1, 2);
 
-  std::string output =
-      CaptureCoutOutput([&]() { network.FindBridgesAndCutVertices(); });
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
 
-  // All edges should be bridges
-  EXPECT_TRUE(output.find("0 -- 1") != std::string::npos);
-  EXPECT_TRUE(output.find("1 -- 2") != std::string::npos);
-  // Middle vertex should be a cut vertex
-  EXPECT_TRUE(output.find("Cut vertices:\n1") != std::string::npos);
+  std::vector<std::pair<int, int>> excepted_bridges = {{0, 1}, {1, 2}};
+  std::vector<int> excepted_cut_vertices = {1};
+
+  CheckBridges(bridges, excepted_bridges);
+  CheckCutVertices(cut_vertices, excepted_cut_vertices);
 }
 
-TEST_F(NetworkTest, EmptyGraph) {
-  std::string output =
-      CaptureCoutOutput([&]() { network.FindBridgesAndCutVertices(); });
+TEST(NetworkTest, EmptyGraph) {
+  Network network;
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
 
-  // Should not find any bridges or cut vertices
-  EXPECT_TRUE(output.find("Bridges:\n") != std::string::npos);
-  EXPECT_TRUE(output.find("Cut vertices:\n") != std::string::npos);
+  std::vector<std::pair<int, int>> excepted_bridges = {};
+  std::vector<int> excepted_cut_vertices = {};
+
+  CheckBridges(bridges, excepted_bridges);
+  CheckCutVertices(cut_vertices, excepted_cut_vertices);
 }
 
-TEST_F(NetworkTest, CycleWithMultipleBridges) {
-  // Create a more complex graph with multiple bridges and cut vertices
+TEST(NetworkTest, CycleWithMultipleBridges) {
+  Network network;
   network.AddVertex(0);
   network.AddVertex(1);
   network.AddVertex(2);
   network.AddVertex(3);
   network.AddVertex(4);
 
-  // Create a cycle 0-1-2
   network.AddEdge(0, 1);
   network.AddEdge(1, 2);
   network.AddEdge(2, 0);
-
-  // Add bridges
   network.AddEdge(1, 3);  // Bridge to vertex 3
   network.AddEdge(3, 4);  // Bridge to vertex 4
 
-  std::string output =
-      CaptureCoutOutput([&]() { network.FindBridgesAndCutVertices(); });
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
 
-  // Check for bridges
-  EXPECT_TRUE(output.find("1 -- 3") != std::string::npos);
-  EXPECT_TRUE(output.find("3 -- 4") != std::string::npos);
+  std::vector<std::pair<int, int>> excepted_bridges = {{1, 3}, {3, 4}};
+  std::vector<int> excepted_cut_vertices = {1, 3};
 
-  // Vertices 1 and 3 should be cut vertices
-  EXPECT_TRUE(output.find("1") != std::string::npos);
-  EXPECT_TRUE(output.find("3") != std::string::npos);
+  CheckBridges(bridges, excepted_bridges);
+  CheckCutVertices(cut_vertices, excepted_cut_vertices);
 }

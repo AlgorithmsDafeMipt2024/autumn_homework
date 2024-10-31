@@ -40,7 +40,8 @@ void Network::TarjanVisit(size_t vertex_id, std::vector<int> &disc,
     cut_vertices.push_back(vertex_id);
 }
 
-void Network::FindBridgesAndCutVertices() {
+std::pair<std::vector<std::pair<int, int>>, std::vector<int>>
+Network::FindBridgesAndCutVertices() {
   std::vector<int> disc(Size(), -1);
   std::vector<int> low(Size(), -1);
   std::vector<int> parent(Size(), -1);
@@ -51,14 +52,5 @@ void Network::FindBridgesAndCutVertices() {
   for (size_t vertex_id = 0; vertex_id < Size(); ++vertex_id)
     if (disc[vertex_id] == -1)
       TarjanVisit(vertex_id, disc, low, parent, bridges, cut_vertices, time);
-
-  // Print bridges
-  std::cout << "Bridges:" << std::endl;
-  for (const auto &bridge : bridges)
-    std::cout << bridge.first << " -- " << bridge.second << std::endl;
-
-  // Print cut vertices
-  std::cout << "Cut vertices:" << std::endl;
-  for (const auto &cut_vertex : cut_vertices)
-    std::cout << cut_vertex << std::endl;
+  return std::make_pair(bridges, cut_vertices);
 }

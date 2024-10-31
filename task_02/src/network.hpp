@@ -6,7 +6,8 @@
 class Network : public Graph<int> {
  public:
   /// @brief Finds bridges and cut vertices in graph using Tarjan's algorithm
-  void FindBridgesAndCutVertices();
+  std::pair<std::vector<std::pair<int, int>>, std::vector<int>>
+  FindBridgesAndCutVertices();
 
  private:
   void TarjanVisit(size_t vertex_id, std::vector<int> &disc,

@@ -16,5 +16,17 @@ int main() {
   network.AddEdge(2, 0);
   network.AddEdge(2, 3);
 
-  network.FindBridgesAndCutVertices();
+  auto [bridges, cut_vertices] = network.FindBridgesAndCutVertices();
+
+  // Print bridges
+  std::cout << "Bridges:" << std::endl;
+  for (const auto &bridge : bridges)
+    std::cout << bridge.first << " -- " << bridge.second << std::endl;
+
+  // Print cut vertices
+  std::cout << "Cut vertices:" << std::endl;
+  for (const auto &cut_vertex : cut_vertices)
+    std::cout << cut_vertex << std::endl;
+
+  return 0;
 }
