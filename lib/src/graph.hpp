@@ -33,6 +33,7 @@ class Graph {
   std::shared_ptr<Vertex<T>> operator[](size_t index) {
     return vertices_[index];
   }
+
   const std::shared_ptr<Vertex<T>> operator[](size_t index) const {
     return vertices_[index];
   }
@@ -43,7 +44,7 @@ class Graph {
    * @param vertex
    * @return size_t
    */
-  size_t Find(const std::shared_ptr<Vertex<T>> &vertex) {
+  size_t Find(const std::shared_ptr<Vertex<T>> &vertex) const {
     return std::find(vertices_.begin(), vertices_.end(), vertex) -
            vertices_.begin();
   };
@@ -74,7 +75,7 @@ class Graph {
    * Returns the number of vertices in the graph
    * @return size_t
    */
-  size_t Size() { return vertices_.size(); }
+  size_t Size() const { return vertices_.size(); }
 
   /**
    * @brief
@@ -127,7 +128,7 @@ class Graph {
    * @param first_id
    * @param second_id
    */
-  void AddEdge(size_t first_id, std::shared_ptr<Vertex<T>> second_id) {
+  void AddEdge(size_t first_id, size_t second_id) {
     AddDirEdge(first_id, second_id);
     AddDirEdge(second_id, first_id);
   }
@@ -181,6 +182,6 @@ class Graph {
     }
   }
 
- private:
+ protected:
   std::vector<std::shared_ptr<Vertex<T>>> vertices_;
 };
