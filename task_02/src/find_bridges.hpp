@@ -21,7 +21,7 @@ inline void FindBridgesStep(
   indexes[vert] = low_links[vert] = curr_index++;
 
   // перебираем рёбра, исходящие из vert
-  for (const auto& u_vert : adj_list[vert]) {
+  for (const auto& u_vert : adj_list[vert])
     if (!visited[u_vert]) {
       // вершина u_vert ранее не посещалась; запускаемся из неё рекурсивно
       FindBridgesStep(u_vert, vert, curr_index, indexes, low_links, visited,
@@ -35,7 +35,6 @@ inline void FindBridgesStep(
     } else if (u_vert !=
                parent_vert)  // если предок vert уже посещен - игнорируем
       low_links[vert] = std::min(low_links[vert], low_links[u_vert]);
-  }
 }
 
 }  // namespace

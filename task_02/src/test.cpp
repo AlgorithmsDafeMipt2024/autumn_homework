@@ -82,3 +82,17 @@ TEST(FindBridgesTest, ComplexGraph) {
 
   ASSERT_EQ(bridges, answer);
 }
+
+TEST(FindBridgesTest, NonSimpleGraphs) {
+  std::unordered_map<std::string, std::vector<std::string>> adj_list_dict = {
+      {"A", {"B"}}, {"B", {"C", "D"}}, {"C", {"A", "D"}}, {"D", {"E"}},
+      {"E", {"D"}}, {"F", {"E", "G"}}, {"G", {"F", "H"}}, {"H", {"E", "G"}}};
+
+  auto graph = Graph<std::string, long>::GraphFromAdjList(adj_list_dict);
+  graph.MakeUndirected();
+
+  auto bridges = FindBridges(graph);
+  std::vector<std::pair<std::string, std::string>> answer = {{"E", "D"}};
+
+  ASSERT_EQ(bridges, answer);
+}
