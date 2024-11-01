@@ -1,42 +1,13 @@
-
 #include <gtest/gtest.h>
 
-#include <stack>
+#include "bridges_and_point.hpp"
 
-#include "stack.hpp"
+TEST(SimpleTest, Simple){
+    int vertices = 6;
+    int edge = 7;
+    std::vector<std::pair<int, int>> edges = {{1, 2}, {2, 3}, {2, 4}, {2, 5}, {4, 5}, {1, 3}, {3, 6}};
 
-TEST(StackTest, Simple) {
-  Stack stack;
-  stack.Push(1);              // Stack [1]
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
-  stack.Push(1);              // Stack [1]
-  stack.Push(2);              // Stack [1, 2]
-  ASSERT_EQ(stack.Pop(), 2);  // Stack [1]
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
-  stack.Push(1);              // Stack [1]
-  stack.Push(2);              // Stack [1, 2]
-  ASSERT_EQ(stack.Pop(), 2);  // Stack [1]
-  stack.Push(3);              // Stack [1, 3]
-  ASSERT_EQ(stack.Pop(), 3);  // Stack [1]
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
-}
-
-TEST(MinStackTest, Simple) {
-  MinStack stack;
-  stack.Push(1);  // Stack [1]
-  ASSERT_EQ(stack.GetMin(), 1);
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
-  stack.Push(1);              // Stack [1]
-  stack.Push(2);              // Stack [1, 2]
-  ASSERT_EQ(stack.GetMin(), 1);
-  ASSERT_EQ(stack.Pop(), 2);  // Stack [1]
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
-  stack.Push(1);              // Stack [1]
-  stack.Push(2);              // Stack [1, 2]
-  ASSERT_EQ(stack.GetMin(), 1);
-  ASSERT_EQ(stack.Pop(), 2);  // Stack [1]
-  stack.Push(3);              // Stack [1, 3]
-  ASSERT_EQ(stack.GetMin(), 1);
-  ASSERT_EQ(stack.Pop(), 3);  // Stack [1]
-  ASSERT_EQ(stack.Pop(), 1);  // Stack []
+    set<int> result = cut_point(vertices, edge, edges);
+    set<int> expected = {2, 3};
+    ASSERT_EQ(result, expected);
 }
