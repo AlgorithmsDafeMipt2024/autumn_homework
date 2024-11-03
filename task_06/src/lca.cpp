@@ -8,7 +8,7 @@ LCA::LCA(const vector<vector<int>>& tree, int root) {
   for (const auto& i : tree)
     if (i.empty()) throw std::logic_error("vertex vector is empty");
   n = tree.size();
-  const int log_n = static_cast<int>(log2(n) + 1);
+  const int log_n = static_cast<int>(log2(static_cast<double>(n)) + 1);
   up.assign(n, vector<int>(log_n, -1));
   depth.resize(n);
   Dfs(tree, root, root);
