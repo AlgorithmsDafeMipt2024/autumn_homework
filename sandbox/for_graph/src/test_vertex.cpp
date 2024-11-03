@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <stdexcept>
+
 #include "graph/vertex.hpp"
 
 TEST(TestVertex, Test_Constructors_1) {
@@ -49,4 +51,27 @@ TEST(TestVertex, Test_AddAdjacentVertex) {
   std::vector<std::string> expected_vertices{"B", "C", "E", "D"};
 
   ASSERT_EQ(v1.GetAdjacentVertices(), expected_vertices);
+}
+
+TEST(TestVertex, Test_DeleteAdjacentVertex) {
+  Vertex<std::string> v1("A", {"B", "C", "E"});
+  v1.DeleteAdjacentVertex("C");
+
+  std::vector<std::string> expected_vertices{"B", "E"};
+
+  ASSERT_EQ(v1.GetAdjacentVertices(), expected_vertices);
+
+  ASSERT_THROW(v1.DeleteAdjacentVertex("D"), std::invalid_argument);
+}
+
+TEST(TestVertex, Test_ContainsAdjacentVertex) {
+  Vertex<std::string> v1("A", {"B", "C", "E"});
+
+  ASSERT_EQ(v1.ContainsAdjacentVertex("C"), true);
+
+  v1.DeleteAdjacentVertex("C");
+  ASSERT_EQ(v1.ContainsAdjacentVertex("C"), false);
+
+  v1.AddAdjacentVertex("F");
+  ASSERT_EQ(v1.ContainsAdjacentVertex("F"), true);
 }

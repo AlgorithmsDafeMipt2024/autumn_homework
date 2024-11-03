@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 
 template <typename T>
@@ -17,6 +18,16 @@ class Vertex {
     adjacent_vertices.push_back(adj_vertex);
   }
 
+  void DeleteAdjacentVertex(T adj_vertex) {
+    for (int i = 0; i < adjacent_vertices.size(); i++) {
+      if (adjacent_vertices[i] == adj_vertex) {
+        adjacent_vertices.erase(adjacent_vertices.begin() + i);
+        return;
+      }
+    }
+    throw std::invalid_argument("Adjacent vertex not found!");
+  }
+
   T GetVertexId() const { return vertex_id; }
 
   std::vector<T> GetAdjacentVertices() const { return adjacent_vertices; }
@@ -28,6 +39,13 @@ class Vertex {
       if (i != adjacent_vertices.size() - 1) std::cout << ", ";
     }
     std::cout << "}\n";
+  }
+
+  bool ContainsAdjacentVertex(T adj_vert) const {
+    for (T vertex : adjacent_vertices) {
+      if (adj_vert == vertex) return true;
+    }
+    return false;
   }
 
  private:
