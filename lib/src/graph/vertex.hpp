@@ -6,8 +6,9 @@ class Vertex {
   Vertex(size_t vertex_id, std::vector<size_t> adj_vertices)
       : vertex_id(vertex_id), adjacent_vertices(adj_vertices) {}
 
-  Vertex(size_t vertex_id, std::initializer_list<size_t> adj_vertices) {
-    for (size_t adj_vertex_id : adjacent_vertices)
+  Vertex(size_t vertex_id, std::initializer_list<size_t> adj_vertices)
+      : vertex_id(vertex_id) {
+    for (size_t adj_vertex_id : adj_vertices)
       adjacent_vertices.push_back(adj_vertex_id);
   }
 
