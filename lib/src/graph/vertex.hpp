@@ -22,8 +22,11 @@ class Vertex {
   std::vector<T> GetAdjacentVertices() const { return adjacent_vertices; }
 
   void PrintAdjacentVertices() const {
-    std::cout << "Adjacent vertices for " << vertex_id << ": { ";
-    for (T vertex : adjacent_vertices) std::cout << vertex << ", ";
+    std::cout << "Adjacent vertices for " << vertex_id << ": {";
+    for (int i = 0; i < adjacent_vertices.size(); i++) {
+      std::cout << adjacent_vertices[i];
+      if (i != adjacent_vertices.size() - 1) std::cout << ", ";
+    }
     std::cout << "}\n";
   }
 
