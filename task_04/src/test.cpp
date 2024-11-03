@@ -2,40 +2,88 @@
 
 #include <graph.hpp>
 
-TEST(DijkstraAlgorithm, Simple1) {
-  std::vector<std::vector<int>> table = {
-      {0, 4, 0, 0, 0, 0, 0, 8, 0},  {4, 0, 8, 0, 0, 0, 0, 11, 0},
-      {0, 8, 0, 7, 0, 4, 0, 0, 2},  {0, 0, 7, 0, 9, 14, 0, 0, 0},
-      {0, 0, 0, 9, 0, 10, 0, 0, 0}, {0, 0, 4, 14, 10, 0, 2, 0, 0},
-      {0, 0, 0, 0, 0, 2, 0, 1, 6},  {8, 11, 0, 0, 0, 0, 1, 0, 7},
-      {0, 0, 2, 0, 0, 0, 6, 7, 0}};
-  Weighted_Graph graph(table);
-  ASSERT_EQ(graph.Dijkstra_algo(1),
-            std::vector<int>({0, 4, 12, 19, 21, 11, 9, 8, 14}));
-  ASSERT_EQ(graph.Dijkstra_algo(3),
-            std::vector<int>({12, 8, 0, 7, 14, 4, 6, 7, 2}));
+TEST(DijkstraAlgorithmTest, PositiveWeights) {
+  vector<vector<int>> graph = {{0, 10, INF, 30, 100},
+                               {INF, 0, 50, INF, INF},
+                               {INF, INF, 0, INF, 10},
+                               {INF, INF, 20, 0, 60},
+                               {INF, INF, INF, INF, 0}};
+  vector<int> expected_distances = {0, 10, 50, 30, 60};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
 }
 
-TEST(DijkstraAlgorithm, Simple2) {
-  std::vector<std::vector<int>> table = {
-      {0, 7, 9, 0, 0, 14},  {7, 0, 10, 15, 0, 0}, {9, 10, 0, 11, 0, 2},
-      {0, 15, 11, 0, 6, 0}, {0, 0, 0, 6, 0, 9},   {14, 0, 2, 0, 9, 0}};
-  Weighted_Graph graph(table);
-  ASSERT_EQ(graph.Dijkstra_algo(1), std::vector<int>({0, 7, 9, 20, 20, 11}));
-  ASSERT_EQ(graph.Dijkstra_algo(5), std::vector<int>({20, 21, 11, 6, 0, 9}));
+TEST(DijkstraAlgorithmTest, DisconnectedGraph) {
+  vector<vector<int>> graph = {{0, INF, INF, INF, INF},
+                               {INF, 0, 15, INF, INF},
+                               {INF, INF, 0, INF, INF},
+                               {INF, INF, INF, 0, 5},
+                               {INF, INF, INF, INF, 0}};
+  vector<int> expected_distances = {0, INF, INF, INF, INF};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
 }
 
-TEST(DijkstraAlgorithm, Simple3) {
-  std::vector<std::vector<int>> table = {{1, 2, 3}, {1, 2, 3, 4}};
-  EXPECT_THROW(Weighted_Graph graph(table), std::logic_error);
+TEST(DijkstraAlgorithmTest, SingleVertex) {
+  vector<vector<int>> graph = {{0}};
+  vector<int> expected_distances = {0};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
 }
 
-TEST(DijkstraAlgorithm, Simple4) {
-  std::vector<std::vector<int>> table = {{}, {}, {}};
-  EXPECT_THROW(Weighted_Graph graph(table), std::logic_error);
+TEST(DijkstraAlgorithmTest, StartVertexDisconnected) {
+  vector<vector<int>> graph = {{0, INF, INF, INF},
+                               {INF, 0, 7, INF},
+                               {INF, INF, 0, 3},
+                               {INF, INF, INF, 0}};
+  vector<int> expected_distances = {0, INF, INF, INF};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
 }
 
-TEST(DijkstraAlgorithm, Simple5) {
-  std::vector<std::vector<int>> table = {};
-  EXPECT_THROW(Weighted_Graph graph(table), std::logic_error);
+TEST(DijkstraAlgorithmTest, MultiplePaths) {
+  vector<vector<int>> graph = {{0, 1, 4, INF, INF},
+                               {INF, 0, 4, 2, 7},
+                               {INF, INF, 0, 3, INF},
+                               {INF, INF, INF, 0, 1},
+                               {INF, INF, INF, INF, 0}};
+  vector<int> expected_distances = {0, 1, 4, 3, 4};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
+}
+
+TEST(DijkstraAlgorithmTest, GraphWithSelfLoops) {
+  vector<vector<int>> graph = {
+      {0, 10, INF, 5}, {INF, 0, 1, INF}, {INF, INF, 0, 4}, {7, INF, 2, 0}};
+  vector<int> expected_distances = {0, 10, 7, 5};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
+}
+
+TEST(DijkstraAlgorithmTest, LargerGraph) {
+  vector<vector<int>> graph = {
+      {0, 3, 1, INF, INF, INF}, {3, 0, 7, 5, 1, INF},   {1, 7, 0, 2, INF, 3},
+      {INF, 5, 2, 0, 7, 4},     {INF, 1, INF, 7, 0, 6}, {INF, INF, 3, 4, 6, 0}};
+  vector<int> expected_distances = {0, 3, 1, 3, 4, 4};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
+}
+
+TEST(DijkstraAlgorithmTest, EvenLargerGraph) {
+  vector<vector<int>> graph = {
+      {0, 10, INF, INF, INF, 5, INF, INF}, {10, 0, 2, 1, INF, INF, INF, INF},
+      {INF, 2, 0, 4, 8, INF, INF, INF},    {INF, 1, 4, 0, 2, INF, INF, INF},
+      {INF, INF, 8, 2, 0, 3, 6, INF},      {5, INF, INF, INF, 3, 0, INF, 9},
+      {INF, INF, INF, INF, 6, INF, 0, 1},  {INF, INF, INF, INF, INF, 9, 1, 0}};
+  vector<int> expected_distances = {0, 10, 12, 10, 8, 5, 14, 14};
+
+  WeightedGraph wg(std::move(graph));
+  EXPECT_EQ(wg.Dijkstra(0), expected_distances);
 }

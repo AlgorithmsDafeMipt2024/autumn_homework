@@ -1,132 +1,179 @@
 #pragma once
 
 #include <cmath>
+#include <limits>
 #include <list>
+#include <memory>
+#include <queue>
 #include <stdexcept>
 #include <vector>
 
+using std::list;
+using std::pair;
 using std::vector;
+
+const int INF = std::numeric_limits<int>::max();
 
 template <typename T>
 class Graph {
  private:
-  int vertices_number;
-  std::list<T>* adjacency_list;
+  size_t vertices_number_;
+  std::unique_ptr<list<T>[]> adjacency_list_;
 
  public:
-  Graph(int number) {
+  Graph(size_t number) {
     if (number <= 0) throw std::logic_error("number must be positive!");
-    vertices_number = number;
-    adjacency_list = new std::list<T>[vertices_number + 1];
+    vertices_number_ = number;
+    adjacency_list_ = std::make_unique<list<T>[]>(vertices_number_ + 1);
   }
-  void AddEdge(int first_verticle, int second_verticle) {
-    if (first_verticle < 0 || first_verticle > vertices_number ||
-        second_verticle < 0 || second_verticle > vertices_number)
+
+  void AddEdge(size_t first_verticle, size_t second_verticle) {
+    if (first_verticle < 1 || first_verticle > vertices_number_ ||
+        second_verticle < 1 || second_verticle > vertices_number_)
       throw std::logic_error("such node does not exist");
     if (first_verticle == second_verticle)
       throw std::logic_error("graph must be acyclic!");
-    adjacency_list[first_verticle].push_back(second_verticle);
+    adjacency_list_[first_verticle].push_back(second_verticle);
   }
-  void TopologySortStep(int current_vertice, bool visited_vertices[],
-                        std::list<int>& list) {
+
+  void TopologySortStep(int current_vertice, vector<bool>& visited_vertices,
+                        list<T>& list) {
     visited_vertices[current_vertice] = true;
-    for (typename std::list<T>::iterator i =
-             adjacency_list[current_vertice].begin();
-         i != adjacency_list[current_vertice].end(); i++) {
-      if (!visited_vertices[*i]) TopologySortStep(*i, visited_vertices, list);
+    for (const auto& neighbor : adjacency_list_[current_vertice]) {
+      if (!visited_vertices[neighbor]) {
+        TopologySortStep(neighbor, visited_vertices, list);
+      }
     }
     list.push_front(current_vertice);
   }
-  std::list<int> TopologySort() {
-    std::list<T> list;
-    bool* visited_vertices = new bool[vertices_number];
-    for (int i = 0; i < vertices_number; i++) {
-      if (!visited_vertices[i]) TopologySortStep(i, visited_vertices, list);
+
+  list<T> TopologySort() {
+    list<T> list;
+    vector<bool> visited_vertices(vertices_number_ + 1, false);
+    for (size_t i = 1; i <= vertices_number_; i++) {
+      if (!visited_vertices[i]) {
+        TopologySortStep(i, visited_vertices, list);
+      }
     }
     return list;
   }
 };
 
-class Weighted_Graph {
+class WeightedGraph {
  private:
-  vector<vector<int>> table;
-  int vertices_number;
+  vector<vector<int>> table_;
+  size_t vertices_number_;
 
- public:
-  Weighted_Graph(vector<vector<int>> table_) {
-    if (table_.empty())
-      throw std::logic_error(
-          "the graph was not created because the input table is empty");
-    for (int i = 0; i < table_.size(); i++)
-      if (table_[i].size() != table_.size())
-        throw std::logic_error(
-            "the graph was not created because the input table is incorrect");
-    table = table_;
-    vertices_number = table.size();
-  }
-  vector<int> BellmanFord_Algorithm(const vector<vector<int>>& edges) {
-    vector<int> dist(vertices_number + 1, std::numeric_limits<int>::max());
-    dist[vertices_number] = 0;
-
-    vector<vector<int>> edges_with_extra = edges;
-    for (int i = 0; i < vertices_number; ++i) {
-      edges_with_extra.push_back({vertices_number, i, 0});
-    }
-
-    for (int i = 0; i < vertices_number; ++i) {
-      for (const auto& edge : edges_with_extra) {
-        if (dist[edge[0]] != std::numeric_limits<int>::max() &&
-            dist[edge[0]] + edge[2] < dist[edge[1]]) {
-          dist[edge[1]] = dist[edge[0]] + edge[2];
+  void CheckNegativeCycle(const vector<int>& distances) {
+    for (size_t u = 0; u < vertices_number_; ++u) {
+      for (size_t v = 0; v < vertices_number_; ++v) {
+        if (table_[u][v] != INF && distances[u] != INF) {
+          if (distances[u] + table_[u][v] < distances[v]) {
+            throw std::logic_error("Graph contains a negative weight cycle");
+          }
         }
       }
     }
-    return vector<int>(dist.begin(), dist.begin() + vertices_number);
   }
-  vector<vector<int>> JohnsonAlgorithm() {
-    vector<vector<int>> edges;
 
-    for (int i = 0; i < vertices_number; ++i)
-      for (int j = 0; j < vertices_number; ++j)
-        if (table[i][j] != 0) edges.push_back({i, j, table[i][j]});
-
-    vector<int> altered_weights = BellmanFord_Algorithm(edges);
-    vector<vector<int>> altered_graph(vertices_number,
-                                      vector<int>(vertices_number, 0));
-
-    for (int i = 0; i < vertices_number; ++i)
-      for (int j = 0; j < vertices_number; ++j)
-        if (table[i][j] != 0)
-          altered_graph[i][j] =
-              table[i][j] + altered_weights[i] - altered_weights[j];
-
-    return altered_graph;
+  bool RelaxEdges(vector<int>& distances) {
+    bool updated = false;
+    for (size_t u = 0; u < vertices_number_; ++u) {
+      for (size_t v = 0; v < vertices_number_; ++v) {
+        if (table_[u][v] != INF && distances[u] != INF) {
+          if (distances[u] + table_[u][v] < distances[v]) {
+            distances[v] = distances[u] + table_[u][v];
+            updated = true;
+          }
+        }
+      }
+    }
+    return updated;
   }
-  int MinDistance(vector<int> distances, bool is_shortest[]) {
-    int min_distance = std::numeric_limits<int>::max(), min_index;
-    for (int i = 0; i < vertices_number; i++)
-      if (!is_shortest[i] && distances[i] < min_distance)
-        min_distance = distances[i], min_index = i;
-    return min_index;
-  };
-  vector<int> Dijkstra_algo(int source) {
-    source -= 1;
-    vector<int> distances;
-    bool is_shortest[vertices_number];
-    for (int i = 0; i < vertices_number; i++) {
-      distances.push_back(std::numeric_limits<int>::max());
-      is_shortest[i] = false;
+
+  vector<int> BellmanFord(int start) {
+    vector<int> distances(vertices_number_, INF);
+    distances[start] = 0;
+
+    for (size_t i = 0; i < vertices_number_ - 1; ++i) {
+      RelaxEdges(distances);
     }
-    distances[source] = 0;
-    for (int i = 0; i < vertices_number - 1; i++) {
-      int min_distance = MinDistance(distances, is_shortest);
-      is_shortest[min_distance] = true;
-      for (int j = 0; j < vertices_number; j++)
-        if (!is_shortest[j] && table[min_distance][j] &&
-            distances[j] != (std::numeric_limits<int>::max() - 1) &&
-            distances[min_distance] + table[min_distance][j] < distances[j])
-          distances[j] = distances[min_distance] + table[min_distance][j];
+
+    CheckNegativeCycle(distances);
+    return distances;
+  }
+
+ public:
+  WeightedGraph(vector<vector<int>>&& table)
+      : table_(std::move(table)), vertices_number_(table_.size()) {
+    if (table_.empty())
+      throw std::logic_error(
+          "the graph was not created because the input table is empty");
+    for (size_t i = 0; i < table_.size(); i++)
+      if (table_[i].size() != table_.size())
+        throw std::logic_error(
+            "the graph was not created because the input table is incorrect");
+  }
+
+  vector<int> Dijkstra(int start) {
+    vector<int> distances(vertices_number_, INF);
+    distances[start] = 0;
+
+    std::priority_queue<pair<int, int>, vector<pair<int, int>>, std::greater<>>
+        pq;
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+      int u = pq.top().second;
+      int dist_u = pq.top().first;
+      pq.pop();
+
+      if (dist_u > distances[u]) continue;
+
+      for (size_t v = 0; v < vertices_number_; ++v) {
+        if (table_[u][v] != INF && distances[u] != INF) {
+          int new_dist = distances[u] + table_[u][v];
+          if (new_dist < distances[v]) {
+            distances[v] = new_dist;
+            pq.push({new_dist, v});
+          }
+        }
+      }
     }
+    return distances;
+  }
+
+  vector<vector<int>> Johnson() {
+    vector<int> h(vertices_number_ + 1, 0);
+
+    table_.push_back(vector<int>(vertices_number_, 0));
+    try {
+      h = BellmanFord(vertices_number_);
+    } catch (const std::logic_error&) {
+      throw std::logic_error(
+          "Graph contains a negative weight cycle, Johnson's algorithm cannot "
+          "be applied");
+    }
+    table_.pop_back();
+
+    for (size_t u = 0; u < vertices_number_; ++u) {
+      for (size_t v = 0; v < vertices_number_; ++v) {
+        if (table_[u][v] != INF) {
+          table_[u][v] += h[u] - h[v];
+        }
+      }
+    }
+
+    vector<vector<int>> distances(vertices_number_);
+    for (size_t u = 0; u < vertices_number_; ++u) {
+      distances[u] = Dijkstra(u);
+      for (size_t v = 0; v < vertices_number_; ++v) {
+        if (distances[u][v] != INF) {
+          distances[u][v] += h[v] - h[u];
+        }
+      }
+    }
+
     return distances;
   }
 };
@@ -134,71 +181,72 @@ class Weighted_Graph {
 template <typename T>
 class BridgeGraph {
  private:
-  int vertices_number;
-  std::list<T>* adjacency_list;
-  vector<int> tin, low;
-  vector<bool> visited;
-  vector<std::pair<int, int>> bridges;
-  vector<int> articulation_points;
+  size_t vertices_number_;
+  list<T>* adjacency_list_;
+  vector<int> tin_, low_;
+  vector<bool> visited_;
+  vector<pair<int, int>> bridges_;
+  vector<int> articulation_points_;
 
   void dfs(int v, int p, int& timer) {
-    visited[v] = true;
-    tin[v] = low[v] = timer++;
+    visited_[v] = true;
+    tin_[v] = low_[v] = timer++;
     int children = 0;
 
-    for (int to : adjacency_list[v]) {
+    for (int to : adjacency_list_[v]) {
       if (to == p) continue;
-      if (visited[to]) {
-        low[v] = std::min(low[v], tin[to]);
+      if (visited_[to]) {
+        low_[v] = std::min(low_[v], tin_[to]);
       } else {
         dfs(to, v, timer);
-        low[v] = std::min(low[v], low[to]);
+        low_[v] = std::min(low_[v], low_[to]);
 
-        if (low[to] > tin[v]) bridges.push_back({v, to});
-        if (low[to] >= tin[v] && p != -1) {
-          if (articulation_points.empty()) {
-            articulation_points.push_back(v);
-          } else if (articulation_points.back() != v) {
-            articulation_points.push_back(v);
+        if (low_[to] > tin_[v]) bridges_.push_back({v, to});
+        if (articulation_points_.empty()) {
+          if (low_[to] >= tin_[v] && p != -1) {
+            if (articulation_points_.empty() ||
+                articulation_points_.back() != v) {
+              articulation_points_.push_back(v);
+            }
           }
         }
         ++children;
       }
     }
 
-    if (p == -1 && children > 1) articulation_points.push_back(v);
+    if (p == -1 && children > 1) articulation_points_.push_back(v);
   }
 
  public:
-  BridgeGraph(int number) {
+  BridgeGraph(size_t number) {
     if (number <= 0) throw std::logic_error("number must be positive!");
-    vertices_number = number;
-    adjacency_list = new std::list<T>[vertices_number + 1];
+    vertices_number_ = number;
+    adjacency_list_ = new list<T>[vertices_number_ + 1];
   }
 
-  void AddEdge(int first_verticle, int second_verticle) {
-    if (first_verticle < 0 || first_verticle > vertices_number ||
-        second_verticle < 0 || second_verticle > vertices_number)
+  void AddEdge(size_t first_verticle, size_t second_verticle) {
+    if (first_verticle < 0 || first_verticle > vertices_number_ ||
+        second_verticle < 0 || second_verticle > vertices_number_)
       throw std::logic_error("such node does not exist");
     if (first_verticle == second_verticle)
       throw std::logic_error("graph must be acyclic!");
-    adjacency_list[first_verticle].push_back(second_verticle);
-    adjacency_list[second_verticle].push_back(first_verticle);
+    adjacency_list_[first_verticle].push_back(second_verticle);
+    adjacency_list_[second_verticle].push_back(first_verticle);
   }
 
   void FindBridgesAndArticulationPoints() {
     int timer = 0;
-    tin.assign(vertices_number + 1, -1);
-    low.assign(vertices_number + 1, -1);
-    visited.assign(vertices_number + 1, false);
-    bridges.clear();
-    articulation_points.clear();
+    tin_.assign(vertices_number_ + 1, -1);
+    low_.assign(vertices_number_ + 1, -1);
+    visited_.assign(vertices_number_ + 1, false);
+    bridges_.clear();
+    articulation_points_.clear();
 
-    for (int i = 0; i <= vertices_number; ++i) {
-      if (!visited[i]) dfs(i, -1, timer);
+    for (size_t i = 0; i <= vertices_number_; ++i) {
+      if (!visited_[i]) dfs(i, -1, timer);
     }
   }
 
-  vector<std::pair<int, int>> GiveBridges() { return bridges; }
-  vector<int> GivePoints() { return articulation_points; }
+  vector<pair<int, int>> GiveBridges() { return bridges_; }
+  vector<int> GivePoints() { return articulation_points_; }
 };

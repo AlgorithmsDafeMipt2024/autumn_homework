@@ -14,7 +14,8 @@ struct RMQ {
   vector<T> data;
   int size;
   static const int block_size = 30;
-  vector<int> masks, table;
+  vector<int> masks;
+  vector<int> table;
 
   int Operation(int x, int y) { return data[x] < data[y] ? x : y; }
   int LeastSignificantBit(int x) { return x & -x; }
@@ -30,7 +31,7 @@ struct RMQ {
         masks(size),
         table((size / block_size) * 32) {
     int current_mask = 0;
-    for (int i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; i++) {
       current_mask = (current_mask << 1) & ((1 << block_size) - 1);
       while (current_mask > 0 &&
              Operation(i, i - MostSignificantBitIndex(
@@ -54,7 +55,8 @@ struct RMQ {
       throw std::out_of_range("incorrect boundaries!");
     if (r - l + 1 <= block_size) return data[Small(r, r - l + 1)];
     int ans = Operation(Small(l + block_size - 1), Small(r));
-    int x = l / block_size + 1, y = r / block_size - 1;
+    const int x = l / block_size + 1;
+    const int y = r / block_size - 1;
     if (x <= y) {
       int j = MostSignificantBitIndex(y - x + 1);
       ans = Operation(
