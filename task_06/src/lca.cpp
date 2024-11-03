@@ -8,7 +8,7 @@ LCA::LCA(const vector<vector<int>>& tree, int root) {
   for (const auto& i : tree)
     if (i.empty()) throw std::logic_error("vertex vector is empty");
   n = tree.size();
-  int log_n = log2(n) + 1;
+  const int log_n = static_cast<int>(log2(n) + 1);
   up.assign(n, vector<int>(log_n, -1));
   depth.resize(n);
   Dfs(tree, root, root);
@@ -17,12 +17,12 @@ LCA::LCA(const vector<vector<int>>& tree, int root) {
 int LCA::Query(int u, int v) {
   if (u < 0 || v >= n) throw std::out_of_range("incorrect boundaries!");
   if (depth[u] < depth[v]) std::swap(u, v);
-  int log_n = up[0].size();
-  for (int i = log_n - 1; i >= 0; i--) {
+  const size_t log_n = up[0].size();
+  for (size_t i = log_n - 1; i >= 0; i--) {
     if (depth[u] - (1 << i) >= depth[v]) u = up[u][i];
   }
   if (u == v) return u;
-  for (int i = log_n - 1; i >= 0; i--) {
+  for (size_t i = log_n - 1; i >= 0; i--) {
     if (up[u][i] != up[v][i]) {
       u = up[u][i];
       v = up[v][i];
@@ -38,7 +38,7 @@ void LCA::Dfs(const vector<vector<int>>& tree, int v, int p) {
       up[v][i] = up[up[v][i - 1]][i - 1];
     }
   }
-  for (int u : tree[v]) {
+  for (const int u : tree[v]) {
     if (u != p) {
       depth[u] = depth[v] + 1;
       Dfs(tree, u, v);

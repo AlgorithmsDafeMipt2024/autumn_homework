@@ -16,7 +16,7 @@ class LCA {
  private:
   vector<vector<int>> up;
   vector<int> depth;
-  int n;
+  size_t n;
 
   void Dfs(const vector<vector<int>>& tree, int v, int p);
 };

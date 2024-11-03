@@ -94,11 +94,11 @@ TEST(LCATest, test6) {
   tree[1] = {0, 3};
   tree[2] = {0};
 
-  EXPECT_THROW(LCA lca(tree, 0), std::logic_error);
+  EXPECT_THROW(const LCA lca(tree, 0), std::logic_error);
 }
 
 TEST(LCATest, test7) {
-  vector<vector<int>> tree;
+  vector<vector<int>> const tree;
 
-  EXPECT_THROW(LCA lca(tree, 0), std::logic_error);
+  EXPECT_THROW(const LCA lca(tree, 0), std::logic_error);
 }

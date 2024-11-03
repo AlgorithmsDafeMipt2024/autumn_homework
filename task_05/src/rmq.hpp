@@ -50,15 +50,15 @@ struct RMQ {
                       table[size / block_size * (j - 1) + i + (1 << (j - 1))]);
   }
 
-  T Query(int l, int r) {
+  T Query(size_t l, size_t r) {
     if (l < 0 || r >= data.size())
       throw std::out_of_range("incorrect boundaries!");
     if (r - l + 1 <= block_size) return data[Small(r, r - l + 1)];
     int ans = Operation(Small(l + block_size - 1), Small(r));
-    const int x = l / block_size + 1;
-    const int y = r / block_size - 1;
+    const size_t x = l / block_size + 1;
+    const size_t y = r / block_size - 1;
     if (x <= y) {
-      int j = MostSignificantBitIndex(y - x + 1);
+      const size_t j = MostSignificantBitIndex(y - x + 1);
       ans = Operation(
           ans, Operation(table[size / block_size * j + x],
                          table[size / block_size * j + y - (1 << j) + 1]));
