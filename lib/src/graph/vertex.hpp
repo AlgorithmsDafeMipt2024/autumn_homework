@@ -36,7 +36,7 @@ class Vertex {
   }
 
   bool ContainsAdjacentVertex(const T& adj_vert) const {
-    for (T vertex : adjacent_vertices) {
+    for (const T& vertex : adjacent_vertices) {
       if (adj_vert == vertex) return true;
     }
     return false;
