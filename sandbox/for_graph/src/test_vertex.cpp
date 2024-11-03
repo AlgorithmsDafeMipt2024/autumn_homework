@@ -1,4 +1,3 @@
-
 #include <gtest/gtest.h>
 
 #include "graph/vertex.hpp"
@@ -41,4 +40,13 @@ TEST(TestVertex, Test_Constructors_3) {
   for (int i = 0; i < v1.GetAdjacentVertices().size(); i++) {
     ASSERT_EQ(v1.GetAdjacentVertices()[i], v2.GetAdjacentVertices()[i]);
   }
+}
+
+TEST(TestVertex, Test_AddAdjacentVertex) {
+  Vertex<std::string> v1("A", {"B", "C", "E"});
+  v1.AddAdjacentVertex("D");
+
+  std::vector<std::string> expected_vertices{"B", "C", "E", "D"};
+
+  ASSERT_EQ(v1.GetAdjacentVertices(), expected_vertices);
 }
