@@ -45,3 +45,5 @@ void LCA::Dfs(const vector<vector<int>>& tree, int v, int p) {
     }
   }
 }
+
+int main() { return 0; }
