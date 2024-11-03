@@ -18,13 +18,13 @@ template <typename T>
 class Graph {
  private:
   size_t vertices_number_;
-  std::unique_ptr<list<T>[]> adjacency_list_;
+  vector<vector<T>> adjacency_list_;
 
  public:
   Graph(size_t number) {
     if (number <= 0) throw std::logic_error("number must be positive!");
     vertices_number_ = number;
-    adjacency_list_ = std::make_unique<list<T>[]>(vertices_number_ + 1);
+    adjacency_list_.resize(vertices_number_ + 1);
   }
 
   void AddEdge(size_t first_verticle, size_t second_verticle) {
@@ -91,7 +91,7 @@ class WeightedGraph {
     return updated;
   }
 
-  vector<int> BellmanFord(int start) {
+  vector<int> BellmanFord(size_t start) {
     vector<int> distances(vertices_number_, INF);
     distances[start] = 0;
 
@@ -115,7 +115,7 @@ class WeightedGraph {
             "the graph was not created because the input table is incorrect");
   }
 
-  vector<int> Dijkstra(int start) {
+  vector<int> Dijkstra(size_t start) {
     vector<int> distances(vertices_number_, INF);
     distances[start] = 0;
 
@@ -124,15 +124,15 @@ class WeightedGraph {
     pq.push({0, start});
 
     while (!pq.empty()) {
-      int u = pq.top().second;
-      int dist_u = pq.top().first;
+      const int u = pq.top().second;
+      const int dist_u = pq.top().first;
       pq.pop();
 
       if (dist_u > distances[u]) continue;
 
       for (size_t v = 0; v < vertices_number_; ++v) {
         if (table_[u][v] != INF && distances[u] != INF) {
-          int new_dist = distances[u] + table_[u][v];
+          const int new_dist = distances[u] + table_[u][v];
           if (new_dist < distances[v]) {
             distances[v] = new_dist;
             pq.push({new_dist, v});

@@ -12,8 +12,8 @@ using std::vector;
 template <typename T>
 struct RMQ {
   vector<T> data;
-  int size;
-  static const int block_size = 30;
+  size_t size;
+  static const size_t block_size = 30;
   vector<int> masks;
   vector<int> table;
 
@@ -29,7 +29,7 @@ struct RMQ {
       : data(v),
         size(data.size()),
         masks(size),
-        table((size / block_size) * 32) {
+        table((static_cast<size_t>(size / block_size) * 32)) {
     int current_mask = 0;
     for (size_t i = 0; i < size; i++) {
       current_mask = (current_mask << 1) & ((1 << block_size) - 1);
