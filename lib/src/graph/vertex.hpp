@@ -9,6 +9,7 @@ class Vertex {
       : vertex_id(vertex_id), adjacent_vertices(adj_vertices) {}
 
   void AddAdjVertex(const T& adj_vertex) {
+    if (ContainsAdjVertex(adj_vertex)) return;
     adjacent_vertices.push_back(adj_vertex);
   }
 
