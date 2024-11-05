@@ -20,32 +20,34 @@ class Graph {
     }
   }
 
-  void PrintAdjacencyList() const {
+  void PrintAdjList() const {
     for (auto vertex : vertices) {
-      vertex.PrintAdjacentVertices();
+      vertex.PrintAdjVertices();
     }
   }
+
+  std::vector<Vertex<T>> GetVertices() const { return vertices; }
+
+  size_t GetVerticesCount() const { return vertices.size(); }
 
   void AddEdge(const T& vert_1, const T& vert_2) {
     if (!ContainsVertex(vert_1) || !ContainsVertex(vert_2))
       throw std::invalid_argument("Vertex not found!");
 
     for (int i = 0; i < vertices.size(); i++) {
-      if (vertices[i].GetVertexId() == vert_1)
-        vertices[i].AddAdjacentVertex(vert_2);
-      if (vertices[i].GetVertexId() == vert_2)
-        vertices[i].AddAdjacentVertex(vert_1);
+      if (vertices[i].GetVertexId() == vert_1) vertices[i].AddAdjVertex(vert_2);
+      if (vertices[i].GetVertexId() == vert_2) vertices[i].AddAdjVertex(vert_1);
     }
   }
 
   void AddVertex(const Vertex<T>& vertex) {
-    for (const T& adj_vertex : vertex.GetAdjacentVertices()) {
+    for (const T& adj_vertex : vertex.GetAdjVertices()) {
       if (!ContainsVertex(adj_vertex))
-        throw std::invalid_argument("Adjacent vertex not found!");
+        throw std::invalid_argument("Adj vertex not found!");
 
       for (int i = 0; i < vertices.size(); i++) {
         if (adj_vertex == vertices[i].GetVertexId()) {
-          vertices[i].AddAdjacentVertex(vertex.GetVertexId());
+          vertices[i].AddAdjVertex(vertex.GetVertexId());
           break;
         }
       }
@@ -69,13 +71,14 @@ class Graph {
 
   bool ContainsVertex(const Vertex<T>& vertex) const {
     for (const Vertex<T>& vert : vertices) {
-      if (vert.GetVertexId() == vertex.GetVertexId()) {
-        auto adj_verts = vertex.GetAdjacentVertices();
+      if (vert.GetVertexId() == vertex.GetVertexId() &&
+          vert.GetAdjVerticesCount() == vertex.GetAdjVerticesCount()) {
+        auto adj_verts = vertex.GetAdjVertices();
         for (int i = 0; i < adj_verts.size(); i++) {
-          if (!vertex.ContainsAdjacentVertex(adj_verts[i])) return false;
+          if (!vertex.ContainsAdjVertex(adj_verts[i])) return false;
         }
+        return true;
       }
-      return true;
     }
     return false;
   }
@@ -83,6 +86,18 @@ class Graph {
   bool ContainsVertex(const T& vertex) const {
     for (const Vertex<T>& vert : vertices) {
       if (vert.GetVertexId() == vertex) return true;
+    }
+    return false;
+  }
+
+  bool ContainsEdge(const T& vert_1, const T& vert_2) const {
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vert_1 == vertices[i].GetVertexId() ||
+          vert_2 == vertices[i].GetVertexId()) {
+        if (vertices[i].ContainsAdjVertex(vert_1) ||
+            vertices[i].ContainsAdjVertex(vert_2))
+          return true;
+      }
     }
     return false;
   }

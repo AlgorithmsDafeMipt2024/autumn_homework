@@ -10,10 +10,10 @@ TEST(TestVertex, Test_Constructors_1) {
 
   ASSERT_EQ(v1.GetVertexId(), v2.GetVertexId());
 
-  ASSERT_EQ(v1.GetAdjacentVertices().size(), v2.GetAdjacentVertices().size());
+  ASSERT_EQ(v1.GetAdjVertices().size(), v2.GetAdjVertices().size());
 
-  for (int i = 0; i < v1.GetAdjacentVertices().size(); i++) {
-    ASSERT_EQ(v1.GetAdjacentVertices()[i], v2.GetAdjacentVertices()[i]);
+  for (int i = 0; i < v1.GetAdjVertices().size(); i++) {
+    ASSERT_EQ(v1.GetAdjVertices()[i], v2.GetAdjVertices()[i]);
   }
 }
 
@@ -23,10 +23,10 @@ TEST(TestVertex, Test_Constructors_2) {
 
   ASSERT_EQ(v1.GetVertexId(), v2.GetVertexId());
 
-  ASSERT_EQ(v1.GetAdjacentVertices().size(), v2.GetAdjacentVertices().size());
+  ASSERT_EQ(v1.GetAdjVertices().size(), v2.GetAdjVertices().size());
 
-  for (int i = 0; i < v1.GetAdjacentVertices().size(); i++) {
-    ASSERT_EQ(v1.GetAdjacentVertices()[i], v2.GetAdjacentVertices()[i]);
+  for (int i = 0; i < v1.GetAdjVertices().size(); i++) {
+    ASSERT_EQ(v1.GetAdjVertices()[i], v2.GetAdjVertices()[i]);
   }
 }
 
@@ -37,41 +37,41 @@ TEST(TestVertex, Test_Constructors_3) {
 
   ASSERT_EQ(v1.GetVertexId(), v2.GetVertexId());
 
-  ASSERT_EQ(v1.GetAdjacentVertices().size(), v2.GetAdjacentVertices().size());
+  ASSERT_EQ(v1.GetAdjVertices().size(), v2.GetAdjVertices().size());
 
-  for (int i = 0; i < v1.GetAdjacentVertices().size(); i++) {
-    ASSERT_EQ(v1.GetAdjacentVertices()[i], v2.GetAdjacentVertices()[i]);
+  for (int i = 0; i < v1.GetAdjVertices().size(); i++) {
+    ASSERT_EQ(v1.GetAdjVertices()[i], v2.GetAdjVertices()[i]);
   }
 }
 
-TEST(TestVertex, Test_AddAdjacentVertex) {
+TEST(TestVertex, Test_AddAdjVertex) {
   Vertex<std::string> v1("A", {"B", "C", "E"});
-  v1.AddAdjacentVertex("D");
+  v1.AddAdjVertex("D");
 
   std::vector<std::string> expected_vertices{"B", "C", "E", "D"};
 
-  ASSERT_EQ(v1.GetAdjacentVertices(), expected_vertices);
+  ASSERT_EQ(v1.GetAdjVertices(), expected_vertices);
 }
 
-TEST(TestVertex, Test_DeleteAdjacentVertex) {
+TEST(TestVertex, Test_DeleteAdjVertex) {
   Vertex<std::string> v1("A", {"B", "C", "E"});
-  v1.DeleteAdjacentVertex("C");
+  v1.DeleteAdjVertex("C");
 
   std::vector<std::string> expected_vertices{"B", "E"};
 
-  ASSERT_EQ(v1.GetAdjacentVertices(), expected_vertices);
+  ASSERT_EQ(v1.GetAdjVertices(), expected_vertices);
 
-  ASSERT_THROW(v1.DeleteAdjacentVertex("D"), std::invalid_argument);
+  ASSERT_THROW(v1.DeleteAdjVertex("D"), std::invalid_argument);
 }
 
-TEST(TestVertex, Test_ContainsAdjacentVertex) {
+TEST(TestVertex, Test_ContainsAdjVertex) {
   Vertex<std::string> v1("A", {"B", "C", "E"});
 
-  ASSERT_EQ(v1.ContainsAdjacentVertex("C"), true);
+  ASSERT_EQ(v1.ContainsAdjVertex("C"), true);
 
-  v1.DeleteAdjacentVertex("C");
-  ASSERT_EQ(v1.ContainsAdjacentVertex("C"), false);
+  v1.DeleteAdjVertex("C");
+  ASSERT_EQ(v1.ContainsAdjVertex("C"), false);
 
-  v1.AddAdjacentVertex("F");
-  ASSERT_EQ(v1.ContainsAdjacentVertex("F"), true);
+  v1.AddAdjVertex("F");
+  ASSERT_EQ(v1.ContainsAdjVertex("F"), true);
 }
