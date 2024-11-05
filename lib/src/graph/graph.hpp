@@ -64,6 +64,11 @@ class Graph {
     for (int i = 0; i < vertices.size(); i++) {
       if (vertex == vertices[i].GetVertexId()) {
         vertices.erase(vertices.begin() + i);
+
+        for (int i = 0; i < vertices.size(); i++) {
+          if (vertices[i].ContainsAdjVertex(vertex))
+            vertices[i].DeleteAdjVertex(vertex);
+        }
         return;
       }
     }
