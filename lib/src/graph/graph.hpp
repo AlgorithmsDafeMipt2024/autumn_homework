@@ -5,14 +5,16 @@
 template <typename T>
 class Graph {
  public:
-  Graph(const std::vector<Vertex<T>>& vertices) : vertices(vertices) {}
+  Graph(const std::vector<Vertex<T>>& vertices, bool is_oriented = true)
+      : vertices(vertices), is_oriented(is_oriented) {}
 
-  Graph(const std::vector<std::pair<T, T>>& edges) {
+  Graph(const std::vector<std::pair<T, T>>& edges, bool is_oriented = true)
+      : is_oriented(is_oriented) {
     std::map<T, std::vector<T>> vertices_to_add;
 
     for (auto edge : edges) {
       vertices_to_add[edge.first].push_back(edge.second);
-      vertices_to_add[edge.second].push_back(edge.first);
+      if (!is_oriented) vertices_to_add[edge.second].push_back(edge.first);
     }
 
     for (auto vertex : vertices_to_add) {
@@ -35,12 +37,23 @@ class Graph {
       throw std::invalid_argument("Vertex not found!");
 
     for (int i = 0; i < vertices.size(); i++) {
-      if (vertices[i].GetVertexId() == vert_1) vertices[i].AddAdjVertex(vert_2);
+      if (vertices[i].GetVertexId() == vert_1) {
+        vertices[i].AddAdjVertex(vert_2);
+        if (is_oriented) return;
+      }
+
+      // Если граф неориентированный, то мы добавляем ребро vert_2->vert_1
       if (vertices[i].GetVertexId() == vert_2) vertices[i].AddAdjVertex(vert_1);
     }
   }
 
   void AddVertex(const Vertex<T>& vertex) {
+    if (is_oriented) {
+      vertices.push_back(vertex);
+      return;
+    }
+
+    // Добавление вершины для неориентированного графа
     for (const T& adj_vertex : vertex.GetAdjVertices()) {
       if (!ContainsVertex(adj_vertex))
         throw std::invalid_argument("Adj vertex not found!");
@@ -65,6 +78,7 @@ class Graph {
       if (vertex == vertices[i].GetVertexId()) {
         vertices.erase(vertices.begin() + i);
 
+        // Удаляем смежности с удаленной вершиной
         for (int i = 0; i < vertices.size(); i++) {
           if (vertices[i].ContainsAdjVertex(vertex))
             vertices[i].DeleteAdjVertex(vertex);
@@ -78,6 +92,7 @@ class Graph {
     for (const Vertex<T>& vert : vertices) {
       if (vert.GetVertexId() == vertex.GetVertexId() &&
           vert.GetAdjVerticesCount() == vertex.GetAdjVerticesCount()) {
+        // Проверяем смежности
         auto adj_verts = vertex.GetAdjVertices();
         for (int i = 0; i < adj_verts.size(); i++) {
           if (!vertex.ContainsAdjVertex(adj_verts[i])) return false;
@@ -97,16 +112,14 @@ class Graph {
 
   bool ContainsEdge(const T& vert_1, const T& vert_2) const {
     for (int i = 0; i < vertices.size(); i++) {
-      if (vert_1 == vertices[i].GetVertexId() ||
-          vert_2 == vertices[i].GetVertexId()) {
-        if (vertices[i].ContainsAdjVertex(vert_1) ||
-            vertices[i].ContainsAdjVertex(vert_2))
-          return true;
-      }
+      if (vert_1 == vertices[i].GetVertexId() &&
+          vertices[i].ContainsAdjVertex(vert_2))
+        return true;
     }
     return false;
   }
 
  private:
   std::vector<Vertex<T>> vertices;
+  bool is_oriented;
 };
