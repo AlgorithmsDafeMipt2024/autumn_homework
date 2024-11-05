@@ -43,8 +43,8 @@ class Graph {
   }
 
   void AddEdge(const T& vert_1, const T& vert_2) {
-    if (!ContainsVertex(vert_1) || !ContainsVertex(vert_2))
-      throw std::invalid_argument("Vertex not found!");
+    if (!ContainsVertex(vert_1)) AddVertex(vert_1);
+    if (!ContainsVertex(vert_2)) AddVertex(vert_2);
 
     for (int i = 0; i < vertices.size(); i++) {
       if (vertices[i].GetVertexId() == vert_1) {
@@ -71,8 +71,7 @@ class Graph {
 
     // Добавление вершины для неориентированного графа
     for (const T& adj_vertex : vertex.GetAdjVertices()) {
-      if (!ContainsVertex(adj_vertex))
-        throw std::invalid_argument("Adj vertex not found!");
+      if (!ContainsVertex(adj_vertex)) AddVertex(adj_vertex);
 
       for (int i = 0; i < vertices.size(); i++) {
         if (adj_vertex == vertices[i].GetVertexId()) {
