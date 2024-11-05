@@ -40,10 +40,16 @@ class Graph {
       if (vertices[i].GetVertexId() == vert_1) {
         vertices[i].AddAdjVertex(vert_2);
         if (is_oriented) return;
+        break;
       }
+    }
 
-      // Если граф неориентированный, то мы добавляем ребро vert_2->vert_1
-      if (vertices[i].GetVertexId() == vert_2) vertices[i].AddAdjVertex(vert_1);
+    // Если граф неориентированный, то мы добавляем ребро vert_2->vert_1
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vert_2) {
+        vertices[i].AddAdjVertex(vert_1);
+        return;
+      }
     }
   }
 
