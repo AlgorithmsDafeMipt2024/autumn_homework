@@ -34,6 +34,14 @@ class Graph {
 
   size_t GetVerticesCount() const { return vertices.size(); }
 
+  size_t GetEdgesCount() const {
+    size_t count = 0;
+    for (int i = 0; i < vertices.size(); i++)
+      count += vertices[i].GetAdjVerticesCount();
+
+    return count;
+  }
+
   void AddEdge(const T& vert_1, const T& vert_2) {
     if (!ContainsVertex(vert_1) || !ContainsVertex(vert_2))
       throw std::invalid_argument("Vertex not found!");
