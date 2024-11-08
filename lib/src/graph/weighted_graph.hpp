@@ -51,6 +51,14 @@ class WeightedGraph {
 
   size_t GetEdgesCount() const { return graph.GetEdgesCount(); }
 
+  int GetEdgeWeight(const T& start, const T& end) const {
+    for (WeightedEdge<T> w_edge : weighted_edges) {
+      if (w_edge.start_vertex == start && w_edge.end_vertex == end)
+        return w_edge.weight;
+    }
+    throw std::invalid_argument("Edge not found!");
+  }
+
   bool ContainsVertex(const T& vertex) const {
     return graph.ContainsVertex(vertex);
   }
@@ -72,7 +80,7 @@ class WeightedGraph {
 
   void SetWeightToEdge(const T& start, const T& end, int w) {
     if (!graph.ContainsEdge(start, end))
-      throw std::invalid_argument("There is no such edge in a graph!");
+      throw std::invalid_argument("Edge not found!");
 
     for (int i = 0; i < weighted_edges.size(); i++) {
       if (weighted_edges[i].start_vertex == start &&
