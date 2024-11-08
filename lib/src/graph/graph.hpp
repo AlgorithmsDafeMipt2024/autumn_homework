@@ -38,6 +38,9 @@ class Graph {
     size_t count = 0;
     for (int i = 0; i < vertices.size(); i++)
       count += vertices[i].GetAdjVerticesCount();
+    // У неориентированного графа в два раза меньше ребер, чем у такого же
+    // ориентированного
+    if (!is_oriented) count /= 2;
 
     return count;
   }

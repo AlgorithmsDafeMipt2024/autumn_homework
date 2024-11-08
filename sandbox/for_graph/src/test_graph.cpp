@@ -21,6 +21,15 @@ TEST(Test_NotOrientedGraph, Test_Constructors) {
   }
 }
 
+TEST(Test_NotOrientedGraph, Test_GetEdgesCount) {
+  std::vector<std::pair<char, char>> edges = {
+      {'A', 'B'}, {'A', 'D'}, {'B', 'C'}, {'D', 'B'}, {'E', 'C'}, {'D', 'C'}};
+
+  Graph<char> g(edges, false);
+
+  ASSERT_EQ(edges.size(), g.GetEdgesCount());
+}
+
 TEST(Test_NotOrientedGraph, Test_ContainsEdge) {
   Graph<char> g(
       {{'A', 'B'}, {'A', 'C'}, {'A', 'D'}, {'B', 'D'}, {'B', 'C'}, {'B', 'D'}},
@@ -123,6 +132,15 @@ TEST(Test_OrientedGraph, Test_Constructors) {
   for (int i = 0; i < g1.GetVerticesCount(); i++) {
     ASSERT_TRUE(g2.ContainsVertex(g1.GetVertices()[i]));
   }
+}
+
+TEST(Test_OrientedGraph, Test_GetEdgesCount) {
+  std::vector<std::pair<char, char>> edges = {
+      {'A', 'B'}, {'B', 'A'}, {'C', 'B'}, {'D', 'A'}, {'C', 'D'}, {'B', 'D'}};
+
+  Graph<char> g(edges);
+
+  ASSERT_EQ(edges.size(), g.GetEdgesCount());
 }
 
 TEST(Test_OrientedGraph, Test_ContainsEdge) {
