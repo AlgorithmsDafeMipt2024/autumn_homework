@@ -87,6 +87,31 @@ TEST(Test_NotOrientedGraph, Test_DeleteVertex) {
   ASSERT_THROW(g.DeleteVertex('T'), std::invalid_argument);
 }
 
+TEST(Test_NotOrientedGraph, Test_DeleteEdge) {
+  Graph<char> g({{'A', 'B'},
+                 {'A', 'C'},
+                 {'A', 'D'},
+                 {'B', 'C'},
+                 {'B', 'E'},
+                 {'C', 'F'},
+                 {'D', 'E'},
+                 {'E', 'F'},
+                 {'F', 'G'},
+                 {'A', 'F'},
+                 {'B', 'G'}},
+                false);
+
+  g.DeleteEdge('A', 'B');
+
+  ASSERT_FALSE(g.ContainsEdge('A', 'B'));
+  ASSERT_FALSE(g.ContainsEdge('B', 'A'));
+  ASSERT_TRUE(g.ContainsEdge('A', 'C'));
+  ASSERT_TRUE(g.ContainsEdge('C', 'A'));
+
+  ASSERT_THROW(g.DeleteEdge('A', 'B'), std::invalid_argument);
+  ASSERT_THROW(g.DeleteEdge('E', 'G'), std::invalid_argument);
+}
+
 TEST(Test_NotOrientedGraph, Test_AddVertex_AddEdge) {
   Graph<char> g({{'A', 'B'}, {'A', 'C'}, {'B', 'C'}, {'B', 'D'}, {'C', 'D'}},
                 false);
@@ -209,6 +234,27 @@ TEST(Test_OrientedGraph, Test_DeleteVertex) {
   ASSERT_TRUE(g.ContainsEdge('G', 'E'));
 
   ASSERT_THROW(g.DeleteVertex('T'), std::invalid_argument);
+}
+
+TEST(Test_OrientedGraph, Test_DeleteEdge) {
+  Vertex<char> v1('A', {'B', 'C', 'D', 'F'});
+  Vertex<char> v2('B', {'C', 'E', 'F'});
+  Vertex<char> v3('C', {'A', 'D', 'E', 'F'});
+  Vertex<char> v4('D', {'B', 'F'});
+  Vertex<char> v5('E', {'G'});
+  Vertex<char> v6('F', {'A', 'C'});
+  Vertex<char> v7('G', {'E'});
+
+  Graph<char> g({v1, v2, v3, v4, v5, v6, v7});
+
+  g.DeleteEdge('A', 'C');
+
+  ASSERT_FALSE(g.ContainsEdge('A', 'C'));
+  ASSERT_TRUE(g.ContainsEdge('C', 'A'));
+  ASSERT_TRUE(g.ContainsEdge('A', 'B'));
+  ASSERT_TRUE(g.ContainsEdge('A', 'D'));
+
+  ASSERT_THROW(g.DeleteEdge('E', 'F'), std::invalid_argument);
 }
 
 TEST(Test_OrientedGraph, Test_AddVertex_AddEdge) {

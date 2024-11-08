@@ -108,6 +108,31 @@ class Graph {
     }
   }
 
+  void DeleteEdge(const T& vert_1, const T& vert_2) {
+    if (!ContainsVertex(vert_1)) throw std::invalid_argument("Edge not found!");
+
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vert_1) {
+        vertices[i].DeleteAdjVertex(vert_2);
+        if (is_oriented)
+          return;
+        else
+          break;
+      }
+    }
+
+    // Для неориентированного графа нужно удалить и у vert_2 смежную вершину
+    // vert_1
+    if (!ContainsVertex(vert_2)) throw std::invalid_argument("Edge not found!");
+
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vert_2) {
+        vertices[i].DeleteAdjVertex(vert_1);
+        return;
+      }
+    }
+  }
+
   bool ContainsVertex(const Vertex<T>& vertex) const {
     for (const Vertex<T>& vert : vertices) {
       if (vert.GetVertexId() == vertex.GetVertexId() &&
