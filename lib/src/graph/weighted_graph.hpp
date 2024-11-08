@@ -41,6 +41,19 @@ class WeightedGraph {
     }
   }
 
+  void PrintAdjList() {
+    for (Vertex<T> vertex : graph.GetVertices()) {
+      std::cout << "Adjacent vertices for '" << vertex.GetVertexId() << "': {";
+      auto adj_verts = vertex.GetAdjVertices();
+      for (int i = 0; i < adj_verts.size(); i++) {
+        std::cout << "('" << adj_verts[i] << "', "
+                  << GetEdgeWeight(vertex.GetVertexId(), adj_verts[i]) << ")";
+        if (i != adj_verts.size() - 1) std::cout << ", ";
+      }
+      std::cout << "}\n";
+    }
+  }
+
   std::vector<WeightedEdge<T>> GetWeightedEdges() const {
     return weighted_edges;
   }
@@ -72,6 +85,20 @@ class WeightedGraph {
   void AddWeightedEdge(const T& start, const T& end, int weight = 0) {
     graph.AddEdge(start, end);
     weighted_edges.push_back(WeightedEdge<T>(start, end, weight));
+  }
+
+  void DeleteVertex(const T& vertex) {
+    graph.DeleteVertex(vertex);
+
+    int end = weighted_edges.size();
+    for (int i = 0; i < end; i++) {
+      WeightedEdge<T> w_edge = weighted_edges[i];
+      if (!graph.ContainsEdge(w_edge.start_vertex, w_edge.end_vertex)) {
+        weighted_edges.erase(weighted_edges.begin() + i);
+        i--;
+        end--;
+      }
+    }
   }
 
   void DeleteWeightedEdge(const T& start, const T& end) {
