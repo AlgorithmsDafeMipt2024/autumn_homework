@@ -19,29 +19,6 @@ class WeightedGraph {
  public:
   WeightedGraph() = default;
 
-  WeightedGraph(const std::vector<Vertex<T>>& vertices,
-                const std::vector<WeightedEdge<T>>& w_edges)
-      : graph(vertices), weighted_edges(w_edges) {
-    if (graph.GetEdgesCount() < w_edges.size())
-      throw std::invalid_argument(
-          "The number of weighted edges is greater than the number of all "
-          "edges in the graph!");
-
-    for (int i = 0; i < weighted_edges.size(); i++) {
-      bool flag = true;
-      for (int j = 0; j < graph.GetVerticesCount(); j++) {
-        Vertex<T> vertex = graph.GetVertices()[j];
-        if (weighted_edges[i].state_vertex == vertex.GetVertexId() &&
-            vertex.ContainsAdjVertex(weighted_edges[i].end_vertex)) {
-          flag = false;
-          break;
-        }
-      }
-      if (flag)
-        throw std::invalid_argument("There is no such edge in a graph!");
-    }
-  }
-
   WeightedGraph(const std::vector<std::pair<std::pair<T, T>, int>>& w_edges) {
     for (auto w_edge : w_edges) {
       auto edge = w_edge.first;
