@@ -51,6 +51,16 @@ class WeightedGraph {
 
   size_t GetEdgesCount() const { return graph.GetEdgesCount(); }
 
+  bool ContainsVertex(const T& vertex) const {
+    return graph.ContainsVertex(vertex);
+  }
+
+  bool ContainsEdge(const T& start, const T& end) const {
+    return graph.ContainsEdge(start, end);
+  }
+
+  void AddVertex(const T& vertex) { graph.AddVertex(vertex); }
+
   void AddWeightedEdge(const T& start, const T& end, int weight = 0) {
     graph.AddEdge(start, end);
     weighted_edges.push_back(WeightedEdge<T>(start, end, weight));
@@ -58,16 +68,6 @@ class WeightedGraph {
 
   void DeleteWeightedEdge(const T& start, const T& end) {
     graph.DeleteEdge(start, end);
-  }
-
-  void AddVertex(const T& vertex) { graph.AddVertex(vertex); }
-
-  bool ContainsVertex(const T& vertex) const {
-    return graph.ContainsVertex(vertex);
-  }
-
-  bool ContainsEdge(const T& start, const T& end) const {
-    return graph.ContainsEdge(start, end);
   }
 
   void SetWeightToEdge(const T& start, const T& end, int w) {

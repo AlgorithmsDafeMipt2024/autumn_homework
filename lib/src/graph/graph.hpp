@@ -47,25 +47,35 @@ class Graph {
     return count;
   }
 
-  void AddEdge(const T& vert_1, const T& vert_2) {
-    if (!ContainsVertex(vert_1)) AddVertex(vert_1);
-    if (!ContainsVertex(vert_2)) AddVertex(vert_2);
-
-    for (int i = 0; i < vertices.size(); i++) {
-      if (vertices[i].GetVertexId() == vert_1) {
-        vertices[i].AddAdjVertex(vert_2);
-        if (is_oriented) return;
-        break;
+  bool ContainsVertex(const Vertex<T>& vertex) const {
+    for (const Vertex<T>& vert : vertices) {
+      if (vert.GetVertexId() == vertex.GetVertexId() &&
+          vert.GetAdjVerticesCount() == vertex.GetAdjVerticesCount()) {
+        // Проверяем смежности
+        auto adj_verts = vertex.GetAdjVertices();
+        for (int i = 0; i < adj_verts.size(); i++) {
+          if (!vertex.ContainsAdjVertex(adj_verts[i])) return false;
+        }
+        return true;
       }
     }
+    return false;
+  }
 
-    // Если граф неориентированный, то мы добавляем ребро vert_2->vert_1
-    for (int i = 0; i < vertices.size(); i++) {
-      if (vertices[i].GetVertexId() == vert_2) {
-        vertices[i].AddAdjVertex(vert_1);
-        return;
-      }
+  bool ContainsVertex(const T& vertex) const {
+    for (const Vertex<T>& vert : vertices) {
+      if (vert.GetVertexId() == vertex) return true;
     }
+    return false;
+  }
+
+  bool ContainsEdge(const T& vert_1, const T& vert_2) const {
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vert_1 == vertices[i].GetVertexId() &&
+          vertices[i].ContainsAdjVertex(vert_2))
+        return true;
+    }
+    return false;
   }
 
   void AddVertex(const Vertex<T>& vertex) {
@@ -89,6 +99,27 @@ class Graph {
   }
 
   void AddVertex(const T& vertex) { vertices.push_back(Vertex<T>(vertex)); }
+
+  void AddEdge(const T& vert_1, const T& vert_2) {
+    if (!ContainsVertex(vert_1)) AddVertex(vert_1);
+    if (!ContainsVertex(vert_2)) AddVertex(vert_2);
+
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vert_1) {
+        vertices[i].AddAdjVertex(vert_2);
+        if (is_oriented) return;
+        break;
+      }
+    }
+
+    // Если граф неориентированный, то мы добавляем ребро vert_2->vert_1
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vert_2) {
+        vertices[i].AddAdjVertex(vert_1);
+        return;
+      }
+    }
+  }
 
   void DeleteVertex(const T& vertex) {
     if (!ContainsVertex(vertex))
@@ -131,37 +162,6 @@ class Graph {
         return;
       }
     }
-  }
-
-  bool ContainsVertex(const Vertex<T>& vertex) const {
-    for (const Vertex<T>& vert : vertices) {
-      if (vert.GetVertexId() == vertex.GetVertexId() &&
-          vert.GetAdjVerticesCount() == vertex.GetAdjVerticesCount()) {
-        // Проверяем смежности
-        auto adj_verts = vertex.GetAdjVertices();
-        for (int i = 0; i < adj_verts.size(); i++) {
-          if (!vertex.ContainsAdjVertex(adj_verts[i])) return false;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool ContainsVertex(const T& vertex) const {
-    for (const Vertex<T>& vert : vertices) {
-      if (vert.GetVertexId() == vertex) return true;
-    }
-    return false;
-  }
-
-  bool ContainsEdge(const T& vert_1, const T& vert_2) const {
-    for (int i = 0; i < vertices.size(); i++) {
-      if (vert_1 == vertices[i].GetVertexId() &&
-          vertices[i].ContainsAdjVertex(vert_2))
-        return true;
-    }
-    return false;
   }
 
  private:
