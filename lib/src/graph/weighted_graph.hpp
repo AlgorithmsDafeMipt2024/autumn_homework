@@ -17,6 +17,8 @@ struct WeightedEdge {
 template <typename T>
 class WeightedGraph {
  public:
+  WeightedGraph() = default;
+
   WeightedGraph(const std::vector<Vertex<T>>& vertices,
                 const std::vector<WeightedEdge<T>>& w_edges)
       : graph(vertices), weighted_edges(w_edges) {
@@ -30,7 +32,7 @@ class WeightedGraph {
       for (int j = 0; j < graph.GetVerticesCount(); j++) {
         Vertex<T> vertex = graph.GetVertices()[j];
         if (weighted_edges[i].state_vertex == vertex.GetVertexId() &&
-            == vertex.ContainsAdjVertex(weighted_edges[i].end_vertex)) {
+            vertex.ContainsAdjVertex(weighted_edges[i].end_vertex)) {
           flag = false;
           break;
         }
@@ -80,7 +82,7 @@ class WeightedGraph {
   void AddVertex(const T& vertex) { graph.AddVertex(vertex); }
 
   bool ContainsVertex(const T& vertex) const {
-    return graph.ContainsVertex(vertex;)
+    return graph.ContainsVertex(vertex);
   }
 
   bool ContainsEdge(const T& start, const T& end) const {
@@ -91,7 +93,7 @@ class WeightedGraph {
     if (!graph.ContainsEdge(start, end))
       throw std::invalid_argument("There is no such edge in a graph!");
 
-    for (int i = 0; i < weighted_edges.size()) {
+    for (int i = 0; i < weighted_edges.size(); i++) {
       if (weighted_edges[i].start_vertex == start &&
           weighted_edges[i].end_vertex == end) {
         weighted_edges[i].weight = w;

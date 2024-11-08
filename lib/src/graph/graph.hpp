@@ -7,6 +7,8 @@
 template <typename T>
 class Graph {
  public:
+  Graph() = default;
+
   Graph(const std::vector<Vertex<T>>& vertices, bool is_oriented = true)
       : vertices(vertices), is_oriented(is_oriented) {}
 
