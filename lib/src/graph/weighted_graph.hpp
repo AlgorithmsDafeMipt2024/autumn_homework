@@ -78,7 +78,7 @@ class WeightedGraph {
     graph.DeleteEdge(start, end);
   }
 
-  void SetWeightToEdge(const T& start, const T& end, int w) {
+  void SetEdgeWeight(const T& start, const T& end, int w) {
     if (!graph.ContainsEdge(start, end))
       throw std::invalid_argument("Edge not found!");
 
