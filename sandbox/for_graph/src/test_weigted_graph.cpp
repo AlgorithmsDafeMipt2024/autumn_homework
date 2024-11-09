@@ -50,3 +50,58 @@ TEST(Test_WeightedGraph, Test_AddWeightedEdge) {
   ASSERT_EQ(wg.GetEdgeWeight('C', 'E'), 3);
   ASSERT_EQ(wg.GetEdgeWeight('D', 'E'), 6);
 }
+
+TEST(Test_WeightedGraph, Test_DeleteVertex) {
+  WeightedGraph<char> wg;
+
+  wg.AddWeightedEdge('A', 'B', 3);
+  wg.AddWeightedEdge('A', 'C', 5);
+  wg.AddWeightedEdge('A', 'D', 2);
+  wg.AddWeightedEdge('B', 'C', 1);
+  wg.AddWeightedEdge('B', 'E', 4);
+  wg.AddWeightedEdge('C', 'E', 3);
+  wg.AddWeightedEdge('D', 'E', 6);
+
+  wg.DeleteVertex('A');
+
+  ASSERT_FALSE(wg.ContainsEdge('A', 'B'));
+  ASSERT_FALSE(wg.ContainsEdge('A', 'C'));
+  ASSERT_FALSE(wg.ContainsEdge('A', 'D'));
+}
+
+TEST(Test_WeightedGraph, Test_DeleteWeightedEdge) {
+  WeightedGraph<char> wg;
+
+  wg.AddWeightedEdge('A', 'B', 3);
+  wg.AddWeightedEdge('A', 'C', 5);
+  wg.AddWeightedEdge('A', 'D', 2);
+  wg.AddWeightedEdge('B', 'C', 1);
+  wg.AddWeightedEdge('B', 'E', 4);
+  wg.AddWeightedEdge('C', 'E', 3);
+  wg.AddWeightedEdge('D', 'E', 6);
+
+  wg.DeleteWeightedEdge('A', 'B');
+
+  ASSERT_FALSE(wg.ContainsEdge('A', 'B'));
+  ASSERT_TRUE(wg.ContainsEdge('A', 'C'));
+
+  ASSERT_THROW(wg.DeleteWeightedEdge('A', 'B'), std::invalid_argument);
+}
+
+TEST(Test_WeightedGraph, Test_SetEdgeWeight) {
+  WeightedGraph<char> wg;
+
+  wg.AddWeightedEdge('A', 'B', 3);
+  wg.AddWeightedEdge('A', 'C', 5);
+  wg.AddWeightedEdge('A', 'D', 2);
+  wg.AddWeightedEdge('B', 'C', 1);
+  wg.AddWeightedEdge('B', 'E', 4);
+  wg.AddWeightedEdge('C', 'E', 3);
+  wg.AddWeightedEdge('D', 'E', 6);
+
+  wg.SetEdgeWeight('A', 'B', 5);
+
+  ASSERT_EQ(wg.GetEdgeWeight('A', 'B'), 5);
+
+  ASSERT_THROW(wg.GetEdgeWeight('B', 'D'), std::invalid_argument);
+}
