@@ -8,7 +8,7 @@ using namespace std;
 pair<pair<int, int>, vector<int>> Dijkstra(int& n, int& m, int& s, int& t,
                                            vector<vector<int>>& vec) {
   Graph graph;
-  graph.read_WUG(n, m, vec);
+  graph.ReadWUG(n, m, vec);
   vector<vector<pair<int, int>>> gr = graph.directed_graph;
   vector<int> put(n + 1, -1);
   set<pair<int, int>> dist;
