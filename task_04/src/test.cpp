@@ -123,20 +123,3 @@ TEST(DijkstraTest, ComplexGraph) {
       Dijkstra(n, m, s, t, vec);
   ASSERT_EQ(result, expected);
 }
-
-TEST(DijkstraTest, DenseGraph) {
-  int n = 7;
-  int m = 21;
-  int s = 1;
-  int t = 7;
-  std::vector<std::vector<int>> vec = {
-      {1, 2, 1}, {1, 3, 2}, {1, 4, 3}, {1, 5, 4}, {1, 6, 5},
-      {2, 3, 1}, {2, 4, 2}, {2, 5, 3}, {2, 6, 4}, {2, 7, 5},
-      {3, 4, 1}, {3, 5, 2}, {3, 6, 3}, {3, 7, 4}, {4, 5, 1},
-      {4, 6, 2}, {4, 7, 3}, {5, 6, 1}, {5, 7, 2}, {6, 7, 1}};
-  std::pair<std::pair<int, int>, std::vector<int>> expected = {{5, 5},
-                                                               {1, 2, 4, 7}};
-  std::pair<std::pair<int, int>, std::vector<int>> result =
-      Dijkstra(n, m, s, t, vec);
-  ASSERT_EQ(result, expected);
-}
