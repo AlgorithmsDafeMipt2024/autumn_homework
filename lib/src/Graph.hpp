@@ -242,7 +242,7 @@ struct Graph {
     // Заполнение списка рёбер
     for (int i = 1; i <= n; i++) {
       for (const auto& neighbor : directed_graph[i]) {
-        edges[k].from = i;  // Устанавливаем начальную вершину
+        edges[k].from = i;  // Устанавливаем начальную вершинуу
         edges[k].to = neighbor.first;  // Устанавливаем конечную вершину
         edges[k].weight = neighbor.second;  // Устанавливаем вес ребра
         k++;  // Переходим к следующему ребру
