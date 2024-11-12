@@ -2,27 +2,27 @@
 
 #include "topological_sort.hpp"
 
-TEST(Test_TopSortWithDFS, Simple_Test_1) {
+TEST(Test_TopologicalSort, Simple_Test_1) {
   Graph<int> graph;
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<int> expected{};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Simple_Test_2) {
+TEST(Test_TopologicalSort, Simple_Test_2) {
   Graph<char> graph;
 
   graph.AddVertex('A');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'A'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Simple_Test_3) {
+TEST(Test_TopologicalSort, Simple_Test_3) {
   Graph<char> graph;
 
   graph.AddVertex('A');
@@ -32,13 +32,13 @@ TEST(Test_TopSortWithDFS, Simple_Test_3) {
   graph.AddEdge('A', 'B');
   graph.AddEdge('A', 'C');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'A', 'C', 'B'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Simple_Test_4) {
+TEST(Test_TopologicalSort, Simple_Test_4) {
   Graph<char> graph;
 
   graph.AddVertex('A');
@@ -48,13 +48,13 @@ TEST(Test_TopSortWithDFS, Simple_Test_4) {
   graph.AddEdge('A', 'C');
   graph.AddEdge('A', 'B');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'A', 'B', 'C'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Simple_Test_5) {
+TEST(Test_TopologicalSort, Simple_Test_5) {
   Graph<char> graph;
 
   graph.AddVertex('A');
@@ -65,13 +65,13 @@ TEST(Test_TopSortWithDFS, Simple_Test_5) {
   graph.AddEdge('A', 'C');
   graph.AddEdge('C', 'B');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'A', 'C', 'B'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_1) {
+TEST(Test_TopologicalSort, Test_1) {
   Graph<char> graph;
 
   graph.AddVertex('A');
@@ -85,13 +85,13 @@ TEST(Test_TopSortWithDFS, Test_1) {
   graph.AddEdge('B', 'D');
   graph.AddEdge('C', 'E');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'A', 'C', 'E', 'B', 'D'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_2) {
+TEST(Test_TopologicalSort, Test_2) {
   Graph<char> graph;
 
   graph.AddVertex('A');
@@ -109,13 +109,13 @@ TEST(Test_TopSortWithDFS, Test_2) {
   graph.AddEdge('B', 'D');
   graph.AddEdge('C', 'E');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'I', 'H', 'G', 'F', 'A', 'C', 'E', 'B', 'D'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_3) {
+TEST(Test_TopologicalSort, Test_3) {
   Graph<std::string> graph;
 
   graph.AddVertex("shirt");
@@ -134,14 +134,14 @@ TEST(Test_TopSortWithDFS, Test_3) {
   graph.AddEdge("pants", "shoes");
   graph.AddEdge("socks", "shoes");
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<std::string> expected{"socks", "glasses", "shirt", "pants",
                                     "shoes", "blazer",  "coat"};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_4) {
+TEST(Test_TopologicalSort, Test_4) {
   Graph<int> graph;
 
   graph.AddVertex(1);
@@ -171,13 +171,13 @@ TEST(Test_TopSortWithDFS, Test_4) {
   graph.AddEdge(4, 8);
   graph.AddEdge(9, 8);
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<int> expected{9, 1, 6, 10, 3, 5, 2, 7, 4, 8};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_5) {
+TEST(Test_TopologicalSort, Test_5) {
   Graph<char> graph;
 
   graph.AddVertex('H');
@@ -198,13 +198,13 @@ TEST(Test_TopSortWithDFS, Test_5) {
   graph.AddEdge('A', 'F');
   graph.AddEdge('D', 'F');
 
-  auto result = TopSortWithDFS(graph);
+  auto result = TopologicalSort(graph);
   std::vector<char> expected{'G', 'A', 'E', 'H', 'D', 'F', 'B', 'C'};
 
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_TopSortWithDFS, Test_NotAcyclic_1) {
+TEST(Test_TopologicalSort, Test_NotAcyclic_1) {
   Graph<int> graph;
 
   graph.AddVertex(1);
@@ -215,10 +215,10 @@ TEST(Test_TopSortWithDFS, Test_NotAcyclic_1) {
   graph.AddEdge(2, 3);
   graph.AddEdge(3, 1);
 
-  ASSERT_THROW(TopSortWithDFS(graph), std::invalid_argument);
+  ASSERT_THROW(TopologicalSort(graph), std::invalid_argument);
 }
 
-TEST(Test_TopSortWithDFS, Test_NotAcyclic_2) {
+TEST(Test_TopologicalSort, Test_NotAcyclic_2) {
   Graph<char> graph;
 
   graph.AddVertex('G');
@@ -239,10 +239,10 @@ TEST(Test_TopSortWithDFS, Test_NotAcyclic_2) {
   graph.AddEdge('G', 'E');
   graph.AddEdge('F', 'D');
 
-  ASSERT_THROW(TopSortWithDFS(graph), std::invalid_argument);
+  ASSERT_THROW(TopologicalSort(graph), std::invalid_argument);
 }
 
-TEST(Test_TopSortWithDFS, Test_NotAcyclic_3) {
+TEST(Test_TopologicalSort, Test_NotAcyclic_3) {
   Graph<size_t> graph;
 
   graph.AddVertex(1);
@@ -271,5 +271,5 @@ TEST(Test_TopSortWithDFS, Test_NotAcyclic_3) {
   graph.AddEdge(3, 4);
   graph.AddEdge(1, 6);
 
-  ASSERT_THROW(TopSortWithDFS(graph), std::invalid_argument);
+  ASSERT_THROW(TopologicalSort(graph), std::invalid_argument);
 }

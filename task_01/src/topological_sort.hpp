@@ -21,7 +21,7 @@ void DFS(Graph<T>& graph, std::vector<T>& visited, std::vector<T>& res,
 }
 
 template <typename T>
-std::vector<T> TopSortWithDFS(Graph<T> graph) {
+std::vector<T> TopologicalSort(Graph<T> graph) {
   std::vector<T> reversed_res;
   std::vector<T> visited;
 
