@@ -60,6 +60,12 @@ class WeightedGraph {
 
   std::vector<Vertex<T>> GetVertices() const { return graph.GetVertices(); }
 
+  std::vector<T> GetVerticesIds() const { return graph.GetVerticesIds(); }
+
+  std::vector<T> GetAdjVertices(const T& vertex) const {
+    return graph.GetAdjVertices(vertex);
+  }
+
   size_t GetVerticesCount() const { return graph.GetVerticesCount(); }
 
   size_t GetEdgesCount() const { return graph.GetEdgesCount(); }

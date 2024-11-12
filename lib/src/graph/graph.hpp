@@ -34,6 +34,27 @@ class Graph {
 
   std::vector<Vertex<T>> GetVertices() const { return vertices; }
 
+  std::vector<T> GetVerticesIds() const {
+    std::vector<T> vertices_ids;
+    for (int i = 0; i < vertices.size(); i++)
+      vertices_ids.push_back(vertices[i].GetVertexId());
+    return vertices_ids;
+  }
+
+  std::vector<T> GetAdjVertices(const T& vertex) const {
+    if (!ContainsVertex(vertex))
+      throw std::invalid_argument("Vertex not found!");
+
+    std::vector<T> adj_vertices;
+    for (int i = 0; i < vertices.size(); i++) {
+      if (vertices[i].GetVertexId() == vertex) {
+        adj_vertices = vertices[i].GetAdjVertices();
+        break;
+      }
+    }
+    return adj_vertices;
+  }
+
   size_t GetVerticesCount() const { return vertices.size(); }
 
   size_t GetEdgesCount() const {
