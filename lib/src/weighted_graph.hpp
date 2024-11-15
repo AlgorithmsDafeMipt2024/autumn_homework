@@ -110,7 +110,7 @@ class WeightedGraph : public Graph<T> {
     for (size_t i = 0; i < Graph<T>::vertices_.size(); ++i) {
       std::cout << Graph<T>::vertices_[i]->data << " -> ";
       for (const auto& neighbor : Graph<T>::vertices_[i]->adjacent) {
-        size_t j = Graph<T>::Find(neighbor);
+        size_t j = Graph<T>::Find(neighbor->data);
         std::cout << "(" << neighbor->data << ", " << weights[i][j] << ") ";
       }
       std::cout << std::endl;
