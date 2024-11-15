@@ -104,6 +104,17 @@ class WeightedGraph : public Graph<T> {
 
   /**
    * @brief
+   * Reweight an edge
+   * @param source_id
+   * @param target_id
+   * @param new_weight
+   */
+  void Reweight(size_t source_id, size_t target_id, int new_weight) {
+    weights[source_id][target_id] = new_weight;
+  }
+
+  /**
+   * @brief
    * Print the weighted graph
    */
   void PrintGraph() const override {
