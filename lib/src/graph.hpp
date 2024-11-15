@@ -44,10 +44,13 @@ class Graph {
    * @param vertex
    * @return size_t
    */
-  size_t Find(const std::shared_ptr<Vertex<T>> &vertex) const {
-    return std::find(vertices_.begin(), vertices_.end(), vertex) -
-           vertices_.begin();
-  };
+  size_t Find(const T &vertex) const {
+    size_t index;
+    for (index = 0; index < vertices_.size(); ++index)
+      if (vertices_[index]->data == vertex) return index;
+
+    return index;
+  }
 
   /**
    * @brief
@@ -62,7 +65,7 @@ class Graph {
 
     // Remove edges pointing to the vertex
     for (auto &v : vertices_[vertex_id]->adjacent) {
-      RemoveEdge(v, vertices_[vertex_id]);
+      RemoveDirEdge(v, vertices_[vertex_id]);
     }
 
     // Remove the vertex from the graph
