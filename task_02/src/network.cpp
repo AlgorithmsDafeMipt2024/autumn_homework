@@ -12,7 +12,7 @@ void Network::TarjanVisit(size_t vertex_id, std::vector<int> &disc,
 
   // Iterate over all adjacent vertices
   for (auto &neighbor : vertices_[vertex_id]->adjacent) {
-    size_t neighbor_id = Find(neighbor);
+    size_t neighbor_id = Find(neighbor->data);
 
     if (disc[neighbor_id] == -1) {  // Vertex is not visited
       children++;

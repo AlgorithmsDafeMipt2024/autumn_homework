@@ -38,7 +38,7 @@ std::pair<std::vector<int>, std::vector<int>> Dijkstra(
 
     // For each adjacent vertex of current vertex
     for (const auto& neighbor : graph[current]->adjacent) {
-      size_t next = graph.Find(neighbor);
+      size_t next = graph.Find(neighbor->data);
       int weight = graph.GetWeight(current, next);
 
       // If we found a shorter path to neighbor

@@ -2,10 +2,10 @@
 
 void PackageManager::FindingOrderStep(
     std::shared_ptr<Vertex<std::string>> target) {
-  is_visited_[dependencies_.Find(target)] = true;
+  is_visited_[dependencies_.Find(target->data)] = true;
 
   for (auto& neighbor : target->adjacent) {
-    if (!is_visited_[dependencies_.Find(neighbor)]) {
+    if (!is_visited_[dependencies_.Find(neighbor->data)]) {
       FindingOrderStep(neighbor);
     }
   }
