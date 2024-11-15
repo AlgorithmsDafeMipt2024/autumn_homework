@@ -29,9 +29,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
 file(GLOB_RECURSE lib_source_list "src/*.hpp")
 
-add_library(Dijkstra ${lib_source_list})
+add_library(Djikstra ${lib_source_list})
 
-set_target_properties(Dijkstra PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(Djikstra PROPERTIES LINKER_LANGUAGE CXX)
 
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(${PROJECT_NAME}_tests ${test_source_list})
