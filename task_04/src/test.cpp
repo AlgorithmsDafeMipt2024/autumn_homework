@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "djikstra.hpp"
+#include "dijkstra.hpp"
 #include "weighted_graph.hpp"
 
 void CheckDistances(std::vector<int>& dist, std::vector<int>& exp_dist) {
