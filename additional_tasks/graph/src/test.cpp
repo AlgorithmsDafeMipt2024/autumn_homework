@@ -165,15 +165,26 @@ TEST(GraphTest_size_t, CreateGraphWithInvalidWeights) {
   std::vector<std::pair<size_t, size_t>> edges = {{0, 1}, {1, 2}, {2, 0}};
   std::vector<long> weights = {1, 2, -1};
 
-  // ASSERT_THROW(Graph<size_t, long>::GraphWeighted(edges, weights),
-  //              std::invalid_argument);
+  // IDK: non-working
+  // ASSERT_THROW((Graph<size_t, long>::GraphWeighted(edges, weights)),
+  //              std::invalid_argument());
+
+  try {
+    Graph<size_t, long>::GraphWeighted(edges, weights);
+    FAIL() << "Expected exception was not thrown.";
+
+  } catch (const std::invalid_argument& e) {
+    SUCCEED() << "CreateGraphWithInvalidWeights";
+  } catch (const std::exception& e) {
+    FAIL() << "Unexpected exception caught: " << e.what();
+  }
 }
 
 TEST(GraphTest_size_t, CreateGraphFromAdjMatrixWithInvalidSize) {
   std::vector<std::vector<long>> adj_matrix = {{0, 1}, {1, 0, 1}, {1, 0}};
 
-  // ASSERT_THROW(Graph<size_t, long>::GraphFromAdjMatrix(adj_matrix),
-  //              std::invalid_argument);
+  EXPECT_THROW((Graph<size_t, long>::GraphFromAdjMatrix(adj_matrix)),
+               std::invalid_argument);
 }
 
 TEST(GraphTest_size_t, GraphFromMapTest) {
@@ -203,8 +214,8 @@ TEST(GraphTest_size_t, GraphFromMapTest) {
   std::unordered_map<std::string, long> invalid_edges_dict = {
       {"0-1", 0}, {"2-1", 1}, {"3->2", 2}, {"1>3", 3}};
 
-  // ASSERT_THROW(Graph<size_t, long>::GraphFromMap(invalid_edges_dict),
-  //              std::invalid_argument);
+  EXPECT_THROW((Graph<size_t, long>::GraphFromMap(invalid_edges_dict)),
+               std::invalid_argument);
 
   edges_dict = {{"0->14", 5}, {"25->1", 1}, {"3->2", 2}, {"1->3", 3}};
 
@@ -242,12 +253,12 @@ TEST(GraphTest_size_t, GraphFromStrsTest) {
   ASSERT_TRUE(empty_graph.IsDirected());
 
   std::vector<std::string> invalid_edges_strs = {"0-1", "2-1", "3->2", "1>3"};
-  // ASSERT_THROW(Graph<size_t, long>::GraphFromStrs(invalid_edges_strs),
-  //              std::invalid_argument);
+  EXPECT_THROW((Graph<size_t, long>::GraphFromStrs(invalid_edges_strs)),
+               std::invalid_argument);
 
   invalid_edges_strs = {"0->vert", "2->1", "3->2", "1->3"};
-  // ASSERT_THROW(Graph<size_t, long>::GraphFromStrs(invalid_edges_strs),
-  //              std::invalid_argument);
+  EXPECT_THROW((Graph<size_t, long>::GraphFromStrs(invalid_edges_strs)),
+               std::invalid_argument);
 }
 
 TEST(GraphTest_size_t, GraphWeighted_EmptyInput) {
@@ -433,19 +444,18 @@ TEST(GraphTest_size_t, AddEdgeWeighted) {
 
   // std::cout << g << std::endl;
 
-  // g.AddEdge(0, 1, 15);
+  g.AddEdge(0, 1, 15);
 
   // если пользователь решает добавить то же ребро,
   // но с другим весом - он сам дурак
 
-  // std::cout << g << std::endl;
+  // (иначе добавление ребра будет работать за O(E))
 
-  // g.RemoveDuplicates();
-  // std::cout << g << std::endl;
+  g.RemoveDuplicates();
 
-  // EXPECT_EQ(g.EdgesAmount(), 2);
-  // EXPECT_TRUE(g.ContainsEdge({0, 1, 15}));
-  // EXPECT_EQ(g.GetWeightOfEdge({0, 1}), 15);
+  EXPECT_EQ(g.EdgesAmount(), 2);
+  EXPECT_TRUE(g.ContainsEdge({0, 1, 10}));
+  EXPECT_EQ(g.GetWeightOfEdge({0, 1}), 10);
 
   EXPECT_THROW(g.AddEdge(2, 3), std::logic_error);
 }
