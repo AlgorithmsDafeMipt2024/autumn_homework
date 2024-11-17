@@ -1,17 +1,14 @@
+#include <unordered_map>
+
 #include "graph/graph.hpp"
 
 template <typename T>
-bool IsVisited(const T& vertex, const std::vector<T>& visited) {
-  return std::find(visited.begin(), visited.end(), vertex) != visited.end();
-}
-
-template <typename T>
-void DFS(Graph<T>& graph, std::vector<T>& visited, std::vector<T>& res,
-         const T& curr_vertex) {
-  if (IsVisited(curr_vertex, visited))
+void DFS(Graph<T>& graph, std::unordered_map<T, bool>& visited,
+         std::vector<T>& res, const T& curr_vertex) {
+  if (visited[curr_vertex])
     throw std::invalid_argument("Graph is not acyclic!");
 
-  visited.push_back(curr_vertex);
+  visited[curr_vertex] = true;
 
   for (auto adj_vertex : graph.GetAdjVertices(curr_vertex))
     if (graph.ContainsVertex(adj_vertex)) DFS(graph, visited, res, adj_vertex);
@@ -23,7 +20,7 @@ void DFS(Graph<T>& graph, std::vector<T>& visited, std::vector<T>& res,
 template <typename T>
 std::vector<T> TopologicalSort(Graph<T> graph) {
   std::vector<T> reversed_res;
-  std::vector<T> visited;
+  std::unordered_map<T, bool> visited;
 
   while (graph.GetVerticesCount())
     DFS(graph, visited, reversed_res, graph.GetVerticesIds()[0]);
