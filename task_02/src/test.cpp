@@ -3,7 +3,7 @@
 #include "find_bridges.hpp"
 #include "find_joint_vertices.hpp"
 
-TEST(Test_FindingBridges, Simple_Test_1) {
+TEST(Test_FindBridges, Simple_Test_1) {
   Graph<int> graph(false);
 
   auto result = FindBridges(graph);
@@ -12,7 +12,7 @@ TEST(Test_FindingBridges, Simple_Test_1) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Simple_Test_2) {
+TEST(Test_FindBridges, Simple_Test_2) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -23,7 +23,7 @@ TEST(Test_FindingBridges, Simple_Test_2) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Simple_Test_3) {
+TEST(Test_FindBridges, Simple_Test_3) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -37,7 +37,7 @@ TEST(Test_FindingBridges, Simple_Test_3) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Simple_Test_4) {
+TEST(Test_FindBridges, Simple_Test_4) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -54,7 +54,7 @@ TEST(Test_FindingBridges, Simple_Test_4) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Simple_Test_5) {
+TEST(Test_FindBridges, Simple_Test_5) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -70,7 +70,7 @@ TEST(Test_FindingBridges, Simple_Test_5) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Test_1) {
+TEST(Test_FindBridges, Test_1) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -96,7 +96,7 @@ TEST(Test_FindingBridges, Test_1) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Test_2) {
+TEST(Test_FindBridges, Test_2) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
@@ -123,7 +123,7 @@ TEST(Test_FindingBridges, Test_2) {
   ASSERT_EQ(result, expected);
 }
 
-TEST(Test_FindingBridges, Test_3) {
+TEST(Test_FindBridges, Test_3) {
   Graph<char> graph(false);
 
   graph.AddVertex('A');
