@@ -163,3 +163,160 @@ TEST(Test_FindBridges, Test_3) {
 
   ASSERT_EQ(result, expected);
 }
+
+TEST(Test_FindJointVertices, Simple_Test_1) {
+  Graph<int> graph(false);
+
+  auto result = FindJointVertices(graph);
+  std::vector<int> expected{};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Simple_Test_2) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Simple_Test_3) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+
+  graph.AddEdge('A', 'B');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Simple_Test_4) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('C');
+
+  graph.AddEdge('A', 'B');
+  graph.AddEdge('A', 'C');
+  graph.AddEdge('B', 'C');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Simple_Test_5) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('C');
+
+  graph.AddEdge('A', 'B');
+  graph.AddEdge('A', 'C');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{'A'};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Test_1) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('C');
+  graph.AddVertex('D');
+  graph.AddVertex('E');
+  graph.AddVertex('F');
+  graph.AddVertex('G');
+
+  graph.AddEdge('A', 'B');
+  graph.AddEdge('A', 'C');
+  graph.AddEdge('C', 'D');
+  graph.AddEdge('C', 'E');
+  graph.AddEdge('D', 'E');
+  graph.AddEdge('B', 'G');
+  graph.AddEdge('B', 'F');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{'B', 'C', 'A'};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Test_2) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('C');
+  graph.AddVertex('D');
+  graph.AddVertex('E');
+  graph.AddVertex('F');
+  graph.AddVertex('G');
+
+  graph.AddEdge('A', 'B');
+  graph.AddEdge('A', 'C');
+  graph.AddEdge('C', 'D');
+  graph.AddEdge('C', 'E');
+  graph.AddEdge('D', 'E');
+  graph.AddEdge('B', 'G');
+  graph.AddEdge('B', 'F');
+  graph.AddEdge('G', 'F');
+  graph.AddEdge('D', 'F');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_FindJointVertices, Test_3) {
+  Graph<char> graph(false);
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('C');
+  graph.AddVertex('D');
+  graph.AddVertex('E');
+  graph.AddVertex('F');
+  graph.AddVertex('G');
+  graph.AddVertex('H');
+  graph.AddVertex('I');
+  graph.AddVertex('J');
+  graph.AddVertex('K');
+  graph.AddVertex('L');
+  graph.AddVertex('M');
+
+  graph.AddEdge('F', 'J');
+  graph.AddEdge('F', 'D');
+  graph.AddEdge('J', 'I');
+  graph.AddEdge('J', 'A');
+  graph.AddEdge('J', 'K');
+  graph.AddEdge('I', 'M');
+  graph.AddEdge('I', 'E');
+  graph.AddEdge('A', 'H');
+  graph.AddEdge('K', 'H');
+  graph.AddEdge('K', 'G');
+  graph.AddEdge('K', 'D');
+  graph.AddEdge('D', 'C');
+  graph.AddEdge('C', 'B');
+  graph.AddEdge('B', 'L');
+
+  auto result = FindJointVertices(graph);
+  std::vector<char> expected{'K', 'B', 'C', 'D', 'I', 'J'};
+
+  ASSERT_EQ(result, expected);
+}
