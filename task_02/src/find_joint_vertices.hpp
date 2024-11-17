@@ -43,8 +43,9 @@ std::vector<T> FindJointVertices(Graph<T> graph) {
   }
 
   std::vector<T> joint_vertices;
-  DFSForJointVertices(d, h, visited, joint_vertices, graph,
-                      graph.GetVerticesIds()[0]);
+  if (graph.GetVerticesCount())
+    DFSForJointVertices(d, h, visited, joint_vertices, graph,
+                        graph.GetVerticesIds()[0]);
 
   return joint_vertices;
 }

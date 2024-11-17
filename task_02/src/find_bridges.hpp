@@ -50,7 +50,8 @@ std::vector<Edge<T>> FindBridges(Graph<T> graph) {
   }
 
   std::vector<Edge<T>> bridges;
-  DFSForBridges(d, h, visited, bridges, graph, graph.GetVerticesIds()[0]);
+  if (graph.GetVerticesCount())
+    DFSForBridges(d, h, visited, bridges, graph, graph.GetVerticesIds()[0]);
 
   return bridges;
 }
