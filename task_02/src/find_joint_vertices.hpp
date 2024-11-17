@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <unordered_map>
 
 #include "graph/graph.hpp"
@@ -21,7 +22,10 @@ void DFSForJointVertices(std::unordered_map<T, int>& d,
         DFSForJointVertices(d, h, visited, joint_vertices, graph, u, v);
 
         d[v] = std::min(d[v], d[u]);
-        if (h[v] <= d[u] && p) joint_vertices.push_back(v);
+        if (h[v] <= d[u] && p)
+          if (std::find(joint_vertices.begin(), joint_vertices.end(), v) ==
+              joint_vertices.end())
+            joint_vertices.push_back(v);
 
         children_count++;
       }
