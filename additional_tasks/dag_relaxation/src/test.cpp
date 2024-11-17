@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "dag_relaxation.hpp"
+#include "petya_and_vasya.hpp"
 
 #define LONG_INF std::numeric_limits<long>::max()
 
@@ -282,4 +283,36 @@ TEST(DAGRelaxationTest, StringVerticesAndLongWeights) {
       {"A", 0}, {"B", 10}, {"C", 5}};
 
   ASSERT_EQ(distances, expected_distances);
+}
+
+TEST(SolutionTest, PetyaWinsSimple) {
+  std::stringstream ss("P0#V");
+  std::stringstream output;
+
+  Solution(ss, output);
+  EXPECT_EQ(output.str(), "Petya! with 1\n");
+}
+
+TEST(SolutionTest, VasyaWinsSimple) {
+  std::stringstream ss("V0#P");
+  std::stringstream output;
+
+  Solution(ss, output);
+  EXPECT_EQ(output.str(), "Vasya! with 1\n");
+}
+
+TEST(SolutionTest, DrawSimple) {
+  std::stringstream ss("P0#V0");
+  std::stringstream output;
+
+  Solution(ss, output);
+  EXPECT_EQ(output.str(), "Draw! with 1\n");
+}
+
+TEST(SolutionTest, ValeryWinsSimple) {
+  std::stringstream ss("V#P\n");
+  std::stringstream output;
+
+  Solution(ss, output);
+  EXPECT_EQ(output.str(), "Deadlock! Valery!\n");
 }
