@@ -7,7 +7,7 @@
 template <typename T>
 class Graph {
  public:
-  Graph() : is_oriented(true) {}
+  Graph(bool is_oriented = true) : is_oriented(is_oriented) {}
 
   Graph(const std::vector<Vertex<T>>& vertices, bool is_oriented = true)
       : vertices(vertices), is_oriented(is_oriented) {}
@@ -31,6 +31,8 @@ class Graph {
       vertex.PrintAdjVertices();
     }
   }
+
+  bool IsOriented() const { return is_oriented; }
 
   std::vector<Vertex<T>> GetVertices() const { return vertices; }
 
