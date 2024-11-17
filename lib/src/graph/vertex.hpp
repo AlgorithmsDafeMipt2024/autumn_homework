@@ -40,7 +40,7 @@ class Vertex {
   }
 
   bool ContainsAdjVertex(const T& adj_vert) const {
-    for (const T& vertex : adjacent_vertices) {
+    for (auto vertex : adjacent_vertices) {
       if (adj_vert == vertex) return true;
     }
     return false;

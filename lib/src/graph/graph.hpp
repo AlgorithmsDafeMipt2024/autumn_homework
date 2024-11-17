@@ -71,7 +71,7 @@ class Graph {
   }
 
   bool ContainsVertex(const Vertex<T>& vertex) const {
-    for (const Vertex<T>& vert : vertices) {
+    for (auto vert : vertices) {
       if (vert.GetVertexId() == vertex.GetVertexId() &&
           vert.GetAdjVerticesCount() == vertex.GetAdjVerticesCount()) {
         // Проверяем смежности
@@ -86,7 +86,7 @@ class Graph {
   }
 
   bool ContainsVertex(const T& vertex) const {
-    for (const Vertex<T>& vert : vertices) {
+    for (auto vert : vertices) {
       if (vert.GetVertexId() == vertex) return true;
     }
     return false;
@@ -108,7 +108,7 @@ class Graph {
     }
 
     // Добавление вершины для неориентированного графа
-    for (const T& adj_vertex : vertex.GetAdjVertices()) {
+    for (auto adj_vertex : vertex.GetAdjVertices()) {
       if (!ContainsVertex(adj_vertex)) AddVertex(adj_vertex);
 
       for (int i = 0; i < vertices.size(); i++) {

@@ -13,7 +13,7 @@ void DFS(Graph<T>& graph, std::vector<T>& visited, std::vector<T>& res,
 
   visited.push_back(curr_vertex);
 
-  for (const T& adj_vertex : graph.GetAdjVertices(curr_vertex))
+  for (auto adj_vertex : graph.GetAdjVertices(curr_vertex))
     if (graph.ContainsVertex(adj_vertex)) DFS(graph, visited, res, adj_vertex);
 
   graph.DeleteVertex(curr_vertex);

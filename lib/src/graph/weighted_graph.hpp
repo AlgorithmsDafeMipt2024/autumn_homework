@@ -42,7 +42,7 @@ class WeightedGraph {
   }
 
   void PrintAdjList() {
-    for (Vertex<T> vertex : graph.GetVertices()) {
+    for (auto vertex : graph.GetVertices()) {
       std::cout << "Adjacent vertices for '" << vertex.GetVertexId() << "': {";
       auto adj_verts = vertex.GetAdjVertices();
       for (int i = 0; i < adj_verts.size(); i++) {
@@ -71,7 +71,7 @@ class WeightedGraph {
   size_t GetEdgesCount() const { return graph.GetEdgesCount(); }
 
   int GetEdgeWeight(const T& start, const T& end) const {
-    for (WeightedEdge<T> w_edge : weighted_edges) {
+    for (auto w_edge : weighted_edges) {
       if (w_edge.start_vertex == start && w_edge.end_vertex == end)
         return w_edge.weight;
     }
