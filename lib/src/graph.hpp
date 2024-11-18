@@ -17,16 +17,17 @@ struct Vertex {
   std::set<std::shared_ptr<Vertex<T>>> adjacent;
 };
 
-template<typename T, typename VT>
+template <typename T, typename VT>
 concept IsVertex = std::derived_from<T, Vertex<VT>>;
 
 /// @brief Basic graph
-/// @tparam VertexType 
-/// @tparam T 
-template <typename VertexType, typename T> requires IsVertex<VertexType, T> 
+/// @tparam VertexType
+/// @tparam T
+template <typename VertexType, typename T>
+  requires IsVertex<VertexType, T>
 class Graph {
  public:
-  /** 
+  /**
    * @brief
    * Add a new vertex to the graph
    * @param data
@@ -185,7 +186,7 @@ class Graph {
    * @param vertex_1
    * @param vertex_2
    */
-  virtual void RemoveEdge(std::shared_ptr<VertexType>vertex_1,
+  virtual void RemoveEdge(std::shared_ptr<VertexType> vertex_1,
                           std::shared_ptr<VertexType> vertex_2) {
     RemoveDirEdge(vertex_1, vertex_2);
     RemoveDirEdge(vertex_2, vertex_1);
