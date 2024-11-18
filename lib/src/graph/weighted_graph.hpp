@@ -63,6 +63,8 @@ class WeightedGraph {
     }
   }
 
+  bool IsOriented() const { return graph.IsOriented(); }
+
   std::vector<WeightedEdge<T>> GetWeightedEdges() const {
     return weighted_edges;
   }
