@@ -6,8 +6,8 @@
 #include "graph.hpp"
 
 /// @brief Vertex representing single downloadable package
-class Library : public Vertex<std::string>{
-  public:
+class Library : public Vertex<std::string> {
+ public:
   std::set<std::shared_ptr<Library>> adjacent;
 };
 

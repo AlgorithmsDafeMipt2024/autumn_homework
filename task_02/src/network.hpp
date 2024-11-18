@@ -3,11 +3,10 @@
 #include "graph.hpp"
 
 /// @brief Vertex representing a single router
-class Router : public Vertex<int>{
-  public:
+class Router : public Vertex<int> {
+ public:
   std::set<std::shared_ptr<Router>> adjacent;
 };
-
 
 /// @brief Graph of routers in cities net
 class Network : public Graph<Router, int> {

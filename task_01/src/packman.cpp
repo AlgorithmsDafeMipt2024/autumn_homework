@@ -1,7 +1,6 @@
 #include "packman.hpp"
 
-void PackageManager::FindingOrderStep(
-    std::shared_ptr<Library> target) {
+void PackageManager::FindingOrderStep(std::shared_ptr<Library> target) {
   is_visited_[dependencies_.Find(target->data)] = true;
 
   for (auto& neighbor : target->adjacent) {

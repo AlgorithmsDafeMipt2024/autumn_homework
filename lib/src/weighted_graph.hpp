@@ -5,14 +5,14 @@
 #include "graph.hpp"
 
 /// @brief Basic weighted graph
-/// @tparam VertexType 
-/// @tparam T  
+/// @tparam VertexType
+/// @tparam T
 template <typename VertexType, typename T>
 class WeightedGraph : public Graph<VertexType, T> {
  public:
-  WeightedGraph() : Graph<VertexType,T>() {
-    weights.resize(Graph<VertexType,T>::vertices_.size(),
-                   std::vector<int>(Graph<VertexType,T>::vertices_.size(),
+  WeightedGraph() : Graph<VertexType, T>() {
+    weights.resize(Graph<VertexType, T>::vertices_.size(),
+                   std::vector<int>(Graph<VertexType, T>::vertices_.size(),
                                     std::numeric_limits<int>::max()));
   }
 
@@ -27,7 +27,8 @@ class WeightedGraph : public Graph<VertexType, T> {
                    std::vector<int>(Graph<VertexType, T>::vertices_.size(),
                                     std::numeric_limits<int>::max()));
     for (auto& row : weights)
-      row.resize(Graph<VertexType, T>::vertices_.size(), std::numeric_limits<int>::max());
+      row.resize(Graph<VertexType, T>::vertices_.size(),
+                 std::numeric_limits<int>::max());
   }
 
   /**
@@ -121,7 +122,8 @@ class WeightedGraph : public Graph<VertexType, T> {
   void PrintGraph() const override {
     for (size_t i = 0; i < Graph<VertexType, T>::vertices_.size(); ++i) {
       std::cout << Graph<VertexType, T>::vertices_[i]->data << " -> ";
-      for (const auto& neighbor : Graph<VertexType, T>::vertices_[i]->adjacent) {
+      for (const auto& neighbor :
+           Graph<VertexType, T>::vertices_[i]->adjacent) {
         size_t j = Graph<VertexType, T>::Find(neighbor->data);
         std::cout << "(" << neighbor->data << ", " << weights[i][j] << ") ";
       }

@@ -3,7 +3,7 @@
 #include "johnson.hpp"
 
 int main() {
-  WeightedGraph<Vertex<int>,int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   for (int i = 0; i < 4; ++i) graph.AddVertex(i);
   graph.AddDirEdge(0, 1, -5);
   graph.AddDirEdge(0, 2, 2);
