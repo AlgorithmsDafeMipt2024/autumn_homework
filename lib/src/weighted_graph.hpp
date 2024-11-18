@@ -5,13 +5,14 @@
 #include "graph.hpp"
 
 /// @brief Basic weighted graph
-/// @tparam T
-template <typename T>
-class WeightedGraph : public Graph<T> {
+/// @tparam VertexType 
+/// @tparam T  
+template <typename VertexType, typename T>
+class WeightedGraph : public Graph<VertexType, T> {
  public:
-  WeightedGraph() : Graph<T>() {
-    weights.resize(Graph<T>::vertices_.size(),
-                   std::vector<int>(Graph<T>::vertices_.size(),
+  WeightedGraph() : Graph<VertexType,T>() {
+    weights.resize(Graph<VertexType,T>::vertices_.size(),
+                   std::vector<int>(Graph<VertexType,T>::vertices_.size(),
                                     std::numeric_limits<int>::max()));
   }
 
@@ -21,12 +22,12 @@ class WeightedGraph : public Graph<T> {
    * @param data
    */
   void AddVertex(const T& data) override {
-    Graph<T>::AddVertex(data);
-    weights.resize(Graph<T>::vertices_.size(),
-                   std::vector<int>(Graph<T>::vertices_.size(),
+    Graph<VertexType, T>::AddVertex(data);
+    weights.resize(Graph<VertexType, T>::vertices_.size(),
+                   std::vector<int>(Graph<VertexType, T>::vertices_.size(),
                                     std::numeric_limits<int>::max()));
     for (auto& row : weights)
-      row.resize(Graph<T>::vertices_.size(), std::numeric_limits<int>::max());
+      row.resize(Graph<VertexType, T>::vertices_.size(), std::numeric_limits<int>::max());
   }
 
   /**
@@ -36,7 +37,7 @@ class WeightedGraph : public Graph<T> {
    */
   void RemoveVertex(size_t vertex_id) override {
     // Remove the vertex from the base class
-    Graph<T>::RemoveVertex(vertex_id);
+    Graph<VertexType, T>::RemoveVertex(vertex_id);
 
     // Remove the corresponding row and column from the weights matrix
     weights.erase(weights.begin() + vertex_id);  // Remove the row
@@ -53,7 +54,7 @@ class WeightedGraph : public Graph<T> {
    * @param weight
    */
   void AddDirEdge(size_t source_id, size_t target_id, int weight) {
-    Graph<T>::AddDirEdge(source_id, target_id);
+    Graph<VertexType, T>::AddDirEdge(source_id, target_id);
     weights[source_id][target_id] = weight;
   }
 
@@ -76,7 +77,7 @@ class WeightedGraph : public Graph<T> {
    * @param target_id
    */
   void RemoveDirEdge(size_t source_id, size_t target_id) override {
-    Graph<T>::RemoveDirEdge(source_id, target_id);
+    Graph<VertexType, T>::RemoveDirEdge(source_id, target_id);
     weights[source_id][target_id] = std::numeric_limits<int>::max();
   }
 
@@ -107,10 +108,10 @@ class WeightedGraph : public Graph<T> {
    * Print the weighted graph
    */
   void PrintGraph() const override {
-    for (size_t i = 0; i < Graph<T>::vertices_.size(); ++i) {
-      std::cout << Graph<T>::vertices_[i]->data << " -> ";
-      for (const auto& neighbor : Graph<T>::vertices_[i]->adjacent) {
-        size_t j = Graph<T>::Find(neighbor->data);
+    for (size_t i = 0; i < Graph<VertexType, T>::vertices_.size(); ++i) {
+      std::cout << Graph<VertexType, T>::vertices_[i]->data << " -> ";
+      for (const auto& neighbor : Graph<VertexType, T>::vertices_[i]->adjacent) {
+        size_t j = Graph<VertexType, T>::Find(neighbor->data);
         std::cout << "(" << neighbor->data << ", " << weights[i][j] << ") ";
       }
       std::cout << std::endl;
