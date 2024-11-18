@@ -3,7 +3,7 @@
 #include "johnson.hpp"
 
 TEST(JohnsonAlgorithmTest, SimpleGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   for (int i = 0; i < 4; ++i) graph.AddVertex(i);
   graph.AddDirEdge(0, 1, 1);
   graph.AddDirEdge(1, 2, 2);
@@ -18,7 +18,7 @@ TEST(JohnsonAlgorithmTest, SimpleGraph) {
 }
 
 TEST(JohnsonAlgorithmTest, GraphWithNegativeWeights) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   for (int i = 0; i < 4; ++i) graph.AddVertex(i);
   graph.AddDirEdge(0, 1, -2);
   graph.AddDirEdge(1, 2, -3);
@@ -33,7 +33,7 @@ TEST(JohnsonAlgorithmTest, GraphWithNegativeWeights) {
 }
 
 TEST(JohnsonAlgorithmTest, NegativeCycle) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   for (int i = 0; i < 4; ++i) graph.AddVertex(i);
   graph.AddDirEdge(0, 1, 1);
   graph.AddDirEdge(1, 2, 2);
@@ -45,7 +45,7 @@ TEST(JohnsonAlgorithmTest, NegativeCycle) {
 }
 
 TEST(JohnsonAlgorithmTest, DisconnectedGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   for (int i = 0; i < 4; ++i) graph.AddVertex(i);
   graph.AddDirEdge(0, 1, 1);
   graph.AddDirEdge(1, 2, 2);
@@ -59,7 +59,7 @@ TEST(JohnsonAlgorithmTest, DisconnectedGraph) {
 }
 
 TEST(JohnsonAlgorithmTest, EmptyGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
   // No edges or vertices
 
   std::vector<std::vector<int>> result = Johnson(graph);

@@ -5,9 +5,15 @@
 
 #include "graph.hpp"
 
+/// @brief Vertex representing single downloadable package
+class Library : public Vertex<std::string>{
+  public:
+  std::set<std::shared_ptr<Library>> adjacent;
+};
+
 /// @brief Graph of dependencies between libraries
 /// The "parent" libraries should be installed before thier children
-class DependencyGraph : public Graph<std::string> {};
+class DependencyGraph : public Graph<Library, std::string> {};
 
 /// @brief Packman basic algorithm
 class PackageManager {
@@ -23,10 +29,10 @@ class PackageManager {
    * @return std::vector<std::string>
    */
   std::vector<std::string> FindDownloadingOrder(/*
-      std::shared_ptr<Vertex<std::string>> target*/);
+      std::shared_ptr<Library> target*/);
 
  private:
-  void FindingOrderStep(std::shared_ptr<Vertex<std::string>> target);
+  void FindingOrderStep(std::shared_ptr<Library> target);
   DependencyGraph& dependencies_;
   std::vector<bool> is_visited_;
   std::stack<std::string> reverse_order_;

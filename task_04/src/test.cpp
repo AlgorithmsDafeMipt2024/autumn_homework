@@ -17,7 +17,7 @@ void CheckPaths(std::vector<int>& prev,
 }
 
 TEST(DijkstraTest, SimpleUndirectedGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
 
   // Add vertices
   for (int i = 0; i < 5; i++) graph.AddVertex(i);
@@ -46,7 +46,7 @@ TEST(DijkstraTest, SimpleUndirectedGraph) {
 }
 
 TEST(DijkstraTest, SimpleDirectedGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
 
   // Add vertices
   for (int i = 0; i < 5; i++) graph.AddVertex(i);
@@ -75,7 +75,7 @@ TEST(DijkstraTest, SimpleDirectedGraph) {
 }
 
 TEST(DijkstraTest, DisconnectedGraph) {
-  WeightedGraph<int> graph;
+  WeightedGraph<Vertex<int>, int> graph;
 
   // Add vertices
   for (int i = 0; i < 3; i++) graph.AddVertex(i);

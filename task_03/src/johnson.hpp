@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <iostream>
 #include <limits>
 #include <vector>
@@ -10,8 +9,8 @@
 
 constexpr int INF = std::numeric_limits<int>::max();
 
-template <typename T>
-std::vector<std::vector<int>> Johnson(WeightedGraph<T>& graph) {
+template <typename VertexType, typename T>
+std::vector<std::vector<int>> Johnson(WeightedGraph<VertexType, T>& graph) {
   // Step 1: Add a new vertex
   T new_vertex_data;
   graph.AddVertex(new_vertex_data);

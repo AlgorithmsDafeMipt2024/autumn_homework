@@ -1,7 +1,7 @@
 #include "packman.hpp"
 
 void PackageManager::FindingOrderStep(
-    std::shared_ptr<Vertex<std::string>> target) {
+    std::shared_ptr<Library> target) {
   is_visited_[dependencies_.Find(target->data)] = true;
 
   for (auto& neighbor : target->adjacent) {
@@ -14,7 +14,7 @@ void PackageManager::FindingOrderStep(
 }
 
 std::vector<std::string> PackageManager::FindDownloadingOrder(/*
-    std::shared_ptr<Vertex<std::string>> target*/) {
+    std::shared_ptr<Library> target*/) {
   is_visited_.resize(dependencies_.Size());
   for (size_t i = 0; i < is_visited_.size(); ++i) is_visited_[i] = false;
 

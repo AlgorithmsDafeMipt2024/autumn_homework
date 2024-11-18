@@ -3,9 +3,9 @@
 
 #include "weighted_graph.hpp"
 
-template <typename T>
+template <typename VertexType, typename T>
 std::pair<std::vector<int>, std::vector<int>> Dijkstra(
-    const WeightedGraph<T>& graph, size_t start) {
+    const WeightedGraph<VertexType, T>& graph, size_t start) {
   const size_t size = graph.Size();
 
   // Distance array to store shortest distances from start
