@@ -7,8 +7,10 @@
 template <typename T>
 struct MinPath {
  public:
-  int weight;
-  std::vector<T> vertices;
+  MinPath() = default;
+
+  MinPath(const std::vector<T>& vertices, int weight)
+      : vertices(vertices), weight(weight) {}
 
   void PrintMinPath() {
     for (int i = 0; i < vertices.size(); i++) {
@@ -20,7 +22,15 @@ struct MinPath {
     else
       std::cout << ": inf\n";
   }
+
+  int weight;
+  std::vector<T> vertices;
 };
+
+template <typename T>
+bool operator==(const MinPath<T>& lhs, const MinPath<T>& rhs) {
+  return lhs.vertices == rhs.vertices && lhs.weight == rhs.weight;
+}
 
 template <typename T>
 void DijkstraStep(WeightedGraph<T>& graph,
@@ -64,13 +74,16 @@ void DijkstraStep(WeightedGraph<T>& graph,
 
 template <typename T>
 std::vector<MinPath<T>> Dijkstra(const T& vertex, WeightedGraph<T> graph) {
-  if (graph.IsOriented())
-    throw std::invalid_argument("Weighted graph is oriented!");
+  // if (graph.IsOriented())
+  //   throw std::invalid_argument("Weighted graph is oriented!");
 
   for (auto w_edge : graph.GetWeightedEdges())
     if (w_edge.weight < 0)
       throw std::invalid_argument(
           "Weighted graph has edges with negative weights!");
+
+  if (!graph.ContainsVertex(vertex))
+    throw std::invalid_argument("Root vertex not found!");
 
   std::unordered_map<T, MinPath<T>> min_paths;
   std::unordered_map<T, bool> visited;
