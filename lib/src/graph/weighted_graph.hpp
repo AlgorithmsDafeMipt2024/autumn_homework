@@ -17,19 +17,25 @@ struct WeightedEdge {
 template <typename T>
 class WeightedGraph {
  public:
-  WeightedGraph() = default;
+  WeightedGraph(bool is_oriented = true) : graph(is_oriented) {}
 
-  WeightedGraph(const std::vector<std::pair<std::pair<T, T>, int>>& w_edges) {
+  WeightedGraph(const std::vector<std::pair<std::pair<T, T>, int>>& w_edges,
+                bool is_oriented = true)
+      : graph(is_oriented) {
     for (auto w_edge : w_edges) {
       auto edge = w_edge.first;
       graph.AddEdge(edge.first, edge.second);
       weighted_edges.push_back(
           WeightedEdge<T>(edge.first, edge.second, w_edge.second));
+      if (!graph.IsOriented())
+        weighted_edges.push_back(
+            WeightedEdge<T>(edge.second, edge.first, w_edge.second));
     }
   }
 
   WeightedGraph(const std::vector<std::pair<T, T>>& edges,
-                const std::vector<int> weights) {
+                const std::vector<int> weights, bool is_oriented = true)
+      : graph(is_oriented) {
     if (edges.size() != weights.size())
       throw std::invalid_argument(
           "The number of weighted edges is greater than the number of all "
@@ -38,6 +44,9 @@ class WeightedGraph {
       graph.AddEdge(edges[i].first, edges[i].second);
       weighted_edges.push_back(
           WeightedEdge<T>(edges[i].first, edges[i].second, weights[i]));
+      if (!graph.IsOriented())
+        weighted_edges.push_back(
+            WeightedEdge<T>(edges[i].second, edges[i].first, weights[i]));
     }
   }
 
@@ -91,6 +100,8 @@ class WeightedGraph {
   void AddWeightedEdge(const T& start, const T& end, int weight = 0) {
     graph.AddEdge(start, end);
     weighted_edges.push_back(WeightedEdge<T>(start, end, weight));
+    if (!graph.IsOriented())
+      weighted_edges.push_back(WeightedEdge<T>(end, start, weight));
   }
 
   void DeleteVertex(const T& vertex) {
@@ -109,6 +120,19 @@ class WeightedGraph {
 
   void DeleteWeightedEdge(const T& start, const T& end) {
     graph.DeleteEdge(start, end);
+
+    for (int i = 0; i < weighted_edges.size(); i++) {
+      if (weighted_edges[i].start_vertex == start &&
+          weighted_edges[i].end_vertex == end) {
+        weighted_edges.erase(weighted_edges.begin() + i);
+        if (graph.IsOriented()) return;
+      }
+    }
+    for (int i = 0; i < weighted_edges.size(); i++) {
+      if (weighted_edges[i].start_vertex == end &&
+          weighted_edges[i].end_vertex == start)
+        weighted_edges.erase(weighted_edges.begin() + i);
+    }
   }
 
   void SetEdgeWeight(const T& start, const T& end, int w) {
@@ -118,6 +142,13 @@ class WeightedGraph {
     for (int i = 0; i < weighted_edges.size(); i++) {
       if (weighted_edges[i].start_vertex == start &&
           weighted_edges[i].end_vertex == end) {
+        weighted_edges[i].weight = w;
+        if (graph.IsOriented()) return;
+      }
+    }
+    for (int i = 0; i < weighted_edges.size(); i++) {
+      if (weighted_edges[i].start_vertex == end &&
+          weighted_edges[i].end_vertex == start) {
         weighted_edges[i].weight = w;
         return;
       }
