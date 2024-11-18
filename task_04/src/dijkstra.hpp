@@ -74,9 +74,6 @@ void DijkstraStep(WeightedGraph<T>& graph,
 
 template <typename T>
 std::vector<MinPath<T>> Dijkstra(const T& vertex, WeightedGraph<T> graph) {
-  // if (graph.IsOriented())
-  //   throw std::invalid_argument("Weighted graph is oriented!");
-
   for (auto w_edge : graph.GetWeightedEdges())
     if (w_edge.weight < 0)
       throw std::invalid_argument(
