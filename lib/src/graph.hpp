@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 #include <iostream>
 #include <memory>
 #include <set>
@@ -16,25 +17,29 @@ struct Vertex {
   std::set<std::shared_ptr<Vertex<T>>> adjacent;
 };
 
+template<typename T, typename VT>
+concept IsVertex = std::derived_from<T, Vertex<VT>>;
+
 /// @brief Basic graph
-/// @tparam T
-template <typename T>
+/// @tparam VertexType 
+/// @tparam T 
+template <typename VertexType, typename T> requires IsVertex<VertexType, T> 
 class Graph {
  public:
-  /**
+  /** 
    * @brief
    * Add a new vertex to the graph
    * @param data
    */
   virtual void AddVertex(const T &data) {
-    vertices_.push_back(std::make_shared<Vertex<T>>(data));
+    vertices_.push_back(std::make_shared<VertexType>(data));
   };
 
-  std::shared_ptr<Vertex<T>> operator[](size_t index) {
+  std::shared_ptr<VertexType> operator[](size_t index) {
     return vertices_[index];
   }
 
-  const std::shared_ptr<Vertex<T>> operator[](size_t index) const {
+  const std::shared_ptr<VertexType> operator[](size_t index) const {
     return vertices_[index];
   }
 
@@ -77,7 +82,7 @@ class Graph {
    * Remove a vertex from the graph
    * @param vertex
    */
-  virtual void RemoveVertex(std::shared_ptr<Vertex<T>> vertex) {
+  virtual void RemoveVertex(std::shared_ptr<VertexType> vertex) {
     // Find the vertex in the graph
     auto it = std::find(vertices_.begin(), vertices_.end(), vertex);
     if (it == vertices_.end()) {
@@ -111,8 +116,8 @@ class Graph {
    * @param source
    * @param target
    */
-  virtual void AddDirEdge(std::shared_ptr<Vertex<T>> source,
-                          std::shared_ptr<Vertex<T>> target) {
+  virtual void AddDirEdge(std::shared_ptr<VertexType> source,
+                          std::shared_ptr<VertexType> target) {
     source->adjacent.insert(target);
   }
 
@@ -134,8 +139,8 @@ class Graph {
    * @param source
    * @param target
    */
-  virtual void RemoveDirEdge(std::shared_ptr<Vertex<T>> source,
-                             std::shared_ptr<Vertex<T>> target) {
+  virtual void RemoveDirEdge(std::shared_ptr<VertexType> source,
+                             std::shared_ptr<VertexType> target) {
     source->adjacent.erase(
         *std::find(source->adjacent.begin(), source->adjacent.end(), target));
   }
@@ -157,8 +162,8 @@ class Graph {
    * @param vertex_1
    * @param vertex_2
    */
-  virtual void AddEdge(std::shared_ptr<Vertex<T>> vertex_1,
-                       std::shared_ptr<Vertex<T>> vertex_2) {
+  virtual void AddEdge(std::shared_ptr<VertexType> vertex_1,
+                       std::shared_ptr<VertexType> vertex_2) {
     AddDirEdge(vertex_1, vertex_2);
     AddDirEdge(vertex_2, vertex_1);
   }
@@ -180,8 +185,8 @@ class Graph {
    * @param vertex_1
    * @param vertex_2
    */
-  virtual void RemoveEdge(std::shared_ptr<Vertex<T>> vertex_1,
-                          std::shared_ptr<Vertex<T>> vertex_2) {
+  virtual void RemoveEdge(std::shared_ptr<VertexType>vertex_1,
+                          std::shared_ptr<VertexType> vertex_2) {
     RemoveDirEdge(vertex_1, vertex_2);
     RemoveDirEdge(vertex_2, vertex_1);
   }
@@ -201,5 +206,5 @@ class Graph {
   }
 
  protected:
-  std::vector<std::shared_ptr<Vertex<T>>> vertices_;
+  std::vector<std::shared_ptr<VertexType>> vertices_;
 };
