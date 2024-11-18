@@ -1,6 +1,6 @@
 #include "utils.hpp"
 
-void ForceAddDirEdge(Graph<char>& graph, char u, char v) {
+void ForceAddDirEdge(Graph<Vertex<char>, char>& graph, char u, char v) {
   // Add vertices if they do not exist
   if (graph.Size() == 0 || graph.Find(u) == graph.Size()) {
     graph.AddVertex(u);
@@ -12,8 +12,9 @@ void ForceAddDirEdge(Graph<char>& graph, char u, char v) {
   graph.AddDirEdge(graph.Find(u), graph.Find(v));
 }
 
-bool TopologicalSortStep(Graph<char>& graph, size_t v, std::set<char>& visited,
-                         std::set<char>& recursion, std::stack<char>& stack) {
+bool TopologicalSortStep(Graph<Vertex<char>, char>& graph, size_t v,
+                         std::set<char>& visited, std::set<char>& recursion,
+                         std::stack<char>& stack) {
   // Mark the current node as visited and add it to the recursion stack
   visited.insert(graph[v]->data);
   recursion.insert(graph[v]->data);
@@ -47,7 +48,7 @@ void FindAlphabeticOrder(const std::vector<std::string>& words) {
     return;
   }
 
-  Graph<char> graph;
+  Graph<Vertex<char>, char> graph;
 
   // Build the graph by iterating through adjacent words
   for (size_t i = 0; i < words.size() - 1; ++i) {
