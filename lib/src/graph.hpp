@@ -1,10 +1,10 @@
 #pragma once
 
 #include <algorithm>
-#include <concepts>
 #include <iostream>
 #include <memory>
 #include <set>
+#include <type_traits>
 #include <vector>
 
 /// @brief Graphs vertex
@@ -18,7 +18,7 @@ struct Vertex {
 };
 
 template <typename T, typename VT>
-concept IsVertex = std::derived_from<T, Vertex<VT>>;
+concept IsVertex = std::is_base_of<Vertex<VT>, T>::value;
 
 /// @brief Basic graph
 /// @tparam VertexType
