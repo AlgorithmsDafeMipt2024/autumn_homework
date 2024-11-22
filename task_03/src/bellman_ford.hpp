@@ -6,6 +6,25 @@
 #include "dijkstra.hpp"
 
 template <typename T>
+void BellmanFordStep(WeightedGraph<T>& graph,
+                     std::map<T, MinPath<T>>& min_paths, bool& is_updated) {
+  for (auto w_edge : graph.GetWeightedEdges()) {
+    T v = w_edge.start_vertex;
+    T u = w_edge.end_vertex;
+
+    if (min_paths[v].weight != std::numeric_limits<int>::max() &&
+        min_paths[u].weight > min_paths[v].weight + w_edge.weight) {
+      is_updated = true;
+
+      min_paths[u].weight = min_paths[v].weight + w_edge.weight;
+      // Обновляем кратчайший путь
+      min_paths[u].vertices = min_paths[v].vertices;
+      min_paths[u].vertices.push_back(v);
+    }
+  }
+}
+
+template <typename T>
 std::vector<MinPath<T>> BellmanFord(const T& vertex, WeightedGraph<T> graph) {
   if (!graph.ContainsVertex(vertex))
     throw std::invalid_argument("Root vertex not found!");
@@ -20,33 +39,17 @@ std::vector<MinPath<T>> BellmanFord(const T& vertex, WeightedGraph<T> graph) {
       min_paths[v].weight = std::numeric_limits<int>::max();
   }
 
+  bool is_updated = false;
   for (int i = 0; i < graph.GetVerticesCount() - 1; i++) {
-    bool is_updated = false;
-
-    for (WeightedEdge<T> w_edge : graph.GetWeightedEdges()) {
-      auto v = w_edge.start_vertex;
-      auto u = w_edge.end_vertex;
-
-      if (min_paths[v].weight != std::numeric_limits<int>::max() &&
-          min_paths[u].weight > min_paths[v].weight + w_edge.weight) {
-        // Проверка на наличие в графе цикла с отрицательной весом
-        if (min_paths[u].vertices.size() &&
-            min_paths[u].vertices[min_paths[u].vertices.size() - 1] == v)
-          throw std::invalid_argument(
-              "Weighted graph has cicle with negative weight!");
-        is_updated = true;
-
-        min_paths[u].weight = min_paths[v].weight + w_edge.weight;
-        // Обновляем кратчайший путь
-        min_paths[u].vertices = min_paths[v].vertices;
-        min_paths[u].vertices.push_back(v);
-      }
-    }
-
-    // Если кратчайшие пути никак не изменились, то дальше нет смысла
-    // продолжать цикл
+    is_updated = false;
+    BellmanFordStep(graph, min_paths, is_updated);
     if (!is_updated) break;
   }
+
+  // Проверяем на цикл с отрицательным весом
+  BellmanFordStep(graph, min_paths, is_updated);
+  if (is_updated)
+    throw std::invalid_argument("Graph has cicle with negative weight!");
 
   // Удаляем вершину, для которой мы находили кратчайшие пути до других вершин
   min_paths.erase(vertex);
