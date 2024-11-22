@@ -1,99 +1,93 @@
 #include "graph.hpp"
 
-#include <iostream>
-#include <stdexcept>
+#include <gtest/gtest.h>
 
-#define UNREACHABLE -1
-
-Graph::Graph(int v, int e) {
-  if (v <= 0)
-    throw std::invalid_argument(
-        "Number of vertices must be greater than zero.");
-
-  vertexes_num = v;
-  edges_num = e;
-  adjList.resize(v);
+TEST(GraphTest, EmptyGraph) {
+  EXPECT_THROW(Graph graph(0, 0), std::invalid_argument);
 }
 
-Graph::Graph(int v, int e, bool directed) {
-  if (v <= 0)
-    throw std::invalid_argument(
-        "Number of vertices must be greater than zero.");
-
-  vertexes_num = v;
-  edges_num = e;
-  is_directed = directed;
-  adjList.resize(v);
+TEST(GraphTest, InvalidNumberOfVertices) {
+  EXPECT_THROW(Graph graph(-1, 5), std::invalid_argument);
 }
 
-void Graph::addEdge(int u, int v, int weight) {
-  if (u < 1 || u > vertexes_num || v < 1 || v > vertexes_num) {
-    throw std::out_of_range("Vertex out of bounds in addEdge.");
-  }
+TEST(GraphTest, AddEdgeOutOfBounds) {
+  Graph graph(3, 3);
 
-  adjList[u - 1].emplace_back(v - 1, weight);
-  if (!is_directed) adjList[v - 1].emplace_back(u - 1, weight);
-
-  edges_num++;
+  EXPECT_THROW(graph.addEdge(0, 1, 1), std::out_of_range);
+  EXPECT_THROW(graph.addEdge(1, 4, 1), std::out_of_range);
+  EXPECT_THROW(graph.addEdge(4, 1, 1), std::out_of_range);
 }
 
-int Graph::getVertexesNum() {
-  if (vertexes_num <= 0)
-    throw std::runtime_error("Graph is not properly initialized.");
-  return vertexes_num;
+TEST(GraphTest, AddEdgeValid) {
+  Graph graph(3, 3);
+
+  EXPECT_NO_THROW(graph.addEdge(1, 2, 1));
+  EXPECT_NO_THROW(graph.addEdge(2, 3, 2));
+  EXPECT_NO_THROW(graph.addEdge(3, 1, 3));
 }
 
-int Graph::getEdgesNum() { return edges_num; }
+TEST(GraphTest, GetNeighboursValid) {
+  Graph graph(3, 3);
 
-void Graph::printGraph() const {
-  if (vertexes_num == 0) {
-    std::cerr << "Error: Graph is empty." << std::endl;
-    return;
-  }
+  graph.addEdge(1, 2, 1);
+  graph.addEdge(2, 3, 2);
+  graph.addEdge(3, 1, 3);
 
-  for (int i = 0; i < vertexes_num; i++) {
-    if (adjList[i].empty()) continue;
+  std::vector<std::pair<int, int>> neighbours = graph.getNeighbours(1);
 
-    std::cout << "Node " << i + 1 << ": ";
+  ASSERT_EQ(neighbours.size(), 1);
+  ASSERT_EQ(neighbours[0].first, 1);
+  ASSERT_EQ(neighbours[0].second, 1);
 
-    for (const auto& [neighbor, weight] : adjList[i]) {
-      std::cout << "(" << neighbor + 1 << ", " << weight << ") ";
-    }
-    std::cout << std::endl;
-  }
+  neighbours = graph.getNeighbours(2);
+  ASSERT_EQ(neighbours.size(), 1);
+  ASSERT_EQ(neighbours[0].first, 2);
+  ASSERT_EQ(neighbours[0].second, 2);
 }
 
-std::vector<std::pair<int, int>> Graph::getNeighbours(int v) {
-  if (v < 0 || v >= vertexes_num) {
-    throw std::out_of_range("Vertex index out of bounds in getNeighbours.");
-  }
-  return adjList[v];
+TEST(GraphTest, GetNeighboursOutOfBounds) {
+  Graph graph(3, 3);
+
+  graph.addEdge(1, 2, 1);
+  graph.addEdge(2, 3, 2);
+
+  EXPECT_THROW(graph.getNeighbours(5), std::out_of_range);
 }
 
-void Graph::top_sort(int v, int from, std::vector<bool>& visited,
-                     std::vector<int>& way) {
-  if (visited[v]) return;  // Если вершина уже посещена, выходим
-  visited[v] = true;  // Помечаем вершину как посещенную
-  way.push_back(v);  // Добавляем вершину в путь
+TEST(GraphTest, TopologicalSortValid) {
+  Graph graph(6, 6);
 
-  for (auto [u, w] : getNeighbours(v)) {
-    if (!visited[u]) {
-      top_sort(u, v, visited, way);  // Рекурсивный вызов для соседа
-    }
-  }
+  graph.addEdge(1, 2, 1);
+  graph.addEdge(1, 3, 2);
+  graph.addEdge(2, 4, 3);
+  graph.addEdge(3, 5, 4);
+  graph.addEdge(4, 6, 5);
+  graph.addEdge(5, 6, 6);
+
+  std::vector<int> expected_order = {0, 2, 1, 4, 3, 5};
+  auto actual_order = graph.topological_sort(0);
+
+  ASSERT_EQ(expected_order, actual_order);
 }
 
-std::vector<int> Graph::topological_sort(int start) {
-  if (vertexes_num == 0) {
-    std::cerr << "Error: Graph is empty, topological sort cannot be performed."
-              << std::endl;
-    return {};  // Возвращаем пустой вектор в случае ошибки
-  }
+TEST(GraphTest, TopologicalSortEmptyGraph) {
+  Graph graph(0, 0);
 
-  std::vector<int> way;
-  std::vector<bool> visited(getVertexesNum(), false);
+  auto order = graph.topological_sort(0);
+  ASSERT_TRUE(order.empty());
+}
 
-  top_sort(start, UNREACHABLE, visited, way);
+TEST(GraphTest, TopologicalSortSingleVertex) {
+  Graph graph(1, 0);
 
-  return way;
+  std::vector<int> expected_order = {0};
+  auto actual_order = graph.topological_sort(0);
+
+  ASSERT_EQ(expected_order, actual_order);
+}
+
+TEST(GraphTest, TopologicalSortEmptyGraphError) {
+  Graph graph(0, 0);
+
+  EXPECT_NO_THROW({ auto order = graph.topological_sort(0); });
 }
