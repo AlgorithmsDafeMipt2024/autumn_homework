@@ -6,7 +6,7 @@ TEST(Test_TopologicalSort, Simple_Test_1) {
   Graph<int> graph;
 
   auto result = TopologicalSort(graph);
-  std::vector<int> expected{};
+  std::vector<int> expected;
 
   ASSERT_EQ(result, expected);
 }

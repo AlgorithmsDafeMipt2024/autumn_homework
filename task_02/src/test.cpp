@@ -7,7 +7,7 @@ TEST(Test_FindBridges, Simple_Test_1) {
   Graph<int> graph(false);
 
   auto result = FindBridges(graph);
-  std::vector<Edge<int>> expected{};
+  std::vector<Edge<int>> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -18,7 +18,7 @@ TEST(Test_FindBridges, Simple_Test_2) {
   graph.AddVertex('A');
 
   auto result = FindBridges(graph);
-  std::vector<Edge<char>> expected{};
+  std::vector<Edge<char>> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -49,7 +49,7 @@ TEST(Test_FindBridges, Simple_Test_4) {
   graph.AddEdge('B', 'C');
 
   auto result = FindBridges(graph);
-  std::vector<Edge<char>> expected{};
+  std::vector<Edge<char>> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -118,7 +118,7 @@ TEST(Test_FindBridges, Test_2) {
   graph.AddEdge('D', 'F');
 
   auto result = FindBridges(graph);
-  std::vector<Edge<char>> expected{};
+  std::vector<Edge<char>> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -181,7 +181,7 @@ TEST(Test_FindBridges, Test_4) {
   graph.AddEdge('E', 'B');
 
   auto result = FindBridges(graph);
-  std::vector<Edge<char>> expected{};
+  std::vector<Edge<char>> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -213,7 +213,7 @@ TEST(Test_FindJointVertices, Simple_Test_1) {
   Graph<int> graph(false);
 
   auto result = FindJointVertices(graph);
-  std::vector<int> expected{};
+  std::vector<int> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -224,7 +224,7 @@ TEST(Test_FindJointVertices, Simple_Test_2) {
   graph.AddVertex('A');
 
   auto result = FindJointVertices(graph);
-  std::vector<char> expected{};
+  std::vector<char> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -238,7 +238,7 @@ TEST(Test_FindJointVertices, Simple_Test_3) {
   graph.AddEdge('A', 'B');
 
   auto result = FindJointVertices(graph);
-  std::vector<char> expected{};
+  std::vector<char> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -255,7 +255,7 @@ TEST(Test_FindJointVertices, Simple_Test_4) {
   graph.AddEdge('B', 'C');
 
   auto result = FindJointVertices(graph);
-  std::vector<char> expected{};
+  std::vector<char> expected;
 
   ASSERT_EQ(result, expected);
 }
@@ -323,7 +323,7 @@ TEST(Test_FindJointVertices, Test_2) {
   graph.AddEdge('D', 'F');
 
   auto result = FindJointVertices(graph);
-  std::vector<char> expected{};
+  std::vector<char> expected;
 
   ASSERT_EQ(result, expected);
 }

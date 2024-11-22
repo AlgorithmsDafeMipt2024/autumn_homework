@@ -15,7 +15,7 @@ TEST(Test_Dijkstra, Simple_Test_2) {
   graph.AddVertex('A');
 
   auto result = Dijkstra('A', graph);
-  std::vector<MinPath<char>> expected{};
+  std::vector<MinPath<char>> expected;
 
   ASSERT_EQ(result, expected);
 }
