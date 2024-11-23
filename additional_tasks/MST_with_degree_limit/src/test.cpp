@@ -1,16 +1,16 @@
 #include <gtest/gtest.h>
 
-#include "mst_with_degree_constraint.h"
+#include "mst_with_degree_constraint.hpp"
 
 TEST(MSTWithDegreeConstraintTest, BasicTest) {
-  int n = 5;
-  std::vector<std::tuple<int, int, int>> edges = {
+  const int n = 5;
+  std::vector<std::tuple<int, int, int>> const edges = {
       {0, 1, 10}, {0, 2, 6}, {0, 3, 5}, {1, 3, 15},
       {2, 3, 4},  {3, 4, 8}, {1, 4, 7}};
-  int max_degree = 3;
+  const int max_degree = 3;
 
   MSTWithDegreeConstraint mst(n, edges, max_degree);
-  std::vector<Edge> result = mst.solve();
+  std::vector<Edge> const result = mst.solve();
 
   ASSERT_EQ(result.size(), 6);
 
@@ -22,7 +22,7 @@ TEST(MSTWithDegreeConstraintTest, BasicTest) {
     total_weight += edge.weight;
   }
 
-  for (int d : degree) {
+  for (const int d : degree) {
     ASSERT_LE(d, max_degree);
   }
 
@@ -30,14 +30,14 @@ TEST(MSTWithDegreeConstraintTest, BasicTest) {
 }
 
 TEST(MSTWithDegreeConstraintTest, DegreeConstraintTest) {
-  int n = 5;
-  std::vector<std::tuple<int, int, int>> edges = {
+  const int n = 5;
+  std::vector<std::tuple<int, int, int>> const edges = {
       {0, 1, 10}, {0, 2, 6}, {0, 3, 5}, {1, 3, 15},
       {2, 3, 4},  {3, 4, 8}, {1, 4, 7}};
-  int max_degree = 2;
+  const int max_degree = 2;
 
   MSTWithDegreeConstraint mst(n, edges, max_degree);
-  std::vector<Edge> result = mst.solve();
+  std::vector<Edge> const result = mst.solve();
 
   ASSERT_EQ(result.size(), 4);
 
@@ -49,7 +49,7 @@ TEST(MSTWithDegreeConstraintTest, DegreeConstraintTest) {
     total_weight += edge.weight;
   }
 
-  for (int d : degree) {
+  for (const int d : degree) {
     ASSERT_LE(d, max_degree);
   }
 
@@ -57,7 +57,7 @@ TEST(MSTWithDegreeConstraintTest, DegreeConstraintTest) {
 }
 
 TEST(MSTWithDegreeConstraintTest, MinimalGraphTest) {
-  int n = 1;
+  const int n = 1;
   std::vector<std::tuple<int, int, int>> edges = {};
   int max_degree = 1;
 

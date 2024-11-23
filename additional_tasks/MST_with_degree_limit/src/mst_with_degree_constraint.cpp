@@ -1,4 +1,4 @@
-#include "mst_with_degree_constraint.h"
+#include "mst_with_degree_constraint.hpp"
 
 #include <algorithm>
 #include <numeric>
@@ -47,9 +47,9 @@ void MSTWithDegreeConstraint::kruskal(vector<Edge>& result, vector<int>& parent,
   vector<int> degree(n, 0);
 
   for (auto& edge : edges_) {
-    int u = get<0>(edge);
-    int v = get<1>(edge);
-    int weight = get<2>(edge);
+    const int u = get<0>(edge);
+    const int v = get<1>(edge);
+    const int weight = get<2>(edge);
 
     if (is_valid(degree, u, v)) {
       result.push_back(Edge(u, v, weight));
