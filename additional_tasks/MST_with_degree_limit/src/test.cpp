@@ -58,23 +58,23 @@ TEST(MSTWithDegreeConstraintTest, DegreeConstraintTest) {
 
 TEST(MSTWithDegreeConstraintTest, MinimalGraphTest) {
   const int n = 1;
-  std::vector<std::tuple<int, int, int>> edges = {};
-  int max_degree = 1;
+  std::vector<std::tuple<int, int, int>> const edges = {};
+  const int max_degree = 1;
 
   MSTWithDegreeConstraint mst(n, edges, max_degree);
-  std::vector<Edge> result = mst.solve();
+  std::vector<Edge> const result = mst.solve();
 
   ASSERT_EQ(result.size(), 0);
 }
 
 TEST(MSTWithDegreeConstraintTest, DegreeExceedsLimitTest) {
-  int n = 4;
-  std::vector<std::tuple<int, int, int>> edges = {
+  const int n = 4;
+  std::vector<std::tuple<int, int, int>> const edges = {
       {0, 1, 10}, {0, 2, 6}, {1, 2, 5}, {1, 3, 7}, {2, 3, 4}};
-  int max_degree = 1;
+  const int max_degree = 1;
 
   MSTWithDegreeConstraint mst(n, edges, max_degree);
-  std::vector<Edge> result = mst.solve();
+  std::vector<Edge> const result = mst.solve();
 
   ASSERT_EQ(result.size(), 2);
 }
