@@ -3,8 +3,8 @@
 #include "top_sort.hpp"
 
 TEST(SimpleGraph, Simple) {
-  int vertices = 3;
-  int edges = 2;
+  int const vertices = 3;
+  int const edges = 2;
   std::vector<std::pair<int, int>> edge = {{1, 2}, {2, 3}};
 
   std::vector<int> result = TopologySort(vertices, edges, edge);
@@ -14,8 +14,8 @@ TEST(SimpleGraph, Simple) {
 }
 
 TEST(DisconnectedGraph, Simple) {
-  int vertices = 5;
-  int edges = 3;
+  int const vertices = 5;
+  int const edges = 3;
   std::vector<std::pair<int, int>> edge = {{1, 2}, {3, 4}, {3, 5}};
 
   std::vector<int> result = TopologySort(vertices, edges, edge);
