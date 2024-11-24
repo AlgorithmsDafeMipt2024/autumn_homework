@@ -9,9 +9,9 @@
 // DWG - directed weighted graph
 
 class UUGraph {
-  std::vector<std::vector<int>> edgeList; // невзвешенный
+  std::vector<std::vector<int>> edgeList;  // невзвешенный
 
-  std::vector<int> visited; // массив для обхода
+  std::vector<int> visited;  // массив для обхода
 
   void UUGAddEdge(int u, int v) {
     if (0 < u && u <= edgeList.size() && 0 < v && v <= edgeList.size()) {
@@ -24,7 +24,7 @@ class UUGraph {
 };
 
 class UWGraph {
-  std::vector<std::vector<std::pair<int, double>>> edgeList; // взвешенный
+  std::vector<std::vector<std::pair<int, double>>> edgeList;  // взвешенный
 
   void UWGAddEdge(int u, int v, double weight) {
     if (0 < u && u <= edgeList.size() && 0 < v && v <= edgeList.size()) {
@@ -37,12 +37,12 @@ class UWGraph {
 };
 
 class DUGraph {
-public:
-  std::vector<std::vector<int>> graph; // невзвешенный
-  std::vector<int> used;               // массив для обхода
+ public:
+  std::vector<std::vector<int>> graph;  // невзвешенный
+  std::vector<int> used;                // массив для обхода
 
-  std::vector<int> topSort; // массив для топологической сортировки
-  std::vector<int> color; // массив для цветов вершин
+  std::vector<int> topSort;  // массив для топологической сортировки
+  std::vector<int> color;  // массив для цветов вершин
 
   void DUGAddEdge(int u, int v) {
     if (0 < u && u <= graph.size() && 0 < v && v <= graph.size()) {
@@ -82,7 +82,7 @@ public:
 };
 
 class DWGraph {
-  std::vector<std::vector<std::pair<int, double>>> edgeListW; // взвешенный
+  std::vector<std::vector<std::pair<int, double>>> edgeListW;  // взвешенный
   std::vector<int> visited;
 
   void DWGAddEdge(int u, int v, double weight) {
