@@ -20,7 +20,6 @@ weight_t AStar(
     throw std::invalid_argument(
         "AStar: there is no such goal vertice in graph.");
 
-  std::set<vert_t> non_visited_verts;
   std::priority_queue<std::pair<weight_t, vert_t>,
                       std::vector<std::pair<weight_t, vert_t>>,
                       std::greater<std::pair<weight_t, vert_t>>>
@@ -28,7 +27,9 @@ weight_t AStar(
 
   std::unordered_map<vert_t, weight_t> cost_from_start;
   std::unordered_map<vert_t, weight_t> range_plus_cost;
-  std::unordered_map<vert_t, vert_t> parent;
+
+  for (const auto& v : graph.Verts())
+    cost_from_start[v] = std::numeric_limits<weight_t>::max();
 
   cost_from_start[start] = 0;
   range_plus_cost[start] =
@@ -43,8 +44,6 @@ weight_t AStar(
     if (current == goal)
       return cost_from_start[goal];  // уже нашли путь до нужной вершины
 
-    non_visited_verts.insert(current);
-
     for (size_t i = 0; i < graph.GetAdjList()[current].size(); i++) {
       auto neighbor = graph.GetAdjList()[current][i];
 
@@ -53,13 +52,7 @@ weight_t AStar(
           ((graph.IsWeighted()) ? graph.GetWeightOfEdge({current, neighbor})
                                 : 1);
 
-      if (non_visited_verts.count(neighbor) &&
-          tentative_score >= cost_from_start[neighbor])
-        continue;
-
-      if (!non_visited_verts.count(neighbor) ||
-          tentative_score < cost_from_start[neighbor]) {
-        parent[neighbor] = current;
+      if (tentative_score < cost_from_start[neighbor]) {
         cost_from_start[neighbor] = tentative_score;
 
         // range_plus_cost для новой вершины (другого соседа)
