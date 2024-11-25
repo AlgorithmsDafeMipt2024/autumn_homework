@@ -3,6 +3,7 @@
 #include <sstream>
 #include <stack>
 
+#include "a_star.hpp"
 #include "dag_relaxation.hpp"
 
 namespace {
