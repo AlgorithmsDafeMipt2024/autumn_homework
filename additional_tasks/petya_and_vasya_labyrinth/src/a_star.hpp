@@ -38,15 +38,14 @@ weight_t AStar(
 
   while (!visited_verts.empty()) {
     // посещенная вершина с минимальным значением range_plus_cost
-    vert_t current = visited_verts.top().second;
+    const vert_t current = visited_verts.top().second;
     visited_verts.pop();
 
     if (current == goal)
       return cost_from_start[goal];  // уже нашли путь до нужной вершины
 
-    for (size_t i = 0; i < graph.GetAdjList()[current].size(); i++) {
-      auto neighbor = graph.GetAdjList()[current][i];
-
+    const auto neighbors = graph.GetAdjList()[current];
+    for (const auto& neighbor : neighbors) {
       weight_t tentative_score =
           cost_from_start[current] +
           ((graph.IsWeighted()) ? graph.GetWeightOfEdge({current, neighbor})
