@@ -7,17 +7,16 @@
 /**
  * @brief Вычисляет кратчайшие пути от заданной начальной вершины до всех других
  * вершин в направленном ациклическом графе (DAG) с помощью релаксации.
- * @tparam vert_t: тип вершины в графе
- * @tparam weight_t: тип веса в графе
+ * @tparam vert_t: тип вершины в графе.
+ * @tparam weight_t: тип веса в графе.
  * @param graph: граф, для которого необходимо вычислить кратчайшие пути.
  * @param start: начальная вершина, от которой вычисляются расстояния.
- * @throw std::invalid_argument("DAGRelaxation: there is no such start
- * vertice.")
- * @throw std::invalid_argument("DAGRelaxation: graph is not directed.");
- * @return std::unordered_map<vert_t, weight_t>: словарь, где ключ - вершина, а
- * значение - кратчайшее расстояние от start до этой вершины
- * (если до вершины нет пути, то значение будет равно
- * std::numeric_limits<weight_t>::max())
+ * @throw `std::invalid_argument("DAGRelaxation: there is no such start
+ * vertice.")`.
+ * @throw `std::invalid_argument("DAGRelaxation: graph is not directed.")`.
+ * @return `std::unordered_map<vert_t, weight_t>`: словарь, где ключ - вершина,
+ * а значение - кратчайшее расстояние от start до этой вершины (если до вершины
+ * нет пути, то значение будет равно `std::numeric_limits<weight_t>::max()`).
  */
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
 std::unordered_map<vert_t, weight_t> DAGRelaxation(

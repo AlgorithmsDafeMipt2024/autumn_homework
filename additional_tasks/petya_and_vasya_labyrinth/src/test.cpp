@@ -285,39 +285,39 @@ TEST(DAGRelaxationTest, StringVerticesAndLongWeights) {
   ASSERT_EQ(distances, expected_distances);
 }
 
-TEST(SolutionTest, PetyaWinsSimple) {
+TEST(ComplicatedBadSolutionTest, PetyaWinsSimple) {
   std::stringstream ss("P0#V");
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Petya! with 1\n");
 }
 
-TEST(SolutionTest, VasyaWinsSimple) {
+TEST(ComplicatedBadSolutionTest, VasyaWinsSimple) {
   std::stringstream ss("V0#P");
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Vasya! with 1\n");
 }
 
-TEST(SolutionTest, DrawSimple) {
+TEST(ComplicatedBadSolutionTest, DrawSimple) {
   std::stringstream ss("P0#V0");
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Draw! with 1\n");
 }
 
-TEST(SolutionTest, ValeryWinsSimple) {
+TEST(ComplicatedBadSolutionTest, ValeryWinsSimple) {
   std::stringstream ss("V#P\n");
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Deadlock! Valery!\n");
 }
 
-TEST(SolutionTest, PetyaWins) {
+TEST(ComplicatedBadSolutionTest, PetyaWins) {
   std::stringstream ss;
   ss << "##V########\n"
      << "#000000000#\n"
@@ -333,7 +333,7 @@ TEST(SolutionTest, PetyaWins) {
 
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Petya! with 6\n");
 
   std::stringstream ss_2;
@@ -351,11 +351,11 @@ TEST(SolutionTest, PetyaWins) {
 
   std::stringstream output_2;
 
-  Solution(ss_2, output_2);
+  ComplicatedBadSolution(ss_2, output_2);
   EXPECT_EQ(output_2.str(), "Petya! with 8\n");
 }
 
-TEST(SolutionTest, VasyaWins) {
+TEST(ComplicatedBadSolutionTest, VasyaWins) {
   std::stringstream ss;
   ss << "##V########\n"
      << "#000000000#\n"
@@ -371,7 +371,7 @@ TEST(SolutionTest, VasyaWins) {
 
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Vasya! with 21\n");
 
   std::stringstream ss_2;
@@ -389,11 +389,11 @@ TEST(SolutionTest, VasyaWins) {
 
   std::stringstream output_2;
 
-  Solution(ss_2, output_2);
+  ComplicatedBadSolution(ss_2, output_2);
   EXPECT_EQ(output_2.str(), "Vasya! with 6\n");
 }
 
-TEST(SolutionTest, PetyaWinsHard) {
+TEST(ComplicatedBadSolutionTest, PetyaWinsHard) {
   std::stringstream ss;
   ss << "###V###\n"
      << "#00000#\n"
@@ -407,11 +407,11 @@ TEST(SolutionTest, PetyaWinsHard) {
 
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Petya! with 6\n");
 }
 
-TEST(SolutionTest, Draw) {
+TEST(ComplicatedBadSolutionTest, Draw) {
   std::stringstream ss;
   ss << "##V########\n"
      << "#000000000#\n"
@@ -427,11 +427,11 @@ TEST(SolutionTest, Draw) {
 
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Draw! with 25\n");
 }
 
-TEST(SolutionTest, ValeryWins) {
+TEST(ComplicatedBadSolutionTest, ValeryWins) {
   std::stringstream ss;
   ss << "##V########\n"
      << "#000000000#\n"
@@ -447,6 +447,6 @@ TEST(SolutionTest, ValeryWins) {
 
   std::stringstream output;
 
-  Solution(ss, output);
+  ComplicatedBadSolution(ss, output);
   EXPECT_EQ(output.str(), "Deadlock! Valery!\n");
 }

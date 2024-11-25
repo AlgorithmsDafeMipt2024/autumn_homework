@@ -154,8 +154,9 @@ inline PetyaAndVasyaGraphs ParseMaze(std::istream& is = std::cin) {
   return maze;
 }
 
-/// @brief Решает игру в лабиринте и определяет победителя.
-void Solution(std::istream& is = std::cin, std::ostream& os = std::cout) {
+/// @brief Сложно и плохо решает задачу: "Петя и Вася в страшном лабиринте".
+void ComplicatedBadSolution(std::istream& is = std::cin,
+                            std::ostream& os = std::cout) {
   try {
     auto maze = ParseMaze(is);
 
