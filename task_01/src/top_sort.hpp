@@ -1,7 +1,7 @@
 #pragma once
-#include <bits/stdc++.h>
-#define int long
-
+#include <algorithm>
+#include <stdexcept>
+#include <vector>
 class CycleGraph : public std::logic_error {
   using std::logic_error::logic_error;
 };

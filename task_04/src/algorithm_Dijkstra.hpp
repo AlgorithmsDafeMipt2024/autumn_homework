@@ -1,6 +1,8 @@
 #pragma once
-#include <bits/stdc++.h>
-
+#include <algorithm>
+#include <set>
+#include <stdexcept>
+#include <vector>
 using namespace std;
 
 class Nonexistent_way : public std::logic_error {

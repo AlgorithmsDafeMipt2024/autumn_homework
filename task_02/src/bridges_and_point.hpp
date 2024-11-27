@@ -1,5 +1,8 @@
 #pragma once
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <set>
+#include <vector>
+
 using namespace std;
 
 void DfsCutPoint(int v, int p);

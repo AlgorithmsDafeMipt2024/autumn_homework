@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-
 #include <Graph.hpp>
 
 using namespace std;

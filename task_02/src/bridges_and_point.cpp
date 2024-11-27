@@ -1,4 +1,4 @@
-#include <bridges_and_point.hpp>
+#include "bridges_and_point.hpp"
 
 #include "Graph.hpp"
 
@@ -34,7 +34,7 @@ void DfsCutPoint(int v, int p) {
   }
 }
 
-set<int> CutPoint(int n, int m, Graph graph) {
+set<int> CutPoint(int n, Graph graph) {
   u.resize(n + 1, 0);
   ret.resize(n + 1, 1e9);
   h.resize(n + 1, 1e9);
@@ -71,7 +71,7 @@ void DfsCutBridges(int u, int p = -1) {
   }
 }
 
-vector<pair<int, int>> CutBridges(int n, int m, Graph graph) {
+vector<pair<int, int>> CutBridges(int n, Graph graph) {
   tin.resize(n + 1, 0);
   fup.resize(n + 1, 1e9);
   used_br.resize(n + 1, 0);
@@ -94,8 +94,8 @@ pair<set<int>, vector<pair<int, int>>> Answer(int n, int m,
                                               vector<pair<int, int>> vec) {
   Graph graph;
   graph.ReadUUG(n, m, vec);
-  vector<pair<int, int>> answer_bridges = CutBridges(n, m, graph);
-  set<int> answer_point = CutPoint(n, m, graph);
+  vector<pair<int, int>> answer_bridges = CutBridges(n, graph);
+  set<int> answer_point = CutPoint(n, graph);
   u.clear();
   ret.clear();
   h.clear();

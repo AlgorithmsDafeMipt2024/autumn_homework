@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include "top_sort.hpp"
 
@@ -37,8 +37,8 @@ TEST(SingleVertex, Simple) {
   int const edges = 0;
   std::vector<std::pair<int, int>> edge = {};
 
-  std::vector<int> result = TopSort(vertices, edges, edge);
-  std::vector<int> expected = {1};
+  std::vector<int> const result = TopSort(vertices, edges, edge);
+  std::vector<int> const expected = {1};
 
   ASSERT_EQ(result, expected);
 }

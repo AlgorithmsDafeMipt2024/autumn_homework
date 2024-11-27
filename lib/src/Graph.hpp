@@ -1,4 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -130,7 +131,7 @@ struct Graph {
   bool DfsCycleUndirected(int v, int p) {
     // Выполняет DFS для проверки наличия циклов в невзвешенном графе.
     used[v] = 1;  // Помечаем вершину как посещенную.
-    for (int to : gr[v]) {
+    for (const int to : gr[v]) {
       if (!used[to]) {
         if (DfsCycleUndirected(to, v)) {
           return true;  // Если цикл найден, возвращаем true.

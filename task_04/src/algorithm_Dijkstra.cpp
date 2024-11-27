@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-
 #include <Graph.hpp>
 #include <algorithm_Dijkstra.hpp>
 
