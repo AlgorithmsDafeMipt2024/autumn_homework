@@ -174,12 +174,12 @@ struct Graph {
   }
 
   // Используется для нахождения Top_Sort и проверке на циклы
-  bool DfsCycleDirectedU(int v) {
+  bool DfsCycleDirectedU(const int v) {
     // Выполняет DFS для топологической сортировки и проверки наличия циклов.
     used[v] = 1;  // Помечаем вершину как посещенную.
     color[v] = 1;  // Устанавливаем цвет в процессе.
     for (auto& edge : gr[v]) {
-      int to = edge;  // Получаем соседнюю вершину.
+      int const to = edge;  // Получаем соседнюю вершину.
       if (!used[to]) {
         if (DfsCycleDirectedU(to)) {
           return true;  // Если цикл найден, возвращаем true.
@@ -235,7 +235,7 @@ struct Graph {
   // Ниже реализован алгоритм Белмана Форда, который ищет кратчайшее расстояние
   // между вершиной s и всеми остальными
   vector<int> AlgorithmBellmanaF(int n, int m, int s) {
-    edges.resize(
+    edges.resize( 
         m);  // Изменяем размер вектора рёбер на количество рёбер в графе
     int k = 0;  // Индекс для добавления рёбер
 
