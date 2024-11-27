@@ -22,7 +22,7 @@ TEST(CutPointsAndBridgesTest, BasicFunctionality) {
 
   pair<set<int>, vector<pair<int, int>>> const result =
       Answer(vertices, edges, edgeList);
-  set<int> expectedCutPoints = {2};
+  set<int> const expectedCutPoints = {2};
   vector<pair<int, int>> const expectedBridges = {{1, 2}};
 
   ASSERT_EQ(result.first, expectedCutPoints);
@@ -37,7 +37,7 @@ TEST(CutPointsAndBridgesTest, NoCutPoints) {
 
   pair<set<int>, vector<pair<int, int>>> const result =
       Answer(vertices, edges, edgeList);
-  set<int> expectedCutPoints = {};
+  set<int> const expectedCutPoints = {};
   vector<pair<int, int>> const expectedBridges = {};
 
   ASSERT_EQ(result.first, expectedCutPoints);
@@ -52,7 +52,7 @@ TEST(CutPointsAndBridgesTest, ComplexGraph) {
 
   pair<set<int>, vector<pair<int, int>>> const result =
       Answer(vertices, edges, edgeList);
-  set<int> expectedCutPoints = {3, 4, 5, 6};
+  set<int> const expectedCutPoints = {3, 4, 5, 6};
   vector<pair<int, int>> const expectedBridges = {
       {3, 4}, {4, 5}, {5, 6}, {6, 7}};
 
