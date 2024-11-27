@@ -1,8 +1,10 @@
 #pragma once
 
-#include <bits/stdc++.h>
-
+#include <algorithm>
+#include <iostream>
 #include <stdexcept>
+#include <vector>
+
 using namespace std;
 
 class NotMST : public logic_error {

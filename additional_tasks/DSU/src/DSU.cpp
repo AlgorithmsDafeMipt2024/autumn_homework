@@ -1,7 +1,5 @@
 #include "DSU.hpp"
 
-#include <bits/stdc++.h>
-
 using namespace std;
 
 DSU::DSU(int n) : parent(n), rank(n, 0) {

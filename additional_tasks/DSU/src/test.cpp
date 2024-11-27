@@ -9,7 +9,7 @@ TEST(Template, Simple) {
   int edge = 3;
   vector<vector<int>> edges = {{1, 2, 4}, {2, 3, 5}, {1, 3, 3}};
 
-  int result = main_part(vertices, edge, edges);
+  int const result = main_part(vertices, edge, edges);
   int expected = 7;
   ASSERT_EQ(result, expected);
 }
@@ -36,8 +36,8 @@ TEST(Template, MultipleEdgesSameWeight) {
   vector<vector<int>> edges = {
       {1, 2, 1}, {2, 3, 1}, {3, 4, 1}, {1, 4, 1}, {2, 4, 1}};
 
-  int result = main_part(vertices, edge, edges);
-  int expected = 3;  // MST can include edges with weight 1
+  int const result = main_part(vertices, edge, edges);
+  int const expected = 3;  // MST can include edges with weight 1
   ASSERT_EQ(result, expected);
 }
 
@@ -55,7 +55,7 @@ TEST(Template, LargerGraph) {
   vector<vector<int>> edges = {{1, 2, 4}, {1, 3, 1}, {2, 3, 2}, {2, 4, 5},
                                {3, 4, 8}, {4, 5, 3}, {5, 6, 7}, {4, 6, 6}};
 
-  int result = main_part(vertices, edge, edges);
-  int expected = 17;  // Minimum spanning tree weight
+  int const result = main_part(vertices, edge, edges);
+  int const expected = 17;  // Minimum spanning tree weight
   ASSERT_EQ(result, expected);
 }
