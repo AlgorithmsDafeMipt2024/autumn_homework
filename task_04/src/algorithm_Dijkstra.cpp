@@ -1,4 +1,4 @@
-#include <Graph.hpp>
+#include "Graph.hpp"
 #include <algorithm_Dijkstra.hpp>
 
 using namespace std;
@@ -41,7 +41,7 @@ pair<pair<int, int>, vector<int>> Dijkstra(int& n, int& m, int& s, int& t,
     throw Nonexistent_way("There is no path from point s to point t");
   }
   vector<int> way;
-  int tu = t;
+  int const tu = t;
   while (put[t] != -1) {
     way.push_back(t);
     t = put[t];
