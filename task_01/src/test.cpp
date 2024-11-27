@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-
 #include "top_sort.hpp"
 
 TEST(SimpleGraph, Simple) {

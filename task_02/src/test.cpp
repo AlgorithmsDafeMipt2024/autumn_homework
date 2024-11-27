@@ -1,6 +1,5 @@
-#include "gtest/gtest.h"
-
 #include "bridges_and_point.hpp"
+#include "gtest/gtest.h"
 
 TEST(SimpleTest, Simple) {
   int const vertices = 6;
