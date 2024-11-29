@@ -86,6 +86,27 @@ TEST(Test_BellmanFord, Simple_Test_6) {
   ASSERT_THROW(BellmanFord('A', graph), std::invalid_argument);
 }
 
+TEST(Test_BellmanFord, Simple_Test_7) {
+  WeightedGraph<char> graph;
+
+  graph.AddVertex('A');
+  graph.AddVertex('B');
+  graph.AddVertex('S');
+
+  graph.AddWeightedEdge('A', 'B', -1);
+  graph.AddWeightedEdge('B', 'A', 2);
+  graph.AddWeightedEdge('S', 'A', 0);
+  graph.AddWeightedEdge('S', 'B', 0);
+
+  auto result = BellmanFord('S', graph);
+  std::vector<MinPath<char>> expected;
+
+  expected.push_back(MinPath<char>({'S', 'A'}, 0));
+  expected.push_back(MinPath<char>({'S', 'A', 'B'}, -1));
+
+  ASSERT_EQ(result, expected);
+}
+
 TEST(Test_BellmanFord, Test_1) {
   WeightedGraph<char> graph;
 

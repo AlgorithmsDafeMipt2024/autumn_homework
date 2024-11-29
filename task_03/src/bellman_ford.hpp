@@ -47,6 +47,7 @@ std::vector<MinPath<T>> BellmanFord(const T& vertex, WeightedGraph<T> graph) {
   }
 
   // Проверяем на цикл с отрицательным весом
+  is_updated = false;
   BellmanFordStep(graph, min_paths, is_updated);
   if (is_updated)
     throw std::invalid_argument("Graph has cicle with negative weight!");
