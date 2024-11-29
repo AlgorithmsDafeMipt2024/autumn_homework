@@ -4,108 +4,96 @@
 
 TEST(Test, Example_1) {
   // Example 1: Small graph
-  DependencyGraph dg_1;
+  DependencyGraph dg;
+  std::vector<std::string> packages = {"Basic_Package", "Extention"};
+  for (const auto& package : packages) dg.AddVertex(package);
 
-  dg_1.AddVertex("Basic_Package");
-  dg_1.AddVertex("Extention");
+  dg.AddDirEdge(1, 0);
 
-  dg_1.AddDirEdge(0, 1);
+  PackageManager packman(dg);
 
-  PackageManager packman_1(dg_1);
+  std::vector<std::vector<std::string>> answers{{"Basic_Package"},
+                                                {"Basic_Package", "Extention"}};
 
-  // std::vector<std::vector<std::string>> answers{{"Basic_Package"},
-  // {"Basic_Package", "Extention"}};
-
-  std::vector<std::string> answer{"Basic_Package", "Extention"};
-
-  ASSERT_EQ(answer, packman_1.FindDownloadingOrder());
+  for (size_t i = 0; i < answers.size(); ++i)
+    ASSERT_EQ(answers[i], packman.FindDownloadingOrder(packages[i]));
 }
-
 TEST(Test, Example_2) {
   // Example 2: Three vertices, one edge
-  DependencyGraph dg_2;
+  DependencyGraph dg;
 
-  dg_2.AddVertex("First");
-  dg_2.AddVertex("Second");
-  dg_2.AddVertex("Independent");
+  std::vector<std::string> packages = {"First", "Second", "Independent"};
 
-  dg_2.AddDirEdge(0, 1);
+  for (const auto& package : packages) dg.AddVertex(package);
 
-  PackageManager packman_2(dg_2);
+  dg.AddDirEdge(1, 0);
 
-  // std::vector<std::vector<std::string>> answers{
-  //     {"First"}, {"First", "Second"}, {"Independent"}};
+  PackageManager packman(dg);
 
-  std::vector<std::string> answer{{"Independent", "First", "Second"}};
+  std::vector<std::vector<std::string>> answers{
+      {"First"}, {"First", "Second"}, {"Independent"}};
 
-  ASSERT_EQ(answer, packman_2.FindDownloadingOrder());
+  for (size_t i = 0; i < answers.size(); ++i)
+    ASSERT_EQ(answers[i], packman.FindDownloadingOrder(packages[i]));
 }
 
 TEST(Test, Example_3) {
   // Example 3: Five vertices, more complex dependencies
-  DependencyGraph dg_3;
+  DependencyGraph dg;
 
-  dg_3.AddVertex("BaseLib");
-  dg_3.AddVertex("TestLib");
-  dg_3.AddVertex("DataLib");
-  dg_3.AddVertex("AlgorithmLib");
-  dg_3.AddVertex("ToolLib");
+  std::vector<std::string> packages = {"BaseLib", "TestLib", "DataLib",
+                                       "AlgorithmLib", "ToolLib"};
 
-  dg_3.AddDirEdge(0, 1);
-  dg_3.AddDirEdge(0, 2);
-  dg_3.AddDirEdge(2, 3);
-  dg_3.AddDirEdge(3, 4);
+  for (const auto& package : packages) dg.AddVertex(package);
 
-  PackageManager packman_3(dg_3);
+  dg.AddDirEdge(1, 0);
+  dg.AddDirEdge(2, 0);
+  dg.AddDirEdge(3, 2);
+  dg.AddDirEdge(4, 3);
 
-  // std::vector<std::vector<std::string>> answers{
-  //     {"BaseLib"},
-  //     {"BaseLib", "TestLib"},
-  //     {"BaseLib", "DataLib"},
-  //     {"BaseLib", "DataLib", "AlgorithmLib"},
-  //     {"BaseLib", "DataLib", "AlgorithmLib", "ToolLib"}};
+  PackageManager packman(dg);
 
-  std::vector<std::string> answer{"BaseLib", "DataLib", "AlgorithmLib",
-                                  "ToolLib", "TestLib"};
+  std::vector<std::vector<std::string>> answers{
+      {"BaseLib"},
+      {"BaseLib", "TestLib"},
+      {"BaseLib", "DataLib"},
+      {"BaseLib", "DataLib", "AlgorithmLib"},
+      {"BaseLib", "DataLib", "AlgorithmLib", "ToolLib"}};
 
-  ASSERT_EQ(answer, packman_3.FindDownloadingOrder());
+  for (size_t i = 0; i < answers.size(); ++i)
+    ASSERT_EQ(answers[i], packman.FindDownloadingOrder(packages[i]));
 }
 
 TEST(Test, Example_4) {
   // Example 4: More complex graph, multiple paths
-  DependencyGraph dg_4;
+  DependencyGraph dg;
 
-  dg_4.AddVertex("Start");
-  dg_4.AddVertex("A1");
-  dg_4.AddVertex("A2");
-  dg_4.AddVertex("B1");
-  dg_4.AddVertex("B2");
-  dg_4.AddVertex("C1");
-  dg_4.AddVertex("C2");
-  dg_4.AddVertex("End");
+  std::vector<std::string> packages = {"Start", "A1", "A2", "B1",
+                                       "B2",    "C1", "C2", "End"};
 
-  dg_4.AddDirEdge(0, 1);
-  dg_4.AddDirEdge(0, 2);
-  dg_4.AddDirEdge(1, 3);
-  dg_4.AddDirEdge(2, 4);
-  dg_4.AddDirEdge(3, 5);
-  dg_4.AddDirEdge(4, 6);
-  dg_4.AddDirEdge(5, 7);
-  dg_4.AddDirEdge(6, 7);
-  PackageManager packman_4(dg_4);
+  for (const auto& package : packages) dg.AddVertex(package);
 
-  // std::vector<std::vector<std::string>> answers{
-  //     {"Start"},
-  //     {"Start", "A1"},
-  //     {"Start", "A2"},
-  //     {"Start", "A1", "B1"},
-  //     {"Start", "A2", "B2"},
-  //     {"Start", "A1", "B1", "C1"},
-  //     {"Start", "A2", "B2", "C2"},
-  //     {"Start", "A1", "B1", "C1", "A2", "B2", "C2", "End"}};
+  dg.AddDirEdge(1, 0);
+  dg.AddDirEdge(2, 0);
+  dg.AddDirEdge(3, 1);
+  dg.AddDirEdge(4, 2);
+  dg.AddDirEdge(5, 3);
+  dg.AddDirEdge(6, 4);
+  dg.AddDirEdge(7, 5);
+  dg.AddDirEdge(7, 6);
 
-  std::vector<std::string> answer{"Start", "A1", "B1", "C1",
-                                  "A2",    "B2", "C2", "End"};
+  PackageManager packman(dg);
 
-  ASSERT_EQ(answer, packman_4.FindDownloadingOrder());
+  std::vector<std::vector<std::string>> answers{
+      {"Start"},
+      {"Start", "A1"},
+      {"Start", "A2"},
+      {"Start", "A1", "B1"},
+      {"Start", "A2", "B2"},
+      {"Start", "A1", "B1", "C1"},
+      {"Start", "A2", "B2", "C2"},
+      {"Start", "A1", "B1", "C1", "A2", "B2", "C2", "End"}};
+
+  for (size_t i = 0; i < answers.size(); ++i)
+    ASSERT_EQ(answers[i], packman.FindDownloadingOrder(packages[i]));
 }

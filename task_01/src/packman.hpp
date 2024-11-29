@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stack>
+#include <queue>
 #include <string>
 
 #include "graph.hpp"
@@ -12,7 +12,7 @@ class Library : public Vertex<std::string> {
 };
 
 /// @brief Graph of dependencies between libraries
-/// The "parent" libraries should be installed before thier children
+/// The "parent" libraries should be installed after thier children
 class DependencyGraph : public Graph<Library, std::string> {};
 
 /// @brief Packman basic algorithm
@@ -28,12 +28,11 @@ class PackageManager {
    * @param target Needed library
    * @return std::vector<std::string>
    */
-  std::vector<std::string> FindDownloadingOrder(/*
-      std::shared_ptr<Library> target*/);
+  std::vector<std::string> FindDownloadingOrder(std::string target);
 
  private:
   void FindingOrderStep(std::shared_ptr<Library> target);
   DependencyGraph& dependencies_;
   std::vector<bool> is_visited_;
-  std::stack<std::string> reverse_order_;
+  std::queue<std::string> order_;
 };

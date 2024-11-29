@@ -1,23 +1,25 @@
 #include "packman.hpp"
 
 int main() {
-  DependencyGraph dg_1;
+  DependencyGraph dg;
 
-  dg_1.AddVertex("Lib_1");
-  dg_1.AddVertex("Lib_2");
-  dg_1.AddVertex("Lib_3");
-  dg_1.AddVertex("Lib_4");
-  dg_1.AddVertex("Lib_5");
+  std::vector<std::string> packages = {"Lib_1", "Lib_2", "Lib_3", "Lib_4",
+                                       "Lib_5"};
+  for (const auto& package : packages) dg.AddVertex(package);
 
-  dg_1.AddDirEdge(0, 1);
-  dg_1.AddDirEdge(0, 2);
-  dg_1.AddDirEdge(2, 3);
-  dg_1.AddDirEdge(3, 1);
-  dg_1.AddDirEdge(0, 3);
+  dg.AddDirEdge(0, 1);  // Lib_1 depends on Lib_2
+  dg.AddDirEdge(0, 2);  // Lib_1 depends on Lib_3
+  dg.AddDirEdge(2, 3);  // Lib_3 depends on Lib_4
+  dg.AddDirEdge(3, 1);  // Lib_4 depends on Lib_2
+  dg.AddDirEdge(0, 3);  // Lib_1 depends on Lib_4
 
-  PackageManager packman_1(dg_1);
+  PackageManager packman(dg);
 
-  packman_1.FindDownloadingOrder();
+  packman.FindDownloadingOrder("Lib_1");
+  packman.FindDownloadingOrder("Lib_2");
+  packman.FindDownloadingOrder("Lib_3");
+  packman.FindDownloadingOrder("Lib_4");
+  packman.FindDownloadingOrder("Lib_5");
 
   return 0;
 }
