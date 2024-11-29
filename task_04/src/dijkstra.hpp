@@ -6,6 +6,8 @@
 
 #include "graph/weighted_graph.hpp"
 
+#define INF std::numeric_limits<int>::max()
+
 template <typename T>
 struct MinPath {
  public:
@@ -19,7 +21,7 @@ struct MinPath {
       std::cout << vertices[i];
       if (i != vertices.size() - 1) std::cout << "->";
     }
-    if (weight != std::numeric_limits<int>::max())
+    if (weight != INF)
       std::cout << ": " << weight << '\n';
     else
       std::cout << ": inf\n";
@@ -38,7 +40,7 @@ template <typename T>
 void DijkstraStep(WeightedGraph<T>& graph,
                   std::unordered_map<T, MinPath<T>>& min_paths,
                   std::unordered_map<T, bool>& visited) {
-  int min_weight = std::numeric_limits<int>::max();
+  int min_weight = INF;
   std::pair<T, T> edge;
 
   for (auto [v, is_visited] : visited) {
@@ -90,7 +92,7 @@ std::vector<MinPath<T>> Dijkstra(const T& vertex, WeightedGraph<T> graph) {
     if (v == vertex)
       visited[v] = true;
     else {
-      min_paths[v].weight = std::numeric_limits<int>::max();
+      min_paths[v].weight = INF;
       visited[v] = false;
     }
   }

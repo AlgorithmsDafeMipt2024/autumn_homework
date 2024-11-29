@@ -242,11 +242,11 @@ TEST(Test_BellmanFord, Test_4) {
 
   expected.push_back(MinPath<char>({'A', 'B'}, 3));
   expected.push_back(MinPath<char>({'A', 'B', 'C'}, 1));
-  expected.push_back(MinPath<char>({'D'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'E'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'F'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'G'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'H'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'D'}, INF));
+  expected.push_back(MinPath<char>({'E'}, INF));
+  expected.push_back(MinPath<char>({'F'}, INF));
+  expected.push_back(MinPath<char>({'G'}, INF));
+  expected.push_back(MinPath<char>({'H'}, INF));
 
   ASSERT_EQ(result, expected);
 }
@@ -276,13 +276,13 @@ TEST(Test_BellmanFord, Test_5) {
   auto result = BellmanFord('D', graph);
   std::vector<MinPath<char>> expected;
 
-  expected.push_back(MinPath<char>({'A'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'B'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'C'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'A'}, INF));
+  expected.push_back(MinPath<char>({'B'}, INF));
+  expected.push_back(MinPath<char>({'C'}, INF));
   expected.push_back(MinPath<char>({'D', 'E'}, 5));
   expected.push_back(MinPath<char>({'D', 'E', 'G', 'F'}, 0));
   expected.push_back(MinPath<char>({'D', 'E', 'G'}, 2));
-  expected.push_back(MinPath<char>({'H'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'H'}, INF));
 
   ASSERT_EQ(result, expected);
 }

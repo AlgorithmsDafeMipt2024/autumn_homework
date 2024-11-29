@@ -84,7 +84,7 @@ TEST(Test_Dijkstra, Simple_Test_6) {
   auto result = Dijkstra('B', graph);
   std::vector<MinPath<char>> expected;
 
-  expected.push_back(MinPath<char>({'A'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'A'}, INF));
   expected.push_back(MinPath<char>({'B', 'C'}, 3));
 
   ASSERT_EQ(result, expected);
@@ -131,8 +131,8 @@ TEST(Test_Dijkstra, Simple_Test_8) {
 
   expected.push_back(MinPath<char>({'A', 'B'}, 2));
   expected.push_back(MinPath<char>({'A', 'B', 'C'}, 5));
-  expected.push_back(MinPath<char>({'D'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'E'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'D'}, INF));
+  expected.push_back(MinPath<char>({'E'}, INF));
 
   ASSERT_EQ(result, expected);
 }
@@ -161,9 +161,9 @@ TEST(Test_Dijkstra, Simple_Test_9) {
 
   expected.push_back(MinPath<char>({'B', 'A'}, 2));
   expected.push_back(MinPath<char>({'B', 'C'}, 3));
-  expected.push_back(MinPath<char>({'D'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'E'}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<char>({'F'}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<char>({'D'}, INF));
+  expected.push_back(MinPath<char>({'E'}, INF));
+  expected.push_back(MinPath<char>({'F'}, INF));
 
   ASSERT_EQ(result, expected);
 }
@@ -378,12 +378,12 @@ TEST(Test_Dijkstra, Test_5) {
   expected.push_back(MinPath<int>({0, 1}, 4));
   expected.push_back(MinPath<int>({0, 2}, 2));
   expected.push_back(MinPath<int>({0, 2, 3}, 3));
-  expected.push_back(MinPath<int>({4}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({5}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({6}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({7}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({8}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({9}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<int>({4}, INF));
+  expected.push_back(MinPath<int>({5}, INF));
+  expected.push_back(MinPath<int>({6}, INF));
+  expected.push_back(MinPath<int>({7}, INF));
+  expected.push_back(MinPath<int>({8}, INF));
+  expected.push_back(MinPath<int>({9}, INF));
 
   ASSERT_EQ(result, expected);
 }
@@ -422,10 +422,10 @@ TEST(Test_Dijkstra, Test_6) {
   auto result = Dijkstra(4, graph);
   std::vector<MinPath<int>> expected;
 
-  expected.push_back(MinPath<int>({0}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({1}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({2}, std::numeric_limits<int>::max()));
-  expected.push_back(MinPath<int>({3}, std::numeric_limits<int>::max()));
+  expected.push_back(MinPath<int>({0}, INF));
+  expected.push_back(MinPath<int>({1}, INF));
+  expected.push_back(MinPath<int>({2}, INF));
+  expected.push_back(MinPath<int>({3}, INF));
   expected.push_back(MinPath<int>({4, 5}, 7));
   expected.push_back(MinPath<int>({4, 6}, 1));
   expected.push_back(MinPath<int>({4, 6, 7}, 3));
