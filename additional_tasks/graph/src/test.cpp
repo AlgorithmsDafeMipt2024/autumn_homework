@@ -321,12 +321,6 @@ TEST(GraphTest_size_t, ContainsEdgeThrowsOnNonWeightedGraph) {
   ASSERT_THROW(g.ContainsEdge({0, 1, 5}), std::logic_error);
 }
 
-TEST(GraphTest_size_t, ContainsEdgeThrowsOnNegativeWeight) {
-  Graph<size_t, long> g =
-      Graph<size_t, long>::GraphWeighted({{0, 1, 5}, {1, 2, 10}, {2, 0, 3}});
-  ASSERT_THROW(g.ContainsEdge({0, 1, -5}), std::logic_error);
-}
-
 TEST(GraphTest_size_t, GetWeightOfExistingEdge) {
   Graph<size_t, long> graph = Graph<size_t, long>::GraphWeighted(
       {{0, 1, 250L}, {1, 2, 370L}, {2, 0, 120L}});

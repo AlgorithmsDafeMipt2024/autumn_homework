@@ -12,7 +12,7 @@ const std::string& Graph<vert_t, weight_t>::Edge::Name() const {
   else
     name = "['" + StartVert() + "'->'" + EndVert() + "']";
 
-  // example: "['Paris'->'Berlin']"
+  // example: "["Paris"->"Berlin"]"
 
   return name;
 }
