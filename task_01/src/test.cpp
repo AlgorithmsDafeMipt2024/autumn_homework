@@ -204,6 +204,42 @@ TEST(Test_TopologicalSort, Test_5) {
   ASSERT_EQ(result, expected);
 }
 
+TEST(Test_TopologicalSort, Test_6) {
+  Graph<std::string> graph;
+  graph.AddVertex("A");
+  graph.AddVertex("B");
+  graph.AddVertex("C");
+  graph.AddVertex("D");
+  graph.AddVertex("E");
+
+  graph.AddEdge("A", "C");
+  graph.AddEdge("B", "C");
+  graph.AddEdge("C", "D");
+  graph.AddEdge("C", "E");
+
+  auto result = TopologicalSort(graph);
+  std::vector<std::string> expected = {"B", "A", "C", "E", "D"};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(Test_TopologicalSort, Test_7) {
+  Graph<std::string> graph;
+  graph.AddVertex("A");
+  graph.AddVertex("B");
+  graph.AddVertex("C");
+  graph.AddVertex("D");
+  graph.AddVertex("E");
+
+  graph.AddEdge("A", "B");
+  graph.AddEdge("C", "D");
+
+  auto result = TopologicalSort(graph);
+  std::vector<std::string> expected = {"E", "C", "D", "A", "B"};
+
+  ASSERT_EQ(result, expected);
+}
+
 TEST(Test_TopologicalSort, Test_NotAcyclic_1) {
   Graph<int> graph;
 
