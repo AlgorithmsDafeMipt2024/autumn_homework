@@ -29,7 +29,7 @@ std::vector<std::vector<weight_t>> Graph<vert_t, weight_t>::GetAdjMatrix()
         adj_matrix[edge.EndVert()][edge.StartVert()] = edge.Weight();
     } else {
       adj_matrix[edge.StartVert()][edge.EndVert()] = 1;
-      adj_matrix[edge.EndVert()][edge.StartVert()] = 1;
+      if (!IsDirected()) adj_matrix[edge.EndVert()][edge.StartVert()] = 1;
     }
 
   return adj_matrix;
