@@ -40,7 +40,10 @@ std::map<T, std::map<T, int>> Johnson(WeightedGraph<T> graph) {
       auto path = min_path.vertices;
       T u = path[path.size() - 1];
       // Возвращаем истинный вес минимального пути
-      res[v][u] = min_path.weight + h[u] - h[v];
+      if (min_path.weight != INF)
+        res[v][u] = min_path.weight + h[u] - h[v];
+      else
+        res[v][u] = INF;
     }
     res[v][v] = 0;
   }
