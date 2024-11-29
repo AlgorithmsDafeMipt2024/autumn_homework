@@ -38,6 +38,9 @@ std::unordered_map<vert_t, weight_t> Dijkstra(
     const auto neighbors = graph.GetAdjList()[min_vert];
     for (const auto& vert : neighbors) {
       auto weight = graph.GetWeightOfEdge({min_vert, vert});
+      if (weight < 0)
+        throw std::logic_error(
+            "Dijkstra: graph contains negative weighted edges.");
 
       if (distances[min_vert] + weight < distances[vert])
         distances[vert] = distances[min_vert] + weight;
