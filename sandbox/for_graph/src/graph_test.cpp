@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include "graph/graph.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(Test_NotOrientedGraph, Test_Constructors) {
   Vertex<size_t> v1(1, {2, 4, 3});

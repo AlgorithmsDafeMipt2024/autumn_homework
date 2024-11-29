@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>
-
 #include "graph/weighted_graph.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(Test_OrientedWeightedGraph, Test_Constructors) {
   WeightedGraph<char> wg1({{{'A', 'B'}, 2},

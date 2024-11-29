@@ -1,8 +1,8 @@
+#include "graph/vertex.hpp"
+
 #include <gtest/gtest.h>
 
 #include <stdexcept>
-
-#include "graph/vertex.hpp"
 
 TEST(TestVertex, Test_Constructors_1) {
   Vertex<size_t> v1(0, {1, 5, 3, 7, 4, 8});
