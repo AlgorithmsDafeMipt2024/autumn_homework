@@ -2,9 +2,27 @@
 
 #include "graph/graph.hpp"
 
+/**
+ * @brief Вычисляет кратчайшие пути от заданной начальной вершины до всех других
+ * вершин в графе (вес в котором может быть только положительным, если есть) с
+ * помощью алгоритма Дейкстры.
+ * @tparam vert_t: тип вершины в графе.
+ * @tparam weight_t: тип веса в графе.
+ * @param graph: граф, для которого необходимо вычислить кратчайшие пути.
+ * @param start: начальная вершина, от которой вычисляются расстояния.
+ * @throw `throw std::logic_error("Dijkstra: graph contains negative weighted
+ * edges.")`.
+ * @return `std::unordered_map<vert_t, weight_t>`: словарь, где ключ - вершина,
+ * а значение - кратчайшее расстояние от start до этой вершины (если до вершины
+ * нет пути, то значение будет равно `std::numeric_limits<weight_t>::max()`).
+ */
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
 std::unordered_map<vert_t, weight_t> Dijkstra(
     const Graph<vert_t, weight_t>& graph, const vert_t& start) {
+  if (!graph.ContainsVert(start))
+    throw std::invalid_argument(
+        "Dijkstra: there is no such start vertice in graph.");
+
   if (graph.Verts().empty()) return {};
 
   std::unordered_map<vert_t, weight_t> distances;
@@ -12,7 +30,7 @@ std::unordered_map<vert_t, weight_t> Dijkstra(
 
   // инициализация расстояний до бесконечности
   for (const auto& vert : graph.Verts()) {
-    distances[vert] = std::numeric_limits<weight_t>::infinity();
+    distances[vert] = std::numeric_limits<weight_t>::max();
     visited[vert] = false;
   }
 
@@ -21,7 +39,7 @@ std::unordered_map<vert_t, weight_t> Dijkstra(
   for (size_t i = 0; i < graph.VertsAmount(); i++) {
     vert_t min_vert =
         graph.Verts()[0];  // находим вершину с минимальным расстоянием
-    weight_t min_distance = std::numeric_limits<weight_t>::infinity();
+    weight_t min_distance = std::numeric_limits<weight_t>::max();
 
     for (const auto& node : graph.Verts())
       if (!visited[node] && distances[node] < min_distance) {
@@ -29,21 +47,23 @@ std::unordered_map<vert_t, weight_t> Dijkstra(
         min_distance = distances[node];
       }
 
-    if (min_distance == std::numeric_limits<weight_t>::infinity())
+    if (min_distance == std::numeric_limits<weight_t>::max())
       break;  // все достижимые вершины обработаны
 
     visited[min_vert] = true;
 
     // релаксация ребер
     const auto neighbors = graph.GetAdjList()[min_vert];
-    for (const auto& vert : neighbors) {
-      auto weight = graph.GetWeightOfEdge({min_vert, vert});
+    for (const auto& neighbor : neighbors) {
+      weight_t weight =
+          graph.IsWeighted() ? graph.GetWeightOfEdge({min_vert, neighbor}) : 1;
+
       if (weight < 0)
         throw std::logic_error(
             "Dijkstra: graph contains negative weighted edges.");
 
-      if (distances[min_vert] + weight < distances[vert])
-        distances[vert] = distances[min_vert] + weight;
+      if (distances[min_vert] + weight < distances[neighbor])
+        distances[neighbor] = distances[min_vert] + weight;
     }
   }
 
