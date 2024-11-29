@@ -18,6 +18,7 @@ TEST(Test, Example_1) {
   for (size_t i = 0; i < answers.size(); ++i)
     ASSERT_EQ(answers[i], packman.FindDownloadingOrder(packages[i]));
 }
+
 TEST(Test, Example_2) {
   // Example 2: Three vertices, one edge
   DependencyGraph dg;

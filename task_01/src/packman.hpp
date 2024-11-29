@@ -31,6 +31,9 @@ class PackageManager {
   std::vector<std::string> FindDownloadingOrder(std::string target);
 
  private:
+  bool IsCyclicUtil(std::shared_ptr<Library> node, std::vector<bool>& visited,
+                    std::vector<bool>& recStack);
+  bool IsCyclic();
   void FindingOrderStep(std::shared_ptr<Library> target);
   DependencyGraph& dependencies_;
   std::vector<bool> is_visited_;
