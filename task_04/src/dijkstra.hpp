@@ -60,7 +60,7 @@ void DijkstraStep(WeightedGraph<T>& graph,
   }
 
   // Случай, когда какие-то вершины недостижимы
-  if (!edge.first && !edge.second) return;
+  if (edge.first == T() && edge.second == T()) return;
 
   if (visited.size() && min_paths.size()) {
     T v = edge.first, u = edge.second;  // v - родитель, u - ребенок
