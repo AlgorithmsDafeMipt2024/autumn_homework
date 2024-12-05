@@ -102,3 +102,95 @@ std::vector<int> Graph::topological_sort(int start) {
 
   return way;
 }
+
+std::vector<std::pair<int, int>> Graph::getBridges() {
+  std::vector<int> tin(vertexes_num, -1);
+  std::vector<int> low(vertexes_num, -1);
+  std::vector<bool> visited(vertexes_num, false);
+  std::vector<std::pair<int, int>> bridges;
+  int timer = 0;
+
+  for (int i = 0; i < vertexes_num; i++) {
+    if (!visited[i]) {
+      dfsBridges(i, -1, tin, low, visited, timer, bridges);
+    }
+  }
+
+  return bridges;
+}
+
+void Graph::dfsBridges(int v, int parent, std::vector<int>& tin,
+                       std::vector<int>& low, std::vector<bool>& visited,
+                       int& timer, std::vector<std::pair<int, int>>& bridges) {
+  visited[v] = true;
+  tin[v] = low[v] = timer++;
+
+  for (auto [u, _] : adjList[v]) {
+    if (u == parent) continue;
+
+    if (!visited[u]) {
+      dfsBridges(u, v, tin, low, visited, timer, bridges);
+      low[v] = std::min(low[v], low[u]);
+
+      if (low[u] > tin[v]) {
+        bridges.emplace_back(v + 1, u + 1);  // Добавляем мост (нумерация с 1)
+      }
+    } else {
+      low[v] = std::min(low[v], tin[u]);
+    }
+  }
+}
+
+std::vector<int> Graph::getArticulationPoints() {
+  std::vector<int> tin(vertexes_num, -1);
+  std::vector<int> low(vertexes_num, -1);
+  std::vector<bool> visited(vertexes_num, false);
+  std::vector<bool> isArticulationPoint(vertexes_num, false);
+  int timer = 0;
+
+  for (int i = 0; i < vertexes_num; i++) {
+    if (!visited[i]) {
+      dfsArticulation(i, -1, tin, low, visited, timer, isArticulationPoint);
+    }
+  }
+
+  std::vector<int> articulationPoints;
+  for (int i = 0; i < vertexes_num; i++) {
+    if (isArticulationPoint[i]) {
+      articulationPoints.push_back(i + 1);  // Нумерация с 1
+    }
+  }
+
+  return articulationPoints;
+}
+
+void Graph::dfsArticulation(int v, int parent, std::vector<int>& tin,
+                            std::vector<int>& low, std::vector<bool>& visited,
+                            int& timer,
+                            std::vector<bool>& isArticulationPoint) {
+  visited[v] = true;
+  tin[v] = low[v] = timer++;
+  int children = 0;
+
+  for (auto [u, _] : adjList[v]) {
+    if (u == parent) continue;
+
+    if (!visited[u]) {
+      children++;
+      dfsArticulation(u, v, tin, low, visited, timer, isArticulationPoint);
+      low[v] = std::min(low[v], low[u]);
+
+      // Условие для точки сочленения
+      if (parent != -1 && low[u] >= tin[v]) {
+        isArticulationPoint[v] = true;
+      }
+    } else {
+      low[v] = std::min(low[v], tin[u]);
+    }
+  }
+
+  // Отдельное условие для корня
+  if (parent == -1 && children > 1) {
+    isArticulationPoint[v] = true;
+  }
+}

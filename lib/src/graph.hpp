@@ -22,7 +22,11 @@ class Graph {
   bool hasEdge(int, int) const;
 
   void printGraph() const;
+
   std::vector<int> topological_sort(int);
+
+  std::vector<std::pair<int, int>> getBridges();
+  std::vector<int> getArticulationPoints();
 
  private:
   int vertexes_num = 0;
@@ -32,6 +36,14 @@ class Graph {
   std::vector<std::vector<std::pair<int, int>>> adjList;
 
   void top_sort(int, int, std::vector<bool>&, std::vector<int>&);
+
+  void dfsBridges(int v, int from, std::vector<int>& tin, std::vector<int>& low,
+                  std::vector<bool>& visited, int& timer,
+                  std::vector<std::pair<int, int>>& bridges);
+
+  void dfsArticulation(int v, int from, std::vector<int>& tin,
+                       std::vector<int>& low, std::vector<bool>& visited,
+                       int& timer, std::vector<bool>& isArticulationPoint);
 };
 };  // namespace algo
 
