@@ -37,13 +37,11 @@ class Graph {
 
   void top_sort(int, int, std::vector<bool>&, std::vector<int>&);
 
-  void dfsBridges(int v, int from, std::vector<int>& tin, std::vector<int>& low,
-                  std::vector<bool>& visited, int& timer,
-                  std::vector<std::pair<int, int>>& bridges);
+  void dfsBridges(int, int, std::vector<int>&, std::vector<int>&,
+                  std::vector<bool>&, int&, std::vector<std::pair<int, int>>&);
 
-  void dfsArticulation(int v, int from, std::vector<int>& tin,
-                       std::vector<int>& low, std::vector<bool>& visited,
-                       int& timer, std::vector<bool>& isArticulationPoint);
+  void dfsArticulation(int, int, std::vector<int>&, std::vector<int>&,
+                       std::vector<bool>&, int&, std::vector<bool>&);
 };
 };  // namespace algo
 
