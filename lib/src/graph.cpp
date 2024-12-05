@@ -47,6 +47,8 @@ int Graph::getVertexesNum() {
 
 int Graph::getEdgesNum() { return edges_num; }
 
+const AdjacencyList Graph::getAdjList() { return adjList; }
+
 void Graph::printGraph() const {
   if (vertexes_num == 0) {
     std::cerr << "Error: Graph is empty." << std::endl;

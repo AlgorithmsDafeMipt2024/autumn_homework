@@ -5,6 +5,8 @@
 
 #include <vector>
 
+using AdjacencyList = std::vector<std::vector<std::pair<int, int>>>;
+
 namespace algo {
 class Graph {
  public:
@@ -16,6 +18,7 @@ class Graph {
 
   int getVertexesNum();
   int getEdgesNum();
+  const AdjacencyList getAdjList();
 
   std::vector<std::pair<int, int>> getNeighbours(int);
 
@@ -33,7 +36,7 @@ class Graph {
   int edges_num = 0;
   bool is_directed = false;
 
-  std::vector<std::vector<std::pair<int, int>>> adjList;
+  AdjacencyList adjList;
 
   void top_sort(int, int, std::vector<bool>&, std::vector<int>&);
 
