@@ -5,6 +5,7 @@
 
 #include <vector>
 
+namespace algo {
 class Graph {
  public:
   Graph(int v, int e);
@@ -32,5 +33,6 @@ class Graph {
 
   void top_sort(int, int, std::vector<bool>&, std::vector<int>&);
 };
+};  // namespace algo
 
 #endif  // GRAPH_HPP
