@@ -22,9 +22,9 @@ vector<int> FindWays(algo::Graph graph, int start) {
 
 void Dijkstra(int v, int from, vector<int>& vis, vector<int>& dst,
               const AdjacencyList adj) {
-  priority_queue<pair<int, int>, vector<pair<int, int>>,
-                 greater<pair<int, int>>>
-      q;
+  using Pair = pair<int, int>;
+
+  priority_queue<Pair, vector<Pair>, greater<Pair>> q;
 
   q.push({0, v});
   while (!q.empty()) {

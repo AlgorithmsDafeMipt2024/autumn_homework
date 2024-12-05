@@ -74,30 +74,29 @@ std::vector<std::pair<int, int>> Graph::GetNeighbours(int v) {
   return adjList[v];
 }
 
-void Graph::TopSort(int v, int from, std::vector<bool>& visited,
-                    std::vector<int>& way) {
+void Graph::TopSort(int v, std::vector<bool>& visited, std::vector<int>& way) {
   if (visited[v]) return;
   visited[v] = true;
   way.push_back(v);
 
   for (auto [u, w] : GetNeighbours(v)) {
     if (!visited[u]) {
-      TopSort(u, v, visited, way);
+      TopSort(u, visited, way);
     }
   }
 }
 
 std::vector<int> Graph::TopologicalSort(int start) {
   if (vertexes_num == 0) {
-    std::cerr << "Error: Graph is empty, topological sort cannot be performed."
-              << std::endl;
+    std::cerr
+        << "Error: Graph is empty, topological sort cannot be performed.\n";
     return {};
   }
 
   std::vector<int> way;
   std::vector<bool> visited(GetVertexesNum(), false);
 
-  TopSort(start, UNREACHABLE, visited, way);
+  TopSort(start, visited, way);
 
   if (way.size() < vertexes_num)
     throw std::invalid_argument("Graph is disconnected.");

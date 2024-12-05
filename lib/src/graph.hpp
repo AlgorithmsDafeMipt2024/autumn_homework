@@ -38,7 +38,7 @@ class Graph {
 
   AdjacencyList adjList;
 
-  void TopSort(int, int, std::vector<bool>&, std::vector<int>&);
+  void TopSort(int, std::vector<bool>&, std::vector<int>&);
 
   void DfsBridges(int, int, std::vector<int>&, std::vector<int>&,
                   std::vector<bool>&, int&, std::vector<std::pair<int, int>>&);
