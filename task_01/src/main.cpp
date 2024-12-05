@@ -13,11 +13,11 @@ int main() {
 
     std::cin >> a >> b >> w;
 
-    graph.addEdge(a, b, w);
+    graph.AddEdge(a, b, w);
   }
 
   std::cout << "Topsort:" << std::endl;
-  for (auto i : graph.topological_sort(0)) {
+  for (auto i : graph.TopologicalSort(0)) {
     std::cout << i + 1 << " ";
   }
 

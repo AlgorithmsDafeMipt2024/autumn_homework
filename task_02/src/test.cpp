@@ -47,12 +47,12 @@ TEST(MinStackTest, Simple) {
 // Тест для поиска мостов
 TEST(GraphTest, getBridges) {
   Graph graph(5, 0, false);
-  graph.addEdge(1, 2, 0);
-  graph.addEdge(1, 3, 0);
-  graph.addEdge(3, 4, 0);
-  graph.addEdge(4, 5, 0);
+  graph.AddEdge(1, 2, 0);
+  graph.AddEdge(1, 3, 0);
+  graph.AddEdge(3, 4, 0);
+  graph.AddEdge(4, 5, 0);
 
-  auto bridges = graph.getBridges();
+  auto bridges = graph.GetBridges();
 
   // Ожидаем следующие мосты
   std::vector<std::pair<int, int>> expectedBridges = {
@@ -67,12 +67,12 @@ TEST(GraphTest, getBridges) {
 // Тест для поиска точек сочленения
 TEST(GraphTest, getArticulationPoints) {
   Graph graph(5, 0, false);
-  graph.addEdge(1, 2, 0);
-  graph.addEdge(1, 3, 0);
-  graph.addEdge(3, 4, 0);
-  graph.addEdge(4, 5, 0);
+  graph.AddEdge(1, 2, 0);
+  graph.AddEdge(1, 3, 0);
+  graph.AddEdge(3, 4, 0);
+  graph.AddEdge(4, 5, 0);
 
-  auto articulationPoints = graph.getArticulationPoints();
+  auto articulationPoints = graph.GetArticulationPoints();
 
   // Ожидаем следующие точки сочленения
   std::vector<int> expectedPoints = {1, 3, 4};
@@ -88,12 +88,12 @@ TEST(GraphTest, getArticulationPoints) {
 // Тест для графа без мостов
 TEST(GraphTest, NoBridges) {
   Graph graph(4, 0, false);
-  graph.addEdge(1, 2, 0);
-  graph.addEdge(2, 3, 0);
-  graph.addEdge(3, 4, 0);
-  graph.addEdge(4, 1, 0);
+  graph.AddEdge(1, 2, 0);
+  graph.AddEdge(2, 3, 0);
+  graph.AddEdge(3, 4, 0);
+  graph.AddEdge(4, 1, 0);
 
-  auto bridges = graph.getBridges();
+  auto bridges = graph.GetBridges();
 
   EXPECT_TRUE(bridges.empty());
 }
@@ -101,12 +101,12 @@ TEST(GraphTest, NoBridges) {
 // Тест для графа без точек сочленения
 TEST(GraphTest, NoArticulationPoints) {
   Graph graph(4, 0, false);
-  graph.addEdge(1, 2, 0);
-  graph.addEdge(2, 3, 0);
-  graph.addEdge(3, 4, 0);
-  graph.addEdge(4, 1, 0);
+  graph.AddEdge(1, 2, 0);
+  graph.AddEdge(2, 3, 0);
+  graph.AddEdge(3, 4, 0);
+  graph.AddEdge(4, 1, 0);
 
-  auto articulationPoints = graph.getArticulationPoints();
+  auto articulationPoints = graph.GetArticulationPoints();
 
   EXPECT_TRUE(articulationPoints.empty());
 }
