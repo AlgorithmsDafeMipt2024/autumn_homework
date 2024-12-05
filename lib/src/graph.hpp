@@ -14,22 +14,22 @@ class Graph {
 
   Graph(int v, int e, bool directed);
 
-  void addEdge(int, int, int);
+  void AddEdge(int, int, int);
 
-  int getVertexesNum();
-  int getEdgesNum();
-  const AdjacencyList getAdjList();
+  int GetVertexesNum();
+  int GetEdgesNum();
+  const AdjacencyList GetAdjList();
 
-  std::vector<std::pair<int, int>> getNeighbours(int);
+  std::vector<std::pair<int, int>> GetNeighbours(int);
 
-  bool hasEdge(int, int) const;
+  bool HasEdge(int, int) const;
 
-  void printGraph() const;
+  void PrintGraph() const;
 
-  std::vector<int> topological_sort(int);
+  std::vector<int> TopologicalSort(int);
 
-  std::vector<std::pair<int, int>> getBridges();
-  std::vector<int> getArticulationPoints();
+  std::vector<std::pair<int, int>> GetBridges();
+  std::vector<int> GetArticulationPoints();
 
  private:
   int vertexes_num = 0;
@@ -38,12 +38,12 @@ class Graph {
 
   AdjacencyList adjList;
 
-  void top_sort(int, int, std::vector<bool>&, std::vector<int>&);
+  void TopSort(int, int, std::vector<bool>&, std::vector<int>&);
 
-  void dfsBridges(int, int, std::vector<int>&, std::vector<int>&,
+  void DfsBridges(int, int, std::vector<int>&, std::vector<int>&,
                   std::vector<bool>&, int&, std::vector<std::pair<int, int>>&);
 
-  void dfsArticulation(int, int, std::vector<int>&, std::vector<int>&,
+  void DfsArticulation(int, int, std::vector<int>&, std::vector<int>&,
                        std::vector<bool>&, int&, std::vector<bool>&);
 };
 };  // namespace algo

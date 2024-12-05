@@ -28,7 +28,7 @@ Graph::Graph(int v, int e, bool directed) {
   adjList.resize(v);
 }
 
-void Graph::addEdge(int u, int v, int weight) {
+void Graph::AddEdge(int u, int v, int weight) {
   if (u < 1 || u > vertexes_num || v < 1 || v > vertexes_num) {
     throw std::out_of_range("Vertex out of bounds in addEdge.");
   }
@@ -39,17 +39,17 @@ void Graph::addEdge(int u, int v, int weight) {
   edges_num++;
 }
 
-int Graph::getVertexesNum() {
+int Graph::GetVertexesNum() {
   if (vertexes_num <= 0)
     throw std::runtime_error("Graph is not properly initialized.");
   return vertexes_num;
 }
 
-int Graph::getEdgesNum() { return edges_num; }
+int Graph::GetEdgesNum() { return edges_num; }
 
-const AdjacencyList Graph::getAdjList() { return adjList; }
+const AdjacencyList Graph::GetAdjList() { return adjList; }
 
-void Graph::printGraph() const {
+void Graph::PrintGraph() const {
   if (vertexes_num == 0) {
     std::cerr << "Error: Graph is empty." << std::endl;
     return;
@@ -67,27 +67,27 @@ void Graph::printGraph() const {
   }
 }
 
-std::vector<std::pair<int, int>> Graph::getNeighbours(int v) {
+std::vector<std::pair<int, int>> Graph::GetNeighbours(int v) {
   if (v < 0 || v >= vertexes_num) {
     throw std::out_of_range("Vertex index out of bounds in getNeighbours.");
   }
   return adjList[v];
 }
 
-void Graph::top_sort(int v, int from, std::vector<bool>& visited,
-                     std::vector<int>& way) {
+void Graph::TopSort(int v, int from, std::vector<bool>& visited,
+                    std::vector<int>& way) {
   if (visited[v]) return;
   visited[v] = true;
   way.push_back(v);
 
-  for (auto [u, w] : getNeighbours(v)) {
+  for (auto [u, w] : GetNeighbours(v)) {
     if (!visited[u]) {
-      top_sort(u, v, visited, way);
+      TopSort(u, v, visited, way);
     }
   }
 }
 
-std::vector<int> Graph::topological_sort(int start) {
+std::vector<int> Graph::TopologicalSort(int start) {
   if (vertexes_num == 0) {
     std::cerr << "Error: Graph is empty, topological sort cannot be performed."
               << std::endl;
@@ -95,9 +95,9 @@ std::vector<int> Graph::topological_sort(int start) {
   }
 
   std::vector<int> way;
-  std::vector<bool> visited(getVertexesNum(), false);
+  std::vector<bool> visited(GetVertexesNum(), false);
 
-  top_sort(start, UNREACHABLE, visited, way);
+  TopSort(start, UNREACHABLE, visited, way);
 
   if (way.size() < vertexes_num)
     throw std::invalid_argument("Graph is disconnected.");
@@ -105,7 +105,7 @@ std::vector<int> Graph::topological_sort(int start) {
   return way;
 }
 
-std::vector<std::pair<int, int>> Graph::getBridges() {
+std::vector<std::pair<int, int>> Graph::GetBridges() {
   std::vector<int> tin(vertexes_num, -1);
   std::vector<int> low(vertexes_num, -1);
   std::vector<bool> visited(vertexes_num, false);
@@ -114,14 +114,14 @@ std::vector<std::pair<int, int>> Graph::getBridges() {
 
   for (int i = 0; i < vertexes_num; i++) {
     if (!visited[i]) {
-      dfsBridges(i, -1, tin, low, visited, timer, bridges);
+      DfsBridges(i, -1, tin, low, visited, timer, bridges);
     }
   }
 
   return bridges;
 }
 
-void Graph::dfsBridges(int v, int parent, std::vector<int>& tin,
+void Graph::DfsBridges(int v, int parent, std::vector<int>& tin,
                        std::vector<int>& low, std::vector<bool>& visited,
                        int& timer, std::vector<std::pair<int, int>>& bridges) {
   visited[v] = true;
@@ -131,7 +131,7 @@ void Graph::dfsBridges(int v, int parent, std::vector<int>& tin,
     if (u == parent) continue;
 
     if (!visited[u]) {
-      dfsBridges(u, v, tin, low, visited, timer, bridges);
+      DfsBridges(u, v, tin, low, visited, timer, bridges);
       low[v] = std::min(low[v], low[u]);
 
       if (low[u] > tin[v]) {
@@ -143,7 +143,7 @@ void Graph::dfsBridges(int v, int parent, std::vector<int>& tin,
   }
 }
 
-std::vector<int> Graph::getArticulationPoints() {
+std::vector<int> Graph::GetArticulationPoints() {
   std::vector<int> tin(vertexes_num, -1);
   std::vector<int> low(vertexes_num, -1);
   std::vector<bool> visited(vertexes_num, false);
@@ -152,7 +152,7 @@ std::vector<int> Graph::getArticulationPoints() {
 
   for (int i = 0; i < vertexes_num; i++) {
     if (!visited[i]) {
-      dfsArticulation(i, -1, tin, low, visited, timer, isArticulationPoint);
+      DfsArticulation(i, -1, tin, low, visited, timer, isArticulationPoint);
     }
   }
 
@@ -166,7 +166,7 @@ std::vector<int> Graph::getArticulationPoints() {
   return articulationPoints;
 }
 
-void Graph::dfsArticulation(int v, int parent, std::vector<int>& tin,
+void Graph::DfsArticulation(int v, int parent, std::vector<int>& tin,
                             std::vector<int>& low, std::vector<bool>& visited,
                             int& timer,
                             std::vector<bool>& isArticulationPoint) {
@@ -179,7 +179,7 @@ void Graph::dfsArticulation(int v, int parent, std::vector<int>& tin,
 
     if (!visited[u]) {
       children++;
-      dfsArticulation(u, v, tin, low, visited, timer, isArticulationPoint);
+      DfsArticulation(u, v, tin, low, visited, timer, isArticulationPoint);
       low[v] = std::min(low[v], low[u]);
 
       // Условие для точки сочленения
