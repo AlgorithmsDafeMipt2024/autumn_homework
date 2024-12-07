@@ -75,8 +75,7 @@ weight_t AStar(
       // @brief предполагаемая стоимость пути до соседа
       weight_t tentative_score =
           cost_from_start[current] +
-          ((graph.IsWeighted()) ? graph.GetWeightOfEdge({current, neighbor})
-                                : 1);
+          ((graph.IsWeighted()) ? graph.GetEdgeWeight({current, neighbor}) : 1);
 
       // предполагаемая стоимость меньше текущей,
       // обновляем стоимость и добавляем соседа в очередь

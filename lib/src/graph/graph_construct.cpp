@@ -62,7 +62,7 @@ Graph<vert_t, weight_t> Graph<vert_t, weight_t>::GraphFromMap(
 
   for (const auto& [edge_str, weight] : edges_dict) {
     vert_t start_vert, end_vert;
-    std::tie(start_vert, end_vert) = ParseEdgeString(edge_str);
+    std::tie(start_vert, end_vert) = ParseEdgeString_(edge_str);
 
     edges.emplace_back(start_vert, end_vert, weight);
   }
@@ -79,7 +79,7 @@ Graph<vert_t, weight_t> Graph<vert_t, weight_t>::GraphFromStrs(
 
   for (const auto& edge_str : edges_strs) {
     vert_t start_vert, end_vert;
-    std::tie(start_vert, end_vert) = ParseEdgeString(edge_str);
+    std::tie(start_vert, end_vert) = ParseEdgeString_(edge_str);
 
     edges.emplace_back(start_vert, end_vert);
   }
