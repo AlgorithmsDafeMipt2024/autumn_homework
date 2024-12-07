@@ -36,7 +36,7 @@ std::vector<std::vector<weight_t>> Graph<vert_t, weight_t>::GetAdjMatrix()
 }
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
-std::pair<vert_t, vert_t> Graph<vert_t, weight_t>::ParseEdgeString(
+std::pair<vert_t, vert_t> Graph<vert_t, weight_t>::ParseEdgeString_(
     const std::string& edge_str) {
   const vert_t pos = edge_str.find("->");
 

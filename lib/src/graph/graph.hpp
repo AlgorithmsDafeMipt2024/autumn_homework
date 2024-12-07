@@ -272,10 +272,10 @@ class Graph {
    * @brief Находит вес ребра в взвешенном графе
    * @param edge: ребро
    * @return `weight_t`: вес
-   * @throw `std::logic_error("GetWeightOfEdge: graph is not weighted.")`
-   * @throw `std::invalid_argument("GetWeightOfEdge: there is no such edge:")`
+   * @throw `std::logic_error("GetEdgeWeight: graph is not weighted.")`
+   * @throw `std::invalid_argument("GetEdgeWeight: there is no such edge:")`
    */
-  weight_t GetWeightOfEdge(const std::pair<vert_t, vert_t>& edge) const;
+  weight_t GetEdgeWeight(const std::pair<vert_t, vert_t>& edge) const;
 
   void AddVert(vert_t vert);
 
@@ -357,7 +357,8 @@ class Graph {
  private:
   Graph(const std::vector<Edge>& edges);
 
-  static std::pair<vert_t, vert_t> ParseEdgeString(const std::string& edge_str);
+  static std::pair<vert_t, vert_t> ParseEdgeString_(
+      const std::string& edge_str);
 };
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>

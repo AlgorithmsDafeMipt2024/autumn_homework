@@ -19,7 +19,7 @@ void Graph<vert_t, weight_t>::RemoveVert(vert_t vert) {
 }
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
-std::pair<vert_t, vert_t> Graph<vert_t, weight_t>::ParseEdgeString(
+std::pair<vert_t, vert_t> Graph<vert_t, weight_t>::ParseEdgeString_(
     const std::string& edge_str) {
   const size_t pos = edge_str.find("->");
 
