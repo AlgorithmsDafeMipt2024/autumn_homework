@@ -5,7 +5,7 @@
 #include <queue>
 #include <set>
 
-#include "graph/graph.hpp"
+#include "graph.hpp"
 
 /**
  * @brief Вычисляет кратчайший путь между двумя вершинами с помощью A*.
