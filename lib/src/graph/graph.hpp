@@ -2,18 +2,17 @@
 
 #include "../lib/utils.hpp"
 
+// MARK: Concepts
+
 template <typename vert_t>
 concept AllowedVertType =
-    std::is_same_v<vert_t, std::string> || std::is_same_v<vert_t, char> ||
-    std::is_same_v<vert_t, short> || std::is_same_v<vert_t, int> ||
-    std::is_same_v<vert_t, long> || std::is_same_v<vert_t, size_t>;
+    std::is_integral_v<vert_t> || std::is_same_v<vert_t, std::string>;
 
 template <typename weight_t>
 concept AllowedWeightType =
-    std::is_same_v<weight_t, char> || std::is_same_v<weight_t, short> ||
-    std::is_same_v<weight_t, int> || std::is_same_v<weight_t, long> ||
-    std::is_same_v<weight_t, size_t> || std::is_same_v<weight_t, float> ||
-    std::is_same_v<weight_t, double> || std::is_same_v<weight_t, long double>;
+    std::is_integral_v<weight_t> || std::is_floating_point_v<weight_t>;
+
+// MARK: VertFromTuple
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
 inline vert_t StartVertFromTuple(
@@ -32,6 +31,8 @@ inline weight_t WeightFromTuple(
     const std::tuple<vert_t, vert_t, weight_t>& edge) {
   return std::get<2>(edge);
 }
+
+// MARK: Graph
 
 /**
  * @brief Класс графа (может быть взвешенным и ориентированным)
@@ -93,7 +94,17 @@ class Graph {
    * @return `Graph`: новый экземпляр Graph
    */
   static Graph GraphNonWeighted(
-      const std::vector<std::pair<vert_t, vert_t>>& edges_pairs);
+      const std::vector<std::pair<vert_t, vert_t>>& edges_pairs) {
+    if (edges_pairs.empty()) return Graph();
+
+    std::vector<Edge> edges{};
+    edges.reserve(edges_pairs.size());
+
+    for (const auto& edge : edges_pairs)
+      edges.push_back(Edge(edge.first, edge.second));
+
+    return Graph(edges);
+  }
 
   /**
    * @brief Создает новый экземпляр Graph по ребрам,
@@ -106,7 +117,23 @@ class Graph {
    */
   static Graph GraphWeighted(
       const std::vector<std::pair<vert_t, vert_t>>& edges_pairs,
-      const std::vector<weight_t>& weights);
+      const std::vector<weight_t>& weights) {
+    if (edges_pairs.empty() && weights.empty()) return Graph();
+
+    std::vector<Edge> edges{};
+    edges.reserve(edges_pairs.size());
+
+    if (edges_pairs.size() != weights.size())
+      throw std::invalid_argument(
+          "GraphWeighted: the sizes of the edges and weights vectors do not "
+          "match.");
+
+    for (size_t i = 0; i < weights.size(); i++)
+      edges.push_back(
+          Edge(edges_pairs[i].first, edges_pairs[i].second, weights[i]));
+
+    return Graph(edges);
+  }
 
   /**
    * @brief Создает новый экземпляр Graph по ребрам
@@ -115,7 +142,16 @@ class Graph {
    * @return `Graph`: новый экземпляр Graph
    */
   static Graph GraphWeighted(
-      const std::vector<std::tuple<vert_t, vert_t, weight_t>>& edges_tuples);
+      const std::vector<std::tuple<vert_t, vert_t, weight_t>>& edges_tuples) {
+    if (edges_tuples.empty()) return Graph();
+
+    std::vector<Edge> edges;
+
+    for (const auto& [start, end, weight] : edges_tuples)
+      edges.emplace_back(start, end, weight);
+
+    return Graph(edges);
+  }
 
   /**
    * @brief Создает новый экземпляр Graph по ребрам
@@ -123,7 +159,20 @@ class Graph {
    * @param edges_strs: ребра графа
    * @return `Graph`: новый экземпляр Graph
    */
-  static Graph GraphFromStrs(const std::vector<std::string>& edges_strs);
+  static Graph GraphFromStrs(const std::vector<std::string>& edges_strs) {
+    if (edges_strs.empty()) return Graph();
+
+    std::vector<Graph<vert_t, weight_t>::Edge> edges;
+
+    for (const auto& edge_str : edges_strs) {
+      vert_t start_vert, end_vert;
+      std::tie(start_vert, end_vert) = ParseEdgeString_(edge_str);
+
+      edges.emplace_back(start_vert, end_vert);
+    }
+
+    return Graph(edges);
+  }
 
   /**
    * @brief Создает новый экземпляр Graph по ребрам
@@ -132,7 +181,20 @@ class Graph {
    * @return `Graph`: новый экземпляр Graph
    */
   static Graph GraphFromMap(
-      const std::unordered_map<std::string, weight_t>& edges_dict);
+      const std::unordered_map<std::string, weight_t>& edges_dict) {
+    if (edges_dict.empty()) return Graph();
+
+    std::vector<Graph<vert_t, weight_t>::Edge> edges;
+
+    for (const auto& [edge_str, weight] : edges_dict) {
+      vert_t start_vert, end_vert;
+      std::tie(start_vert, end_vert) = ParseEdgeString_(edge_str);
+
+      edges.emplace_back(start_vert, end_vert, weight);
+    }
+
+    return Graph(edges);
+  }
 
   /**
    * @brief Создает новый экземпляр Graph по матрице смежности
@@ -148,7 +210,40 @@ class Graph {
    */
   static Graph GraphFromAdjMatrix(
       const std::vector<std::vector<weight_t>>& adj_matrix,
-      bool is_weighted = false);
+      bool is_weighted = false) {
+    if constexpr (std::is_integral_v<vert_t>) {
+      if (adj_matrix.empty()) return Graph();
+
+      std::vector<Edge> edges{};
+
+      if (adj_matrix.size() != adj_matrix[0].size())
+        throw std::invalid_argument(
+            "GraphFromAdjMatrix: AdjacencyMatrix is not squared.");
+
+      for (size_t row = 0; row < adj_matrix.size(); row++) {
+        if (row != 0)
+          if (adj_matrix[row].size() != adj_matrix[row - 1].size())
+            throw std::invalid_argument(
+                "GraphFromAdjMatrix: AdjacencyMatrix is not squared [row "
+                "problem].");
+
+        for (size_t col = 0; col < adj_matrix[row].size(); col++) {
+          if (adj_matrix[row][col] == 0) continue;
+
+          if (is_weighted)
+            edges.push_back(Edge(col, row, adj_matrix[col][row]));
+          else
+            edges.push_back(Edge(col, row));
+        }
+      }
+
+      return Graph(edges);
+
+    } else if constexpr (std::is_same_v<vert_t, std::string>)
+      throw std::logic_error(
+          "GraphFromAdjMatrix: this method (constructor) "
+          "is deleted for std::string.");
+  }
 
   /**
    * @brief Создает новый экземпляр Graph
@@ -159,7 +254,23 @@ class Graph {
    * deleted for std::string.");
    */
   static Graph GraphFromAdjList(
-      const std::vector<std::vector<vert_t>>& adj_list);
+      const std::vector<std::vector<vert_t>>& adj_list) {
+    if constexpr (std::is_integral_v<vert_t>) {
+      if (adj_list.empty()) return Graph();
+
+      std::vector<Edge> edges{};
+
+      for (size_t row = 0; row < adj_list.size(); row++)
+        for (size_t col = 0; col < adj_list[row].size(); col++)
+          edges.push_back(Edge(row, adj_list[row][col]));
+
+      return Graph(edges);
+
+    } else if constexpr (std::is_same_v<vert_t, std::string>)
+      throw std::logic_error(
+          "GraphFromAdjList: this method (constructor) "
+          "is deleted for std::string.");
+  }
 
   /**
    * @brief Создает новый экземпляр Graph
@@ -168,10 +279,28 @@ class Graph {
    * @return `Graph`: новый экземпляр Graph
    */
   static Graph GraphFromAdjList(
-      const std::unordered_map<vert_t, std::vector<vert_t>>& adj_list_dict);
+      const std::unordered_map<vert_t, std::vector<vert_t>>& adj_list_dict) {
+    if (adj_list_dict.empty()) return Graph();
+
+    std::vector<Edge> edges{};
+
+    for (const auto& vert_str_pair : adj_list_dict) {
+      auto vert = vert_str_pair.first;
+      for (const auto& vert_2 : vert_str_pair.second)
+        edges.push_back(Edge(vert, vert_2));
+    }
+
+    return Graph(edges);
+  }
 
   /// @brief Проверяет, взвешен ли граф
-  bool IsWeighted() const;
+  bool IsWeighted() const {
+    if (edges_.empty()) return false;
+
+    bool is_weighted = true;
+    for (const auto& edge : edges_) is_weighted &= edge.IsWeighted();
+    return is_weighted;
+  }
 
   /// @return `size_t`: кол-во вершин
   size_t VertsAmount() const { return verts_.size(); }
@@ -183,34 +312,88 @@ class Graph {
   const std::vector<vert_t>& Verts() const { return verts_; }
 
   /// @return `std::vector<std::tuple<vert_t, vert_t, weight_t>>`: ребра
-  std::vector<std::tuple<vert_t, vert_t, weight_t>> Edges() const;
+  std::vector<std::tuple<vert_t, vert_t, weight_t>> Edges() const {
+    if (edges_.empty()) return {};
+
+    std::vector<std::tuple<vert_t, vert_t, weight_t>> edges_tuples(
+        edges_.size());
+    std::transform(edges_.begin(), edges_.end(), edges_tuples.begin(),
+                   [](const Edge& edge) {
+                     return std::make_tuple(edge.StartVert(), edge.EndVert(),
+                                            edge.Weight());
+                   });
+
+    return edges_tuples;
+  }
 
   /**
    * @brief Выводит в поток список вершин
    * @param os: входной поток
    * @return std::ostream&: выходной поток
    */
-  std::ostream& PrintVerts(std::ostream& os = std::cout) const;
+  std::ostream& PrintVerts(std::ostream& os = std::cout) const {
+    os << Verts();
+    return os;
+  }
 
   /**
    * @brief Выводит в поток список ребер
    * @param os: входной поток
    * @return `std::ostream&`: выходной поток
    */
-  std::ostream& PrintEdges(std::ostream& os = std::cout) const;
+  std::ostream& PrintEdges(std::ostream& os = std::cout) const {
+    os << edges_;
+    return os;
+  }
 
   /**
    * @brief Выводит в поток список смежности
    * @param os: входной поток
    * @return `std::ostream&`: выходной поток
    */
-  std::ostream& PrintAdjList(std::ostream& os = std::cout) const;
+  std::ostream& PrintAdjList(std::ostream& os = std::cout) const {
+    for (const auto& vert : Verts()) {
+      os << vert << ": ";
+
+      for (const auto& neighbor : edges_) {
+        if (neighbor.StartVert() == vert) os << neighbor.EndVert() << "; ";
+        if (!IsDirected())
+          if (neighbor.EndVert() == vert) os << neighbor.StartVert() << "; ";
+      }
+
+      os << "\n";
+    }
+
+    return os;
+  }
 
   /**
    * @brief Делает граф ненаправленным (удаляет лишние ребра)
    * @param remove_duplicates: удалять ли дубликаты
    */
-  void MakeUndirected(bool remove_duplicates = false);
+  void MakeUndirected(bool remove_duplicates = false) {
+    std::unordered_set<size_t> seen_edges;
+    std::vector<Edge> unique_edges;
+    unique_edges.reserve(EdgesAmount());
+
+    for (size_t i = 0; i < EdgesAmount(); i++) {
+      if (seen_edges.count(i) != 0) continue;
+
+      for (size_t j = i + 1; j < EdgesAmount(); j++)
+        if (edges_[i].StartVert() == edges_[j].EndVert() &&
+            edges_[j].StartVert() == edges_[i].EndVert()) {
+          seen_edges.insert(j);
+          break;
+        }
+
+      unique_edges.push_back(edges_[i]);
+    }
+
+    edges_ = std::move(unique_edges);
+    is_direct_ = false;
+
+    if (remove_duplicates) RemoveDuplicates();
+  }
 
   /// @brief Делает граф направленным (ничего)
   void MakeDirected() { is_direct_ = true; }
@@ -219,25 +402,82 @@ class Graph {
   bool IsDirected() const { return is_direct_; }
 
   /// @brief Удаляет из графа ребрами с одинаковым вершинами
-  void RemoveDuplicates();
+  void RemoveDuplicates() {
+    std::vector<Edge> unique_edges;
+    unique_edges.reserve(EdgesAmount());
+
+    for (const auto& edge : edges_)
+      if (!Contains(unique_edges, edge)) unique_edges.push_back(edge);
+
+    edges_ = std::move(unique_edges);
+
+    if (!IsDirected()) MakeUndirected();
+  }
 
   /**
    * @return `std::vector<std::vector<vert_t>>`: список смежности
-   * @throw `std::logic_error("GetAdjListWithoutKeys: this method is deleted for
-   * std::string.")`
+   * @throw `std::logic_error("GetAdjListWithoutKeys: this method is deleted
+   * for std::string.")`
    */
-  std::vector<std::vector<vert_t>> GetAdjListWithoutKeys() const;
+  std::vector<std::vector<vert_t>> GetAdjListWithoutKeys() const {
+    if constexpr (std::is_integral_v<vert_t>) {
+      std::vector<std::vector<vert_t>> adj_list(
+          *std::max_element(Verts().begin(), Verts().end()) + 1);
+
+      for (const auto& edge : edges_) {
+        adj_list[edge.StartVert()].push_back(edge.EndVert());
+        if (!IsDirected()) adj_list[edge.EndVert()].push_back(edge.StartVert());
+      }
+
+      return adj_list;
+    }
+
+    else if constexpr (std::is_same_v<vert_t, std::string>)
+      throw std::logic_error(
+          "GetAdjListWithoutKeys: this method is deleted for std::string.");
+  }
 
   /// @return `std::unordered_map<vert_t, std::vector<vert_t>>`: список
   /// смежности с указанием вершины-ключа
-  std::unordered_map<vert_t, std::vector<vert_t>> GetAdjList() const;
+  std::unordered_map<vert_t, std::vector<vert_t>> GetAdjList() const {
+    auto adj_list_dict = std::unordered_map<vert_t, std::vector<vert_t>>();
+
+    for (const auto& edge : edges_) {
+      adj_list_dict[edge.StartVert()].push_back(edge.EndVert());
+      if (!IsDirected())
+        adj_list_dict[edge.EndVert()].push_back(edge.StartVert());
+    }
+
+    return adj_list_dict;
+  }
 
   /**
    * @return `std::vector<std::vector<vert_t>>`: матрица смежности
    * @throw `std::logic_error("GetAdjMatrix: this method is deleted for
    * std::string.")`
    */
-  std::vector<std::vector<weight_t>> GetAdjMatrix() const;
+  std::vector<std::vector<weight_t>> GetAdjMatrix() const {
+    if constexpr (std::is_integral_v<vert_t>) {
+      std::vector<std::vector<weight_t>> adj_matrix(
+          VertsAmount(), std::vector<weight_t>(VertsAmount(), 0));
+
+      for (const auto& edge : edges_)
+        if (edge.IsWeighted()) {
+          adj_matrix[edge.StartVert()][edge.EndVert()] = edge.Weight();
+          if (!IsDirected())
+            adj_matrix[edge.EndVert()][edge.StartVert()] = edge.Weight();
+        } else {
+          adj_matrix[edge.StartVert()][edge.EndVert()] = 1;
+          if (!IsDirected()) adj_matrix[edge.EndVert()][edge.StartVert()] = 1;
+        }
+
+      return adj_matrix;
+    }
+
+    else if constexpr (std::is_same_v<vert_t, std::string>)
+      throw std::logic_error(
+          "GetAdjMatrix: this method is deleted for std::string.");
+  }
 
   /**
    * @brief Проверяет, содержится ли вершина в графе
@@ -258,7 +498,12 @@ class Graph {
    * @throw `std::logic_error("ContainsEdge: weight must be greater than
    * zero.")`
    */
-  bool ContainsEdge(const std::tuple<vert_t, vert_t, weight_t>& edge) const;
+  bool ContainsEdge(const std::tuple<vert_t, vert_t, weight_t>& edge) const {
+    if (!IsWeighted())
+      throw std::logic_error("ContainsEdge: graph is not weighted.");
+
+    return GetEdgeIter_(edge) != edges_.end();
+  }
 
   /**
    * @brief Проверяет, содержится ли ребро в графе (НЕВЗВЕШЕННЫЙ)
@@ -266,7 +511,9 @@ class Graph {
    * @return `true`: содержится
    * @return `false`: не содержится
    */
-  bool ContainsEdge(const std::pair<vert_t, vert_t>& edge) const;
+  bool ContainsEdge(const std::pair<vert_t, vert_t>& edge) const {
+    return GetEdgeIter_(edge) != edges_.end();
+  }
 
   /**
    * @brief Находит вес ребра в взвешенном графе
@@ -275,7 +522,18 @@ class Graph {
    * @throw `std::logic_error("GetEdgeWeight: graph is not weighted.")`
    * @throw `std::invalid_argument("GetEdgeWeight: there is no such edge:")`
    */
-  weight_t GetEdgeWeight(const std::pair<vert_t, vert_t>& edge) const;
+  weight_t GetEdgeWeight(const std::pair<vert_t, vert_t>& edge) const {
+    if (!IsWeighted())
+      throw std::logic_error("GetEdgeWeight: graph is not weighted.");
+
+    auto it = GetEdgeIter_(edge);
+
+    if (it == edges_.end())
+      throw std::invalid_argument("GetEdgeWeight: there is no such edge: " +
+                                  Edge(edge).Name());
+
+    return it->Weight();
+  }
 
   /**
    * @brief Меняет вес ребра в взвешенном графе
@@ -285,27 +543,113 @@ class Graph {
    * @throw `std::invalid_argument("SetEdgeWeight: there is no such edge:")`
    */
   void SetEdgeWeight(const std::pair<vert_t, vert_t>& edge,
-                     weight_t new_weight);
+                     weight_t new_weight) {
+    if (!IsWeighted())
+      throw std::logic_error("SetEdgeWeight: graph is not weighted.");
 
-  void AddVert(vert_t vert);
+    auto it = GetEdgeIter_(edge);
+
+    if (it == edges_.end())
+      throw std::invalid_argument("SetEdgeWeight: there is no such edge: " +
+                                  Edge(edge).Name());
+
+    it->SetWeight(new_weight);
+  }
+
+  void AddVert(vert_t vert) {
+    if (!Contains(verts_, vert)) verts_.push_back(vert);
+  }
 
   /// @throw `std::invalid_argument(std::string("AddEdge: ") + ex.what())`
-  void AddEdge(vert_t start_vert, vert_t end_vert, weight_t weight);
+  void AddEdge(vert_t start_vert, vert_t end_vert, weight_t weight) {
+    AddVert(start_vert);
+    AddVert(end_vert);
+
+    try {
+      edges_.emplace_back(Edge(start_vert, end_vert, weight));
+    }
+
+    catch (const std::exception& ex) {
+      throw std::invalid_argument(std::string("AddEdge: ") + ex.what());
+    }
+  }
 
   /**
-   * @throw `std::logic_error("AddEdge: weighted graph must consist of weighted
-   * edges.")`
+   * @throw `std::logic_error("AddEdge: weighted graph must consist of
+   * weighted edges.")`
    */
-  void AddEdge(vert_t start_vert, vert_t end_vert);
+  void AddEdge(vert_t start_vert, vert_t end_vert) {
+    if (IsWeighted())
+      throw std::logic_error(
+          "AddEdge: weighted graph must consist of weighted edges.");
+
+    AddVert(start_vert);
+    AddVert(end_vert);
+
+    edges_.emplace_back(Edge(start_vert, end_vert));
+  }
 
   /// @throw `std::invalid_argument("RemoveVert: there is no such vert:")`
-  void RemoveVert(vert_t vert);
+  void RemoveVert(vert_t vert) {
+    if constexpr (std::is_integral_v<vert_t>) {
+      if (!Contains(Verts(), vert))
+        throw std::invalid_argument(
+            "RemoveVert: there is no such vert in graph: " +
+            std::to_string(vert));
+    }
+
+    else if constexpr (std::is_same_v<vert_t, std::string>)
+      if (!Contains(Verts(), vert))
+        throw std::invalid_argument(
+            "RemoveVert: there is no such vert in graph: " + vert);
+
+    verts_.erase(std::remove(verts_.begin(), verts_.end(), vert), verts_.end());
+
+    edges_.erase(std::remove_if(edges_.begin(), edges_.end(),
+                                [vert](const Edge& edge) {
+                                  return edge.StartVert() == vert ||
+                                         edge.EndVert() == vert;
+                                }),
+                 edges_.end());
+  }
 
   /// @throw `std::invalid_argument("RemoveEdge: there is no such edge:")`
-  void RemoveEdge(const std::pair<vert_t, vert_t>& edge_pair);
+  void RemoveEdge(const std::pair<vert_t, vert_t>& edge_pair) {
+    if (!ContainsEdge(edge_pair))
+      throw std::invalid_argument(
+          "RemoveEdge: there is no such edge in graph: " +
+          Edge(edge_pair).Name());
+
+    edges_.erase(std::remove_if(edges_.begin(), edges_.end(),
+                                [&edge_pair, this](const Edge& e) {
+                                  return (Edge(e.StartVert(), e.EndVert()) ==
+                                          Edge(edge_pair)) ||
+                                         (!IsDirected() &&
+                                          Edge(e.EndVert(), e.StartVert()) ==
+                                              Edge(edge_pair));
+                                }),
+                 edges_.end());
+  }
 
   /// @throw `std::invalid_argument("RemoveEdge: there is no such edge:")`
-  void RemoveEdge(const std::tuple<vert_t, vert_t, weight_t>& edge_tuple);
+  void RemoveEdge(const std::tuple<vert_t, vert_t, weight_t>& edge_tuple) {
+    if (!ContainsEdge(edge_tuple))
+      throw std::invalid_argument(
+          "RemoveEdge: there is no such edge in graph: " +
+          Edge(edge_tuple).Name());
+
+    edges_.erase(
+        std::remove_if(
+            edges_.begin(), edges_.end(),
+            [&edge_tuple, this](const Edge& e) {
+              return (e == Edge(edge_tuple)) ||
+                     (!IsDirected() &&
+                      e == Edge(std::make_tuple(EndVertFromTuple(edge_tuple),
+                                                StartVertFromTuple(edge_tuple),
+                                                WeightFromTuple(edge_tuple))));
+            }),
+        edges_.end());
+  }
 
  private:
   class Edge {
@@ -346,7 +690,32 @@ class Graph {
 
     auto operator<=>(const Edge& rhs) const { return weight_ <=> rhs.Weight(); }
 
-    const std::string& Name() const;
+    const std::string& Name() const {
+      static std::string name;
+
+      if constexpr (std::is_integral_v<vert_t>) {
+        if (IsWeighted())
+          name = "[" + std::to_string(StartVert()) + "->" +
+                 std::to_string(EndVert()) +
+                 ", w: " + std::to_string(Weight()) + "]";
+        else
+          name = "[" + std::to_string(StartVert()) + "->" +
+                 std::to_string(EndVert()) + "]";
+
+        // example: "[4->5]"
+
+      } else if constexpr (std::is_same_v<vert_t, std::string>) {
+        if (IsWeighted())
+          name = "['" + StartVert() + "'->'" + EndVert() +
+                 "', w: " + std::to_string(Weight()) + "]";
+        else
+          name = "['" + StartVert() + "'->'" + EndVert() + "']";
+
+        // example: "["Paris"->"Berlin"]"
+      }
+
+      return name;
+    }
 
    private:
     vert_t start_vert_;
@@ -367,12 +736,68 @@ class Graph {
   }
 
  private:
-  Graph(const std::vector<Edge>& edges);
+  Graph(const std::vector<Edge>& edges) : edges_{edges}, verts_() {
+    if (edges.empty()) return;
+
+    if constexpr (std::is_integral_v<vert_t>) {
+      // кол-во вершин = максимальная вершина среди ребер, т.е. в этом случае
+      // происходит заполнение вершин до наибольшей из них в списке ребер
+      vert_t max_vert = edges[0].StartVert();
+
+      for (const auto& edge : edges_) {
+        max_vert = std::max(max_vert, edge.StartVert());
+        max_vert = std::max(max_vert, edge.EndVert());
+      }
+
+      verts_.resize(max_vert + 1);
+      std::iota(verts_.begin(), verts_.end(), 0);
+
+    } else if constexpr (std::is_same_v<vert_t, std::string>) {
+      for (const auto& edge : edges_) {
+        if (!Contains(Verts(), edge.StartVert()))
+          verts_.push_back(edge.StartVert());
+
+        if (!Contains(Verts(), edge.EndVert()))
+          verts_.push_back(edge.EndVert());
+      }
+    }
+
+    if (!IsDirected()) MakeUndirected();
+  }
 
   static std::pair<vert_t, vert_t> ParseEdgeString_(
-      const std::string& edge_str);
+      const std::string& edge_str) {
+    const size_t pos = edge_str.find("->");
+    vert_t start_vert;
+    vert_t end_vert;
 
-  auto GetEdgeIter(const std::pair<vert_t, vert_t>& edge) const {
+    if (pos == std::string::npos)
+      throw std::invalid_argument("EdgeString: invalid edge string format: " +
+                                  edge_str);
+
+    if constexpr (std::is_integral_v<vert_t>) {
+      try {
+        start_vert = std::stoul(edge_str.substr(0, pos));
+        end_vert = std::stoul(edge_str.substr(pos + 2));
+      }
+
+      catch (const std::exception&) {
+        throw std::invalid_argument(
+            "EdgeString: invalid edge string format "
+            "(vertices should be numbers): " +
+            edge_str);
+      }
+    }
+
+    else if constexpr (std::is_same_v<vert_t, std::string>) {
+      start_vert = edge_str.substr(0, pos);
+      end_vert = edge_str.substr(pos + 2);
+    }
+
+    return {start_vert, end_vert};
+  }
+
+  auto GetEdgeIter_(const std::pair<vert_t, vert_t>& edge) const {
     auto [start_vert, end_vert] = edge;
 
     return std::find_if(
@@ -384,7 +809,7 @@ class Graph {
         });
   }
 
-  auto GetEdgeIter(const std::pair<vert_t, vert_t>& edge) {
+  auto GetEdgeIter_(const std::pair<vert_t, vert_t>& edge) {
     auto [start_vert, end_vert] = edge;
 
     return std::find_if(
@@ -396,7 +821,7 @@ class Graph {
         });
   }
 
-  auto GetEdgeIter(const std::tuple<vert_t, vert_t, weight_t>& edge) const {
+  auto GetEdgeIter_(const std::tuple<vert_t, vert_t, weight_t>& edge) const {
     auto [start_vert, end_vert, weight] = edge;
 
     return std::find_if(
@@ -410,6 +835,8 @@ class Graph {
   }
 };
 
+// MARK: operator<<
+
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
 inline std::ostream& operator<<(std::ostream& os,
                                 const Graph<vert_t, weight_t>& graph) {
@@ -422,58 +849,3 @@ inline std::ostream& operator<<(std::ostream& os,
   graph.PrintVerts(os);
   return os;
 }
-
-#define GRAPH_TEMPLATE_CONSTRUCT_FOR_STRING  \
-  template class Graph<std::string, short>;  \
-  template class Graph<std::string, int>;    \
-  template class Graph<std::string, long>;   \
-  template class Graph<std::string, size_t>; \
-  template class Graph<std::string, float>;  \
-  template class Graph<std::string, double>; \
-  template class Graph<std::string, long double>
-
-#define GRAPH_TEMPLATE_CONSTRUCT_FOR_INTEGRAL \
-  template class Graph<char, char>;           \
-  template class Graph<char, short>;          \
-  template class Graph<char, int>;            \
-  template class Graph<char, long>;           \
-  template class Graph<char, size_t>;         \
-  template class Graph<char, float>;          \
-  template class Graph<char, double>;         \
-  template class Graph<char, long double>;    \
-                                              \
-  template class Graph<short, char>;          \
-  template class Graph<short, short>;         \
-  template class Graph<short, int>;           \
-  template class Graph<short, long>;          \
-  template class Graph<short, size_t>;        \
-  template class Graph<short, float>;         \
-  template class Graph<short, double>;        \
-  template class Graph<short, long double>;   \
-                                              \
-  template class Graph<int, char>;            \
-  template class Graph<int, short>;           \
-  template class Graph<int, int>;             \
-  template class Graph<int, long>;            \
-  template class Graph<int, size_t>;          \
-  template class Graph<int, float>;           \
-  template class Graph<int, double>;          \
-  template class Graph<int, long double>;     \
-                                              \
-  template class Graph<long, char>;           \
-  template class Graph<long, short>;          \
-  template class Graph<long, int>;            \
-  template class Graph<long, long>;           \
-  template class Graph<long, size_t>;         \
-  template class Graph<long, float>;          \
-  template class Graph<long, double>;         \
-  template class Graph<long, long double>;    \
-                                              \
-  template class Graph<size_t, char>;         \
-  template class Graph<size_t, short>;        \
-  template class Graph<size_t, int>;          \
-  template class Graph<size_t, long>;         \
-  template class Graph<size_t, size_t>;       \
-  template class Graph<size_t, float>;        \
-  template class Graph<size_t, double>;       \
-  template class Graph<size_t, long double>
