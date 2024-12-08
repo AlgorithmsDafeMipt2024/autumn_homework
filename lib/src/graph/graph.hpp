@@ -277,6 +277,16 @@ class Graph {
    */
   weight_t GetEdgeWeight(const std::pair<vert_t, vert_t>& edge) const;
 
+  /**
+   * @brief Меняет вес ребра в взвешенном графе
+   * @param edge: ребро
+   * @param new_weight: вес
+   * @throw `std::logic_error("SetEdgeWeight: graph is not weighted.")`
+   * @throw `std::invalid_argument("SetEdgeWeight: there is no such edge:")`
+   */
+  void SetEdgeWeight(const std::pair<vert_t, vert_t>& edge,
+                     weight_t new_weight);
+
   void AddVert(vert_t vert);
 
   /// @throw `std::invalid_argument(std::string("AddEdge: ") + ex.what())`
@@ -323,6 +333,8 @@ class Graph {
 
     weight_t Weight() const { return weight_; }
 
+    void SetWeight(weight_t new_weight) { weight_ = new_weight; }
+
     // friend Graph;
 
     bool operator==(const Edge& rhs) const {
@@ -359,6 +371,43 @@ class Graph {
 
   static std::pair<vert_t, vert_t> ParseEdgeString_(
       const std::string& edge_str);
+
+  auto GetEdgeIter(const std::pair<vert_t, vert_t>& edge) const {
+    auto [start_vert, end_vert] = edge;
+
+    return std::find_if(
+        edges_.begin(), edges_.end(),
+        [start_vert, end_vert, this](const auto& e) {
+          return (e.StartVert() == start_vert && e.EndVert() == end_vert) ||
+                 (!IsDirected() && e.StartVert() == end_vert &&
+                  e.EndVert() == start_vert);
+        });
+  }
+
+  auto GetEdgeIter(const std::pair<vert_t, vert_t>& edge) {
+    auto [start_vert, end_vert] = edge;
+
+    return std::find_if(
+        edges_.begin(), edges_.end(),
+        [start_vert, end_vert, this](const auto& e) {
+          return (e.StartVert() == start_vert && e.EndVert() == end_vert) ||
+                 (!IsDirected() && e.StartVert() == end_vert &&
+                  e.EndVert() == start_vert);
+        });
+  }
+
+  auto GetEdgeIter(const std::tuple<vert_t, vert_t, weight_t>& edge) const {
+    auto [start_vert, end_vert, weight] = edge;
+
+    return std::find_if(
+        edges_.begin(), edges_.end(),
+        [start_vert, end_vert, weight, this](const auto& e) {
+          return (e.StartVert() == start_vert && e.EndVert() == end_vert &&
+                  e.Weight() == weight) ||
+                 (!IsDirected() && e.StartVert() == end_vert &&
+                  e.EndVert() == start_vert && e.Weight() == weight);
+        });
+  }
 };
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>

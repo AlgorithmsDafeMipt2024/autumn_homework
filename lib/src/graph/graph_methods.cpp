@@ -113,34 +113,13 @@ bool Graph<vert_t, weight_t>::ContainsEdge(
   if (!IsWeighted())
     throw std::logic_error("ContainsEdge: graph is not weighted.");
 
-  auto [start_vert, end_vert, weight] = edge;
-
-  auto it =
-      std::find_if(edges_.begin(), edges_.end(),
-                   [start_vert, end_vert, weight, this](const auto& e) {
-                     return (e.StartVert() == start_vert &&
-                             e.EndVert() == end_vert && e.Weight() == weight) ||
-                            (!IsDirected() && e.StartVert() == end_vert &&
-                             e.EndVert() == start_vert && e.Weight() == weight);
-                   });
-
-  return it != edges_.end();
+  return GetEdgeIter(edge) != edges_.end();
 }
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
 bool Graph<vert_t, weight_t>::ContainsEdge(
     const std::pair<vert_t, vert_t>& edge) const {
-  auto [start_vert, end_vert] = edge;
-
-  auto it = std::find_if(
-      edges_.begin(), edges_.end(),
-      [start_vert, end_vert, this](const auto& e) {
-        return (e.StartVert() == start_vert && e.EndVert() == end_vert) ||
-               (!IsDirected() && e.StartVert() == end_vert &&
-                e.EndVert() == start_vert);
-      });
-
-  return it != edges_.end();
+  return GetEdgeIter(edge) != edges_.end();
 }
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
@@ -149,21 +128,28 @@ weight_t Graph<vert_t, weight_t>::GetEdgeWeight(
   if (!IsWeighted())
     throw std::logic_error("GetEdgeWeight: graph is not weighted.");
 
-  auto [start_vert, end_vert] = edge;
-
-  auto it = std::find_if(
-      edges_.begin(), edges_.end(),
-      [start_vert, end_vert, this](const auto& e) {
-        return (e.StartVert() == start_vert && e.EndVert() == end_vert) ||
-               (!IsDirected() && e.StartVert() == end_vert &&
-                e.EndVert() == start_vert);
-      });
+  auto it = GetEdgeIter(edge);
 
   if (it == edges_.end())
     throw std::invalid_argument("GetEdgeWeight: there is no such edge: " +
                                 Edge(edge).Name());
 
   return it->Weight();
+}
+
+template <AllowedVertType vert_t, AllowedWeightType weight_t>
+void Graph<vert_t, weight_t>::SetEdgeWeight(
+    const std::pair<vert_t, vert_t>& edge, weight_t new_weight) {
+  if (!IsWeighted())
+    throw std::logic_error("SetEdgeWeight: graph is not weighted.");
+
+  auto it = GetEdgeIter(edge);
+
+  if (it == edges_.end())
+    throw std::invalid_argument("SetEdgeWeight: there is no such edge: " +
+                                Edge(edge).Name());
+
+  it->SetWeight(new_weight);
 }
 
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
