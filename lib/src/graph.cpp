@@ -63,7 +63,7 @@ void Graph::PrintGraph() const {
     for (const auto& [neighbor, weight] : adjList[i]) {
       std::cout << "(" << neighbor + 1 << ", " << weight << ") ";
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
 }
 
