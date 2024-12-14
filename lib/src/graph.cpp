@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-#define UNREACHABLE -1
+#define UNREACHABLE (-1)
 
 using namespace algo;
 
