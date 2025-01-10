@@ -10,6 +10,8 @@
  * @tparam weight_t: тип веса в графе.
  * @param graph: граф, для которого необходимо вычислить кратчайшие пути.
  * @param start: начальная вершина, от которой вычисляются расстояния.
+ * @throw std::invalid_argument("Dijkstra: there is no such start vertice in
+ * graph.").
  * @throw `throw std::logic_error("Dijkstra: graph contains negative weighted
  * edges.")`.
  * @return `std::unordered_map<vert_t, weight_t>`: словарь, где ключ - вершина,
