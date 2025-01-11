@@ -18,7 +18,7 @@
  * нет пути, то значение будет равно `std::numeric_limits<weight_t>::max()`).
  */
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
-std::unordered_map<vert_t, weight_t> BellmanFord(
+inline std::unordered_map<vert_t, weight_t> BellmanFord(
     const Graph<vert_t, weight_t>& graph, const vert_t& start) {
   if (!graph.ContainsVert(start))
     throw std::invalid_argument(
