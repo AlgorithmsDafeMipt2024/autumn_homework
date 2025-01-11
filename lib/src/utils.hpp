@@ -111,15 +111,15 @@ std::ostream& operator<<(std::ostream& os,
  * @return std::string: итоговое число, записанное в строку
  */
 inline std::string ErasedZerosStr(float number) {
-  std::string str = std::to_string(number);
+  std::string origin = std::to_string(number);
 
   // удаляем незначащие нули
-  str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+  origin.erase(origin.find_last_not_of('0') + 1, std::string::npos);
 
   // если последний символ - десятичная точка, удаляем
-  if (str.back() == '.') str.pop_back();
+  if (origin.back() == '.') origin.pop_back();
 
-  return str;
+  return origin;
 }
 
 /**
@@ -176,4 +176,17 @@ inline std::istream& operator>>(std::istream& is, std::vector<Type>& vec) {
 template <typename T>
 inline bool Contains(const std::vector<T>& vec, const T& value) {
   return std::find(vec.begin(), vec.end(), value) != vec.end();
+}
+
+/**
+ * @brief Удаляет подстроку из начала строки, если она там присутствует.
+ * @param origin: исходная строка, из которой нужно удалить подстроку.
+ * @param substring: подстрока, которую нужно удалить из начала строки.
+ * @return `std::string: строка, в которой подстрока (если она была) удалена из
+ * начала.`
+ */
+inline std::string ReplacedString(std::string origin,
+                                  const std::string& substring) {
+  return origin.rfind(substring, 0) == 0 ? origin.erase(0, substring.length())
+                                         : origin;
 }

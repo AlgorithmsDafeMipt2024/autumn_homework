@@ -1,8 +1,29 @@
 #include <gtest/gtest.h>
 
-#include "bellman_ford.hpp"
+#include "johnson.hpp"
 
 #define LONG_INF std::numeric_limits<long>::max()
+#define INF std::numeric_limits<int>::max()
+
+namespace {
+
+std::unordered_map<int, std::unordered_map<int, int>>
+ConvertVectorVectorToUnorderedMap(const std::vector<std::vector<int>>& vec) {
+  std::unordered_map<int, std::unordered_map<int, int>> result_map;
+
+  for (size_t i = 0; i < vec.size(); i++) {
+    const std::vector<int>& inner_vec = vec[i];
+    std::unordered_map<int, int> inner_map;
+
+    for (size_t j = 0; j < inner_vec.size(); j++) inner_map[j] = inner_vec[j];
+
+    result_map[i] = inner_map;
+  }
+
+  return result_map;
+}
+
+}  // namespace
 
 TEST(BellmanFordTest, BasicTest) {
   Graph<int, int> graph = Graph<int, int>::GraphWeighted({{0, 1, 10},
@@ -24,7 +45,7 @@ TEST(BellmanFordTest, BasicTest) {
   ASSERT_EQ(distances, expected);
 }
 
-TEST(BellmanFordTest, WeightedGraph) {
+TEST(BellmanFordTest, Graph) {
   Graph<std::string, int> graph =
       Graph<std::string, int>::GraphWeighted({{"A", "B", 5},
                                               {"A", "C", 2},
@@ -507,4 +528,374 @@ TEST(BellmanFordTest, FloatingPointWeights) {
   auto distances = BellmanFord(graph, 1);
   EXPECT_FLOAT_EQ(distances[1], 0.0f);
   EXPECT_FLOAT_EQ(distances[2], 2.5f);
+}
+
+TEST(JohnsonTest, Simple_Test_1) {
+  Graph<char, int> graph;
+
+  auto result = Johnson(graph);
+  std::unordered_map<char, std::unordered_map<char, int>> expected;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Simple_Test_2) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+
+  auto result = Johnson(graph);
+  std::unordered_map<char, std::unordered_map<char, int>> expected;
+
+  expected['A']['A'] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Simple_Test_3) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+  graph.AddVert('B');
+
+  auto result = Johnson(graph);
+  std::unordered_map<char, std::unordered_map<char, int>> expected;
+
+  expected['A']['A'] = 0;
+  expected['A']['B'] = INF;
+  expected['B']['A'] = INF;
+  expected['B']['B'] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Simple_Test_4) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+  graph.AddVert('B');
+
+  graph.AddEdge({'A', 'B', -1});
+  graph.AddEdge({'B', 'A', 2});
+
+  auto result = Johnson(graph);
+  std::unordered_map<char, std::unordered_map<char, int>> expected;
+
+  expected['A']['A'] = 0;
+  expected['A']['B'] = -1;
+  expected['B']['A'] = 2;
+  expected['B']['B'] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Simple_Test_5) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+  graph.AddVert('B');
+
+  graph.AddEdge({'A', 'B', -2});
+  graph.AddEdge({'B', 'A', 1});
+
+  ASSERT_THROW(Johnson(graph), std::runtime_error);
+}
+
+TEST(JohnsonTest, Test_1) {
+  Graph<int, int> graph;
+
+  graph.AddVert(0);
+  graph.AddVert(1);
+  graph.AddVert(2);
+  graph.AddVert(3);
+
+  graph.AddEdge({0, 1, 1});
+  graph.AddEdge({1, 2, 2});
+  graph.AddEdge({2, 3, 1});
+  graph.AddEdge({0, 2, 4});
+
+  auto result = Johnson(graph);
+  std::unordered_map<int, std::unordered_map<int, int>> expected;
+
+  expected[0][0] = 0;
+  expected[0][1] = 1;
+  expected[0][2] = 3;
+  expected[0][3] = 4;
+
+  expected[1][0] = INF;
+  expected[1][1] = 0;
+  expected[1][2] = 2;
+  expected[1][3] = 3;
+
+  expected[2][0] = INF;
+  expected[2][1] = INF;
+  expected[2][2] = 0;
+  expected[2][3] = 1;
+
+  expected[3][0] = INF;
+  expected[3][1] = INF;
+  expected[3][2] = INF;
+  expected[3][3] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Test_2) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+  graph.AddVert('B');
+  graph.AddVert('C');
+  graph.AddVert('D');
+
+  graph.AddEdge({'A', 'B', -2});
+  graph.AddEdge({'A', 'D', 5});
+  graph.AddEdge({'A', 'C', 7});
+  graph.AddEdge({'B', 'C', 8});
+  graph.AddEdge({'B', 'D', 6});
+  graph.AddEdge({'C', 'B', 3});
+  graph.AddEdge({'C', 'D', -4});
+  graph.AddEdge({'D', 'A', -1});
+
+  auto result = Johnson(graph);
+  std::unordered_map<char, std::unordered_map<char, int>> expected;
+
+  expected['A']['A'] = 0;
+  expected['A']['B'] = -2;
+  expected['A']['C'] = 6;
+  expected['A']['D'] = 2;
+
+  expected['B']['A'] = 3;
+  expected['B']['B'] = 0;
+  expected['B']['C'] = 8;
+  expected['B']['D'] = 4;
+
+  expected['C']['A'] = -5;
+  expected['C']['B'] = -7;
+  expected['C']['C'] = 0;
+  expected['C']['D'] = -4;
+
+  expected['D']['A'] = -1;
+  expected['D']['B'] = -3;
+  expected['D']['C'] = 5;
+  expected['D']['D'] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Test_3) {
+  Graph<int, int> graph;
+
+  graph.AddVert(1);
+  graph.AddVert(2);
+  graph.AddVert(3);
+  graph.AddVert(4);
+  graph.AddVert(5);
+
+  graph.AddEdge({1, 2, -4});
+  graph.AddEdge({2, 3, 5});
+  graph.AddEdge({3, 1, 2});
+  graph.AddEdge({1, 4, 1});
+  graph.AddEdge({1, 5, -2});
+  graph.AddEdge({4, 5, 3});
+
+  auto result = Johnson(graph);
+  std::unordered_map<int, std::unordered_map<int, int>> expected;
+
+  expected[1][1] = 0;
+  expected[1][2] = -4;
+  expected[1][3] = 1;
+  expected[1][4] = 1;
+  expected[1][5] = -2;
+
+  expected[2][1] = 7;
+  expected[2][2] = 0;
+  expected[2][3] = 5;
+  expected[2][4] = 8;
+  expected[2][5] = 5;
+
+  expected[3][1] = 2;
+  expected[3][2] = -2;
+  expected[3][3] = 0;
+  expected[3][4] = 3;
+  expected[3][5] = 0;
+
+  expected[4][1] = INF;
+  expected[4][2] = INF;
+  expected[4][3] = INF;
+  expected[4][4] = 0;
+  expected[4][5] = 3;
+
+  expected[5][1] = INF;
+  expected[5][2] = INF;
+  expected[5][3] = INF;
+  expected[5][4] = INF;
+  expected[5][5] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, Test_4) {
+  Graph<char, int> graph;
+
+  graph.AddVert('A');
+  graph.AddVert('B');
+  graph.AddVert('C');
+  graph.AddVert('D');
+  graph.AddVert('E');
+  graph.AddVert('F');
+  graph.AddVert('G');
+
+  graph.AddEdge({'A', 'B', 5});
+  graph.AddEdge({'A', 'C', 2});
+  graph.AddEdge({'B', 'C', 1});
+  graph.AddEdge({'B', 'D', 3});
+  graph.AddEdge({'C', 'E', -2});
+  graph.AddEdge({'C', 'F', 4});
+  graph.AddEdge({'D', 'E', 2});
+  graph.AddEdge({'D', 'G', 6});
+  graph.AddEdge({'E', 'F', 3});
+  graph.AddEdge({'E', 'G', -4});
+  graph.AddEdge({'F', 'G', 1});
+  graph.AddEdge({'F', 'C', -7});
+  graph.AddEdge({'G', 'A', 8});
+
+  ASSERT_THROW(Johnson(graph), std::runtime_error);
+}
+
+TEST(JohnsonTest, Test_5) {
+  Graph<std::string, int> graph;
+
+  graph.AddVert("A");
+  graph.AddVert("B");
+  graph.AddVert("C");
+  graph.AddVert("D");
+  graph.AddVert("E");
+  graph.AddVert("F");
+
+  graph.AddEdge({"A", "B", 2});
+  graph.AddEdge({"A", "C", 1});
+  graph.AddEdge({"A", "F", 8});
+  graph.AddEdge({"B", "D", 4});
+  graph.AddEdge({"B", "E", -3});
+  graph.AddEdge({"C", "B", 5});
+  graph.AddEdge({"C", "E", 5});
+  graph.AddEdge({"C", "F", 6});
+  graph.AddEdge({"D", "A", -1});
+  graph.AddEdge({"D", "F", -3});
+  graph.AddEdge({"E", "C", -2});
+  graph.AddEdge({"E", "F", -2});
+  graph.AddEdge({"E", "D", 3});
+
+  auto result = Johnson(graph);
+  std::unordered_map<std::string, std::unordered_map<std::string, int>>
+      expected;
+
+  expected["A"]["A"] = 0;
+  expected["A"]["B"] = 2;
+  expected["A"]["C"] = -3;
+  expected["A"]["D"] = 2;
+  expected["A"]["E"] = -1;
+  expected["A"]["F"] = -3;
+
+  expected["B"]["A"] = -1;
+  expected["B"]["B"] = 0;
+  expected["B"]["C"] = -5;
+  expected["B"]["D"] = 0;
+  expected["B"]["E"] = -3;
+  expected["B"]["F"] = -5;
+
+  expected["C"]["A"] = 4;
+  expected["C"]["B"] = 5;
+  expected["C"]["C"] = 0;
+  expected["C"]["D"] = 5;
+  expected["C"]["E"] = 2;
+  expected["C"]["F"] = 0;
+
+  expected["D"]["A"] = -1;
+  expected["D"]["B"] = 1;
+  expected["D"]["C"] = -4;
+  expected["D"]["D"] = 0;
+  expected["D"]["E"] = -2;
+  expected["D"]["F"] = -4;
+
+  expected["E"]["A"] = 2;
+  expected["E"]["B"] = 3;
+  expected["E"]["C"] = -2;
+  expected["E"]["D"] = 3;
+  expected["E"]["E"] = 0;
+  expected["E"]["F"] = -2;
+
+  expected["F"]["A"] = INF;
+  expected["F"]["B"] = INF;
+  expected["F"]["C"] = INF;
+  expected["F"]["D"] = INF;
+  expected["F"]["E"] = INF;
+  expected["F"]["F"] = 0;
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(JohnsonTest, SimpleGraph) {
+  Graph<int, int> graph;
+
+  graph.AddEdge({0, 1, 1});
+  graph.AddEdge({1, 2, 2});
+  graph.AddEdge({2, 3, 1});
+  graph.AddEdge({0, 2, 4});
+
+  std::vector<std::vector<int>> expected_vec = {
+      {0, 1, 3, 4}, {INF, 0, 2, 3}, {INF, INF, 0, 1}, {INF, INF, INF, 0}};
+
+  auto result = Johnson(graph);
+  EXPECT_EQ(result, ConvertVectorVectorToUnorderedMap(expected_vec));
+}
+
+TEST(JohnsonTest, GraphWithNegativeWeights) {
+  Graph<int, int> graph;
+
+  graph.AddEdge({0, 1, -2});
+  graph.AddEdge({1, 2, -3});
+  graph.AddEdge({2, 3, 1});
+  graph.AddEdge({0, 2, 4});
+
+  std::vector<std::vector<int>> expected_vec = {
+      {0, -2, -5, -4}, {INF, 0, -3, -2}, {INF, INF, 0, 1}, {INF, INF, INF, 0}};
+
+  auto result = Johnson(graph);
+  EXPECT_EQ(result, ConvertVectorVectorToUnorderedMap(expected_vec));
+}
+
+TEST(JohnsonTest, NegativeCycle) {
+  Graph<int, int> graph;
+
+  graph.AddEdge({0, 1, 1});
+  graph.AddEdge({1, 2, 2});
+  graph.AddEdge({2, 0, -4});
+  graph.AddEdge({1, 3, 5});
+
+  EXPECT_THROW(Johnson(graph), std::runtime_error);
+}
+
+TEST(JohnsonTest, DisconnectedGraph) {
+  Graph<int, int> graph;
+
+  graph.AddEdge({0, 1, 1});
+  graph.AddEdge({1, 2, 2});
+
+  graph.AddVert(3);
+
+  std::vector<std::vector<int>> expected_vec = {
+      {0, 1, 3, INF}, {INF, 0, 2, INF}, {INF, INF, 0, INF}, {INF, INF, INF, 0}};
+
+  auto result = Johnson(graph);
+  EXPECT_EQ(result, ConvertVectorVectorToUnorderedMap(expected_vec));
+}
+
+TEST(JohnsonTest, EmptyGraph) {
+  Graph<int, int> graph;
+  // No edges or vertices
+
+  auto result = Johnson(graph);
+  EXPECT_TRUE(result.empty());
 }
