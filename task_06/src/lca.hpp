@@ -128,7 +128,7 @@ class LCA {
     block_ = (std::floor(std::log2(size)) + 1) / 2;
     ssize_t blocks_amount = size / block_ + (size % block_ ? 1 : 0);
 
-    // разряженная таблица для минимумов на блоках
+    // разреженная таблица для минимумов на блоках
     block_sparse_table_ = std::vector<std::vector<ssize_t>>(
         blocks_amount,
         std::vector<ssize_t>(std::floor(std::log2(size)) + 1, -1));
@@ -229,8 +229,9 @@ class LCA {
   // размер блока для алгоритма RMQ
   ssize_t block_;
 
-  // разряженная таблица для блоков
+  // разреженная таблица для блоков
   std::vector<std::vector<ssize_t>> block_sparse_table_;
+
   // хеши блоков
   std::vector<ssize_t> block_hash_;
 
