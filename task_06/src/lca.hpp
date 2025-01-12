@@ -16,6 +16,8 @@ class LCA {
    * @brief Инициализирует новый экземпляр LCA.
    * @param graph: граф, для которого нужно найти LCA.
    * @param root: корень дерева.
+   * @throw `std::invalid_argument("LCA: there is no such root vertice in
+   * graph.")`.
    */
   LCA(const Graph<vert_t, weight_t>& graph, vert_t root)
       : graph_(graph), root_(root) {
@@ -30,6 +32,13 @@ class LCA {
    * @brief Находит наименьшего общего предка двух вершин.
    * @param left: первая вершина.
    * @param right: вторая вершина.
+   * @throw `std::invalid_argument("LCA: there is no such left vertice in
+   * graph.")`.
+   * @throw `std::invalid_argument("LCA: there is no such right vertice in
+   * graph.")`.
+   * @throw `std::logic_error("LCA: graph has no edges.")`.
+   * @throw `std::logic_error("LCA: left vertice is not connected to root.")`.
+   * @throw `std::logic_error("LCA: right vertice is not connected to root.")`.
    * @return `vert_t`: наименьший общий предок вершин `left` и `right`.
    */
   vert_t RequestLCA(vert_t left, vert_t right) {
