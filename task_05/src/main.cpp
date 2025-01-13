@@ -24,7 +24,11 @@ int main() {
   std::cout << std::endl;
 
   std::vector<size_t> priorities = {17, 0, 36, 16, 23, 15, 42, 18, 20};
-  std::cout << ImplicitTreap<size_t, size_t>(priorities) << std::endl;
+  std::cout << priorities << std::endl
+            << std::endl
+            << ImplicitIndexTreap<size_t>(priorities).GetGraph() << std::endl
+            << std::endl
+            << ImplicitIndexTreap<size_t>(priorities) << std::endl;
 
   return 0;
 }
