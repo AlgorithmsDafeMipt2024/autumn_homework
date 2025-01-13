@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "implicit_treap.hpp"
+#include "graph.hpp"
 
 /**
  * @brief Класс для нахождения наименьшего общего предка (LCA) в дереве.

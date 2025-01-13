@@ -39,7 +39,3 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_tests)
-
-add_library(ImplicitTreap "src/implicit_treap.hpp")
-set_target_properties(ImplicitTreap PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(ImplicitTreap PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

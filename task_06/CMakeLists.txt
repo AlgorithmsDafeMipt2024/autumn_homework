@@ -18,10 +18,9 @@ list(REMOVE_ITEM SOURCE_LIST ${test_list})
 include_directories(${PROJECT_NAME} PUBLIC src)
 
 find_library(Utils ../)
-find_library(ImplicitTreap ../)
 
 add_executable(${PROJECT_NAME} ${SOURCE_LIST})
-target_link_libraries(${PROJECT_NAME} PUBLIC Utils ImplicitTreap)
+target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
 # Locate GTest
 enable_testing()
@@ -34,7 +33,6 @@ target_link_libraries(
   ${PROJECT_NAME}_tests
   GTest::gtest_main
   Utils
-  ImplicitTreap
 )
 
 include(GoogleTest)
