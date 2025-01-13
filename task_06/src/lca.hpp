@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "graph.hpp"
+#include "implicit_treap.hpp"
 
 /**
  * @brief Класс для нахождения наименьшего общего предка (LCA) в дереве.
@@ -28,6 +28,16 @@ class LCA {
           "LCA: there is no such root vertice in graph.");
 
     if (graph.EdgesAmount()) BuildLCA_();
+  }
+
+  /**
+   * @brief Инициализирует новый экземпляр LCA.
+   * @details Нужно только для RMQ.
+   * @param treap: декартово дерево в виде графа, для которого нужно найти LCA.
+   */
+  LCA(const ImplicitTreap<vert_t, weight_t>& treap)
+      : graph_(treap.GetGraph()), root_(treap.Root()) {
+    if (treap.EdgesAmount()) BuildLCA_();
   }
 
   /**
@@ -91,6 +101,22 @@ class LCA {
     }
 
     return euler_tour_[ans];
+  }
+
+  /**
+   * @brief Находит наименьшего общего предка пары вершин.
+   * @param pair: пара вершин.
+   * @throw `std::invalid_argument("LCA: there is no such left vertice in
+   * graph.")`.
+   * @throw `std::invalid_argument("LCA: there is no such right vertice in
+   * graph.")`.
+   * @throw `std::logic_error("LCA: graph has no edges.")`.
+   * @throw `std::logic_error("LCA: left vertice is not connected to root.")`.
+   * @throw `std::logic_error("LCA: right vertice is not connected to root.")`.
+   * @return `vert_t`: наименьший общий предок вершин `pair`.
+   */
+  vert_t Ancestor(const std::pair<vert_t, vert_t>& pair) const {
+    return Ancestor(pair.first, pair.second);
   }
 
  private:
@@ -232,7 +258,7 @@ class LCA {
   // обход Эйлера (для вершин)
   std::vector<vert_t> euler_tour_;
 
-  // высота каждой вершины от корня.
+  // высота каждой вершины от корня
   std::unordered_map<vert_t, ssize_t> vert_heights_;
 
   // первое вхождение вершины в обходе Эйлера
@@ -268,7 +294,25 @@ class LCA {
  * @return `vert_t`: наименьший общий предок вершин `left` и `right`.
  */
 template <AllowedVertType vert_t, AllowedWeightType weight_t>
-vert_t CalculateLCA(const Graph<vert_t, weight_t>& graph, vert_t root,
-                    vert_t left, vert_t right) {
+inline vert_t CalculateLCA(const Graph<vert_t, weight_t>& graph, vert_t root,
+                           vert_t left, vert_t right) {
   return LCA<vert_t, weight_t>(graph, root).Ancestor(left, right);
+}
+
+/**
+ * @brief Находит наименьшего общего предка двух вершин.
+ * @details Эта функция предназначена для однократного вычисления LCA. При
+ * множественных запросах к одному и тому же графу рекомендуется использовать
+ * класс `LCA`.
+ * @tparam vert_t: тип вершин.
+ * @tparam weight_t: тип весов.
+ * @param graph: граф, для которого нужно найти LCA.
+ * @param root: корень дерева.
+ * @param pair: пара вершин.
+ * @return `vert_t`: наименьший общий предок вершин `pair`.
+ */
+template <AllowedVertType vert_t, AllowedWeightType weight_t>
+inline vert_t CalculateLCA(const Graph<vert_t, weight_t>& graph, vert_t root,
+                           const std::pair<vert_t, vert_t>& pair) {
+  return LCA<vert_t, weight_t>(graph, root).Ancestor(pair);
 }

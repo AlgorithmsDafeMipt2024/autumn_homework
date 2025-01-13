@@ -23,25 +23,20 @@ class ImplicitTreap : public Graph<vert_t, weight_t> {
           left(nullptr),
           right(nullptr),
           size(1) {}
+
+    void UpdateTreapSize() {
+      size = (left ? left->size : 0) + (right ? right->size : 0) + 1;
+    }
   };
-
-  size_t TreapSizeFromNode(TreapNode* node) const {
-    return node ? node->size : 0;
-  }
-
-  void UpdateTreapSizeFromNode(TreapNode* node) const {
-    if (node)
-      node->size =
-          TreapSizeFromNode(node->left) + TreapSizeFromNode(node->right) + 1;
-  }
 
   TreapNode* root_;
 
  public:
   ImplicitTreap(const std::vector<vert_t>& priorities) {
     std::stack<std::tuple<size_t, size_t, TreapNode*>> stack;
-    TreapNode* root = nullptr;
     std::vector<std::pair<vert_t, vert_t>> edges;
+
+    TreapNode* root = nullptr;
 
     for (size_t i = 0; i < priorities.size(); i++) {
       TreapNode* new_node = new TreapNode(i, priorities[i]);
@@ -52,7 +47,7 @@ class ImplicitTreap : public Graph<vert_t, weight_t> {
         last = std::get<2>(stack.top());
         stack.pop();
 
-        if (last != nullptr) UpdateTreapSizeFromNode(last);
+        if (last != nullptr) last->UpdateTreapSize();
       }
 
       if (last != nullptr) new_node->left = last;
@@ -60,7 +55,7 @@ class ImplicitTreap : public Graph<vert_t, weight_t> {
       if (!stack.empty()) std::get<2>(stack.top())->right = new_node;
 
       stack.push({i, priorities[i], new_node});
-      if (new_node != nullptr) UpdateTreapSizeFromNode(new_node);
+      if (new_node != nullptr) new_node->UpdateTreapSize();
     }
 
     while (stack.size() > 1) stack.pop();
@@ -97,5 +92,5 @@ class ImplicitTreap : public Graph<vert_t, weight_t> {
   }
 
   Graph<vert_t, weight_t> GetGraph() const { return *this; }
-  size_t Root() const { return root_->key; }
+  vert_t Root() const { return root_->priority; }
 };
