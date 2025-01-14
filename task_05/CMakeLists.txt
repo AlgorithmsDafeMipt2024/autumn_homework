@@ -27,6 +27,14 @@ include_directories(${GTEST_INCLUDE_DIRS})
 find_library(Utils ../)
 target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
+file(GLOB_RECURSE lib_source_list "src/*.hpp")
+
+add_library(RMQ ${lib_source_list})
+
+set_target_properties(RMQ PROPERTIES LINKER_LANGUAGE CXX)
+
+target_include_directories(RMQ PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(${PROJECT_NAME}_tests ${test_source_list})
 target_link_libraries(
