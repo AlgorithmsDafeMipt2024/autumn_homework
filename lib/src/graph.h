@@ -1,7 +1,6 @@
-#ifndef __GRAPH_H__
-#define __GRAPH_H__
+#ifndef GRAPH_H_
+#define GRAPH_H_
 
-#include <initializer_list>
 #include <iostream>
 #include <vector>
 
@@ -34,13 +33,9 @@ class Graph {
     }
   }
 
-  int size() {
-    return adjacents.size();
-  }
+  int size() { return adjacents.size(); }
 
-  void add_vert() {
-    adjacents.push_back({});
-  }
+  void add_vert() { adjacents.push_back({}); }
 
   friend std::ostream& operator<<(std::ostream& os, const Graph& g) {
     os << " { ";

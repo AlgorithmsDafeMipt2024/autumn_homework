@@ -4,10 +4,8 @@
 #include "main.cpp"
 
 bool is_sorted(Graph& g, std::vector<int>& order) {
-  bool found_parent;
   for (int i = 0; i < order.size(); ++i) {
     for (int j = i + 1; j < order.size(); ++j) {
-      found_parent = false;
       for (auto child : g.adjacents[j]) {
         if (child.name == order[i]) {
           return false;

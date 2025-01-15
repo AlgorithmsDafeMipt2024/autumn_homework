@@ -10,7 +10,7 @@ void dfs_mark_non_rec(Graph& g, std::vector<int>& marks,
   st.push(start_name);
 
   while (!st.empty()) {
-    int v = st.top();
+    int const v = st.top();
 
     if (visited[v] == 2) {
       st.pop();
