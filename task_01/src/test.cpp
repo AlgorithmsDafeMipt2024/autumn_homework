@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "../lib/src/graph.h"
-#include "./main.cpp"
+#include "../../lib/src/graph.h"
+#include "main.cpp"
 
 bool is_sorted(Graph& g, std::vector<int>& order) {
   bool found_parent;

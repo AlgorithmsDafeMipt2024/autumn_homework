@@ -33,11 +33,7 @@ std::map<int, double> dijkstra(Graph& g, int start_vert) {
     finished[active_vert] = true;
   }
 
-  std::map<int, double> answer;
-  for (int i = 0; i < dists.size(); i++) {
-    answer[i] = dists[i];
-  }
-  return answer;
+  return dists;
 }
 
 int main() { return 0; }

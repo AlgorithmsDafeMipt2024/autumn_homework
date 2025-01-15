@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../lib/src/graph.h"
+#include "../../lib/src/graph.h"
 
 void dfs_mark_non_rec(Graph& g, std::vector<int>& marks,
                       std::vector<int>& visited, int start_name) {
