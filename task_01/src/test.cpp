@@ -14,31 +14,31 @@ bool check_test(std::vector<std::vector<int>>& data, std::vector<int>& top_order
   return true;
 }
 
-TEST(Test, Tree) {
+TEST(TopologySort, Tree) {
   std::vector<std::vector<int>> data({{}, {}, {0, 1}, {5, 7}, {9, 2, 3, 8}, {}, {}, {}, {6}, {}});
   std::vector<int> top_order = topological_sort(data);
   ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
-TEST(Test, TwoRoot) {
+TEST(TopologySort, TwoRoot) {
   std::vector<std::vector<int>> data({{}, {4, 6}, {7}, {7, 4}, {5}, {}, {}, {0, 6, 5}});
   std::vector<int> top_order = topological_sort(data);
   ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
-TEST(Test, ThreeRoot){
+TEST(TopologySort, ThreeRoot){
   std::vector<std::vector<int>> data({{1, 4, 6}, {4}, {3}, {}, {2, 5}, {2}, {4}, {6, 4, 2, 3}, {1, 5}});
   std::vector<int> top_order = topological_sort(data);
   ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
-TEST(Test, OneRootOneLeaf){
+TEST(TopologySort, OneRootOneLeaf){
   std::vector<std::vector<int>> data({{2, 3, 4}, {0, 2}, {3, 6}, {6}, {3, 6}, {0, 4}, {}, {1, 9}, {7, 9, 5}, {1, 0, 5}});
   std::vector<int> top_order = topological_sort(data);
   ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
-TEST(Test, Cycle) {
+TEST(TopologySort, Cycle) {
   bool error = false;
   std::vector<std::vector<int>> data({{1}, {2, 3}, {3, 0}, {}});
   try {
@@ -49,7 +49,7 @@ TEST(Test, Cycle) {
   ASSERT_EQ(error, true);  // Stack []
 }
 
-TEST(Test, Cycle2) {
+TEST(TopologySort, Cycle2) {
   bool error = false;
   std::vector<std::vector<int>> data({{}, {4, 6}, {7}, {7, 4}, {5}, {}, {2}, {0, 6, 5}});
   try {
