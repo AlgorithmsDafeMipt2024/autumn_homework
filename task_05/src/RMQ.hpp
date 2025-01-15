@@ -9,13 +9,15 @@
 
 class SegmentMinTree {
  public:
-  SegmentMinTree(std::vector<int> nums) : size(nums.size()) {
-    int sz = pow(2, ceil(std::log2(nums.size())));
-    while (nums.size() != sz) nums.push_back(INF);
+  SegmentMinTree() = default;
+
+  SegmentMinTree(std::vector<int> data) : size(data.size()) {
+    int sz = pow(2, ceil(std::log2(data.size())));
+    while (data.size() != sz) data.push_back(INF);
 
     tree.resize(2 * sz);
     for (int i = 0; i < sz; i++) {
-      tree[i + sz] = nums[i];
+      tree[i + sz] = data[i];
     }
 
     for (int i = 2 * sz - 1; i > 0; i -= 2) {
@@ -42,6 +44,13 @@ class SegmentMinTree {
     return SegmentMin(a, b, 1, 0, tree.size() / 2 - 1);
   }
 
+  size_t FindSegmentMinPos(size_t a, size_t b) const {
+    if (!(a >= 0 && b < size && a <= b))
+      throw std::invalid_argument("Invalid segment limits!");
+
+    return SegmentMinPos(a, b, 1, 0, tree.size() / 2 - 1);
+  }
+
   void PrintTree() const {
     std::cout << "Tree: ";
     for (int i = 0; i < tree.size(); i++) {
@@ -57,7 +66,7 @@ class SegmentMinTree {
 
  private:
   std::vector<int> tree;
-  size_t size;
+  size_t size = 0;
 
   int SegmentMin(size_t a, size_t b, size_t min_pos, size_t l_min,
                  size_t r_min) const {
@@ -72,13 +81,42 @@ class SegmentMinTree {
                       SegmentMin(a, b, 2 * min_pos + 1, mid + 1, r_min));
     }
   }
+
+  // Отличается только тем, что возвращает позицию минимального элемента на
+  // отрезке
+  size_t SegmentMinPos(size_t a, size_t b, size_t min_pos, size_t l_min,
+                       size_t r_min) const {
+    if (l_min > b || a > r_min) {
+      return INF;
+    }
+    if (a <= l_min && b >= r_min) {
+      return min_pos;
+    } else {
+      int mid = (l_min + r_min) / 2;
+      size_t pos_1 = SegmentMinPos(a, b, 2 * min_pos, l_min, mid);
+      size_t pos_2 = SegmentMinPos(a, b, 2 * min_pos + 1, mid + 1, r_min);
+      if (pos_1 == INF || pos_2 == INF) {
+        if (pos_1 == INF)
+          return pos_2;
+        else
+          return pos_1;
+      } else if (tree[pos_1] < tree[pos_2])
+        return pos_1;
+      else
+        return pos_2;
+    }
+  }
 };
 
 class RMQ {
  public:
-  RMQ(std::vector<int> nums) : tree(nums) {}
+  RMQ() = default;
+
+  RMQ(std::vector<int> data) : tree(data) {}
 
   void Set(int value, size_t pos) { tree.Set(value, pos); }
+
+  void SetData(std::vector<int> data) { tree = SegmentMinTree(data); }
 
   size_t Size() const { return tree.Size(); }
 
