@@ -7,6 +7,9 @@
 
 class NonOrientedGraph : public Graph
 {
+private:
+	bool IsCycled(int parent, int id, std::vector<int>& result, std::vector<bool>& visited) const;
+
 public:
 	int GetEdges()
 	{
@@ -19,4 +22,6 @@ public:
 	bool AddEdge(int id0, int id1);
 	bool DeleteVert(int id);
 	bool DeleteEdge(int id0, int id1);
+
+	bool IsCycled() const;
 };
