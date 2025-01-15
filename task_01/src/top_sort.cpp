@@ -7,7 +7,7 @@ std::vector<int> TopologySort(int vertices, int edges,
   DUGraph graph;
   graph.DUGReadGraph(vertices, edges, vecEdges);
   bool is_cycle = false;
-  for (int i = 1; i < vertices; i++) {
+  for (int i = 1; i <= vertices; i++) {
     if (!graph.used[i]) {
       is_cycle = graph.DUGDfsCycle(i);
     }
