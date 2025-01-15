@@ -1,0 +1,5 @@
+add_test([=[SimpleGraph1.Simple]=]  /workspaces/autumn_homework/build/task_02/task_02_tests [==[--gtest_filter=SimpleGraph1.Simple]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[SimpleGraph1.Simple]=]  PROPERTIES WORKING_DIRECTORY /workspaces/autumn_homework/build/task_02 SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[SimpleGraph2.Simple]=]  /workspaces/autumn_homework/build/task_02/task_02_tests [==[--gtest_filter=SimpleGraph2.Simple]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[SimpleGraph2.Simple]=]  PROPERTIES WORKING_DIRECTORY /workspaces/autumn_homework/build/task_02 SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  task_02_tests_TESTS SimpleGraph1.Simple SimpleGraph2.Simple)
