@@ -11,7 +11,7 @@ TEST(SimpleGraph1, Simple) {
   std::pair<std::vector<std::pair<int, int>>, std::vector<int>> result =
       BridgesAndCutPoints(vertices, edges, edge);
   std::pair<std::vector<std::pair<int, int>>, std::vector<int>> expected = {
-      {{4, 3}, {6, 2}}, {3, 2}};
+      {{4, 3}, {6, 2}}, {2, 3}};
 
   ASSERT_EQ(result, expected);
 }
@@ -25,6 +25,20 @@ TEST(SimpleGraph2, Simple) {
       BridgesAndCutPoints(vertices, edges, edge);
   std::pair<std::vector<std::pair<int, int>>, std::vector<int>> expected = {
       {{3, 2}, {2, 1}}, {2}};
+
+  ASSERT_EQ(result, expected);
+}
+
+TEST(SimpleGraph3, Simple) {
+  int const vertices = 8;
+  int const edges = 8;
+  std::vector<std::pair<int, int>> edge = {{1, 2}, {3, 4}, {3, 2}, {3, 1},
+                                           {2, 5}, {2, 6}, {3, 7}, {7, 8}};
+
+  std::pair<std::vector<std::pair<int, int>>, std::vector<int>> result =
+      BridgesAndCutPoints(vertices, edges, edge);
+  std::pair<std::vector<std::pair<int, int>>, std::vector<int>> expected = {
+      {{4, 3}, {8, 7}, {7, 3}, {5, 2}, {6, 2}}, {2, 3, 7}};
 
   ASSERT_EQ(result, expected);
 }

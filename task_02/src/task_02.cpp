@@ -1,6 +1,5 @@
 #include "task_02.hpp"
 
-#include <algorithm>
 #include <vector>
 
 std::pair<std::vector<std::pair<int, int>>, std::vector<int>>
@@ -11,7 +10,7 @@ BridgesAndCutPoints(int vertices, int edges,
 
   for (int i = 1; i <= vertices; i++) {
     if (!graph.used[i]) {
-      graph.dfs(i);
+      graph.DFSBridgesAndCutPoints(i);
     }
   }
 

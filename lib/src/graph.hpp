@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <set>
 #include <vector>
 
 // UUG - undirected unweighted graph
@@ -44,7 +45,7 @@ class UUGraph {
     }
   }
 
-  void dfs(int v, int parent = -1) {
+  void DFSBridgesAndCutPoints(int v, int parent = -1) {
     used[v] = true;
     d[v] = h[v] = (parent == -1 ? 0 : h[parent] + 1);
     int children = 0;
@@ -53,17 +54,15 @@ class UUGraph {
         if (used[u]) {
           d[v] = std::min(d[v], h[u]);
         } else {
-          dfs(u, v);
+          DFSBridgesAndCutPoints(u, v);
           d[v] = std::min(d[v], d[u]);
           if (h[v] < d[u]) {
             std::pair<int, int> bridge{u, v};
             bridges.push_back(bridge);
-            std::cout << "Bridge: " << u << ' ' << v << '\n';
           }
           if (h[v] <= d[u] && parent != -1) {
             int cutPoint{v};
             cutPoints.push_back(cutPoint);
-            std::cout << "Cut point: " << v << '\n';
           }
           children++;
         }
@@ -72,8 +71,10 @@ class UUGraph {
     if (parent == -1 && children > 1) {
       int cutPoint{v};
       cutPoints.push_back(cutPoint);
-      std::cout << "Cut point: " << v << '\n';
     }
+
+    std::set<int> tmp(cutPoints.begin(), cutPoints.end());
+    cutPoints = std::vector<int>(tmp.begin(), tmp.end());
   }
 };
 
