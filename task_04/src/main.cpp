@@ -41,34 +41,4 @@ std::map<int, double> dijkstra(Graph& g, int start_vert) {
   return answer;
 }
 
-int main() {
-  Graph g(6, {
-                 {{0, 1}, 7},
-                 {{1, 0}, 7},
-                 {{0, 2}, 9},
-                 {{2, 0}, 9},
-                 {{1, 2}, 10},
-                 {{2, 1}, 10},
-                 {{0, 5}, 14},
-                 {{5, 0}, 14},
-                 {{2, 5}, 2},
-                 {{5, 2}, 2},
-                 {{2, 3}, 11},
-                 {{3, 2}, 11},
-                 {{1, 3}, 15},
-                 {{3, 1}, 15},
-                 {{3, 4}, 6},
-                 {{4, 3}, 6},
-                 {{5, 4}, 9},
-                 {{4, 5}, 9},
-             });
-  // std::cout << g << std::endl << std::endl;
-  // g.see_vertical();
-  // std::cout << (t_inf<double>(7) < Inf()) << (t_inf<double>(0) < Inf());
-  std::cout << std::endl;
-  std::map<int, double> sorted = dijkstra(g, 0);
-  for (int i = 0; i < sorted.size(); ++i) {
-    std::cout << sorted[i] << " ";
-  }
-  std::cout << std::endl;
-}
+int main() { return 0; }

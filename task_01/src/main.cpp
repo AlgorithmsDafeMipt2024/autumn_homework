@@ -126,30 +126,3 @@ std::vector<int>* topological_sort_dfs_rec(Graph& g) {
 }
 
 int main() { return 0; }
-// Graph g(8, {
-//                {{1, 4}, 4},
-//                {{1, 6}, 5},
-//                {{2, 7}, 9},
-//                {{3, 4}, 1},
-//                {{3, 7}, 5.5},
-//                {{4, 5}, 3.14},
-//                {{7, 0}, 0.2},
-//                {{7, 5}, 1.3},
-//                {{7, 6}, 2.6},
-//                //  {{5, 1}, 1}
-//                {{2, 3}, 3.332323},
-//                // {{6, 2}, 1}
-//            });
-// // std::cout << g << std::endl << std::endl;
-// // g.see_vertical();
-// std::cout << std::endl;
-// std::vector<int>* sorted = topological_sort_dfs_non_rec(g);
-// std::vector<int>* sorted_rec = topological_sort_dfs_rec(g);
-// for (int i = 0; i < g.size(); ++i) {
-//   std::cout << (*sorted)[i] << " ";
-// }
-// std::cout << std::endl;
-// for (int i = 0; i < g.size(); ++i) {
-//   std::cout << (*sorted_rec)[i] << " ";
-// }
-// std::cout << std::endl;
