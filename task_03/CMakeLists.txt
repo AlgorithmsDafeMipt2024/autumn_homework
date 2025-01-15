@@ -25,7 +25,8 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 find_library(Utils ../)
-target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
+find_library(Dijkstra ../)
+target_link_libraries(${PROJECT_NAME} PUBLIC Utils Dijkstra)
 
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(${PROJECT_NAME}_tests ${test_source_list})
@@ -33,6 +34,7 @@ target_link_libraries(
   ${PROJECT_NAME}_tests
   GTest::gtest_main
   Utils
+  Dijkstra
 )
 
 include(GoogleTest)
