@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <algorithm>
-
 #include "../lib/src/graph.h"
 #include "./main.cpp"
 
