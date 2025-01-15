@@ -3,7 +3,7 @@
 #include "RMQ.hpp"
 
 TEST(Test_RMQ, Simple_Test_1) {
-  RMQ rmq({});
+  RMQ rmq;
 
   ASSERT_THROW(rmq(0, 0), std::invalid_argument);
 }
