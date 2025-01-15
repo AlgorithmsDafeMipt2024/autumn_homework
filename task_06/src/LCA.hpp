@@ -1,6 +1,6 @@
 #pragma once
-
 #include <algorithm>
+#include <unordered_map>
 
 #include "RMQ.hpp"
 #include "graph/graph.hpp"
@@ -8,14 +8,23 @@
 template <typename T>
 class LCA {
  public:
-  LCA(T root, Graph<T> graph) : graph(graph) {
+  LCA() = default;
+
+  LCA(T root, Graph<T> graph) { SetGraph(root, graph); }
+
+  void SetGraph(T root, Graph<T> new_graph) {
+    graph = new_graph;
+
     // Проверка свойства дерева
     if (graph.GetVerticesCount() - 1 != graph.GetEdgesCount())
       throw std::invalid_argument("Graph is not tree!");
 
     std::map<T, int> vertices_depths;
-    for (T v : graph.GetVerticesIds()) first_meet[v] = INF;
-    std::vector<T> visited;
+    std::unordered_map<T, bool> visited;
+    for (T v : graph.GetVerticesIds()) {
+      first_meet[v] = INF;
+      visited[v] = false;
+    }
 
     EulerianCycle(vertices_depths, visited, 0, root);
 
@@ -55,6 +64,8 @@ class LCA {
     return seg_graph_tree[min_pos];
   }
 
+  size_t NodesCount() const { return graph.GetVerticesCount(); }
+
  private:
   Graph<T> graph;
   SegmentMinTree tree;
@@ -64,9 +75,14 @@ class LCA {
   // Здесь находятся позиции первой встречи вершин в Эйлеровом цикле
   std::map<T, size_t> first_meet;
 
-  void EulerianCycle(std::map<T, int>& vertices_depths, std::vector<T>& visited,
-                     int curr_depth, T curr_vertex) {
-    visited.push_back(curr_vertex);
+  void EulerianCycle(std::map<T, int>& vertices_depths,
+                     std::unordered_map<T, bool>& visited, int curr_depth,
+                     T curr_vertex) {
+    // Проверка на цикл
+    if (visited[curr_vertex])
+      throw std::invalid_argument("Tree must be acyclic!");
+    visited[curr_vertex] = true;
+
     vertices_depths[curr_vertex] = curr_depth;
     cycle.push_back(curr_vertex);
     if (cycle.size() - 1 < first_meet[curr_vertex])
@@ -84,7 +100,7 @@ class LCA {
     if (parent == curr_vertex) {
       if (visited.size() != graph.GetVerticesCount())
         // Проверка на связности
-        throw std::invalid_argument("Graph is not tree!");
+        throw std::invalid_argument("Tree must be connected!");
       return;
     } else
       cycle.push_back(parent);
