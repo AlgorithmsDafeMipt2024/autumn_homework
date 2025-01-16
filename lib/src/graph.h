@@ -34,7 +34,7 @@ class Graph {
     }
   }
 
-  int size() { return adjacents.size(); }
+  int size() const { return adjacents.size(); }
 
   void add_vert() { adjacents.push_back({}); }
 
