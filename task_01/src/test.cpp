@@ -1,7 +1,4 @@
 #include <gtest/gtest.h>
-#include <vector>
-#include "topo.hpp"
-#include "util.hpp"
 
 TEST(Topa, Simple) {
   // std::vector<int> expected = {0, 3, 2, 1};
