@@ -37,7 +37,7 @@ std::vector<double> dijkstra(OrientedWeightedGraph graph, int from_key)
     return distances;
 }
 
-std::vector<double> bellman(OrientedWeightedGraph graph, int from_key, int iterations = std::numeric_limits<int>::infinity()) { 
+std::vector<double> bellman(OrientedWeightedGraph graph, int from_key, int iterations) { 
     if (iterations == std::numeric_limits<int>::infinity())
         iterations = graph.size();
     std::vector<double> distances(graph.size(), std::numeric_limits<double>::infinity()),
