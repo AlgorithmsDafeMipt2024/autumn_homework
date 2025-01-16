@@ -2,7 +2,8 @@
 
 #include <algorithm>
 #include <vector>
-
+// честно пыталась вынести это в отдельный файл, но FATAL ошибки, core dumped и
+// я не знаю как это фиксить
 void RecursiveDFS(std::vector<std::vector<int>> &data, int root,
                   std::vector<int> &status, std::vector<int> &top_order) {
   status[root] = 1;
