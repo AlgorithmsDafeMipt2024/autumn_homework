@@ -1,7 +1,5 @@
 
 #include <gtest/gtest.h>
-#include <vector>
-#include "rmq.hpp"
 
 TEST(RMQ, Simple) {
   // double expected = 2;
