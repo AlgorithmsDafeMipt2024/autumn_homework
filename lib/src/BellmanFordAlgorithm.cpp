@@ -1,3 +1,5 @@
+#include <cfloat>
+
 #include "BellmanForlAlgorithm.h"
 
 std::vector<double> BellmanFordAlgorithm(const WeightedGraph& graph,

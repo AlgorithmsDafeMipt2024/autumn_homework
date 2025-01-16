@@ -1,7 +1,8 @@
 #pragma once
 
 #include <includes.h>
-#include "DeikstraAlgorithm.h"
+
 #include "BellmanForlAlgorithm.h"
+#include "DeikstraAlgorithm.h"
 
 OrientedWeightedGraphWithZeroWeight JonsonAlgorithm(const WeightedGraph& graph);
