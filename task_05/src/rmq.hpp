@@ -1,9 +1,10 @@
 #pragma once
 
+#include <math.h>
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <math.h>
 #include <vector>
 std::vector<std::vector<double>> sparse(std::vector<double> &data) {
   std::vector<std::vector<double>> sparse_table(

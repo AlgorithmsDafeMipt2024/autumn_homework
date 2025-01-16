@@ -1,5 +1,6 @@
-#include "rmq.hpp"
 #include <gtest/gtest.h>
+
+#include "rmq.hpp"
 
 TEST(RMQ, Simple) {
   std::vector<double> data = {1, 4, 7, 9, 4, 4, 3, 2, 7, 9, 5};

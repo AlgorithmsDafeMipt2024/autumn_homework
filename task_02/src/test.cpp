@@ -1,7 +1,9 @@
+#include <gtest/gtest.h>
+
+#include <iostream>
+
 #include "bridge.hpp"
 #include "router.hpp"
-#include <gtest/gtest.h>
-#include <iostream>
 
 bool same_edges(std::vector<std::pair<int, int>> &a,
                 std::vector<std::pair<int, int>> &b) {

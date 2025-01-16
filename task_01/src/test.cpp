@@ -1,5 +1,6 @@
-#include <algorithm>
 #include <gtest/gtest.h>
+
+#include <algorithm>
 #include <vector>
 
 void recursive_dfs(std::vector<std::vector<int>> &data, int root,
@@ -53,21 +54,21 @@ TEST(TopologySort, Tree) {
   std::vector<std::vector<int>> data(
       {{}, {}, {0, 1}, {5, 7}, {9, 2, 3, 8}, {}, {}, {}, {6}, {}});
   std::vector<int> top_order = topological_sort(data);
-  ASSERT_EQ(check_test(data, top_order), true); // Stack []
+  ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
 TEST(TopologySort, TwoRoot) {
   std::vector<std::vector<int>> data(
       {{}, {4, 6}, {7}, {7, 4}, {5}, {}, {}, {0, 6, 5}});
   std::vector<int> top_order = topological_sort(data);
-  ASSERT_EQ(check_test(data, top_order), true); // Stack []
+  ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
 TEST(TopologySort, ThreeRoot) {
   std::vector<std::vector<int>> data(
       {{1, 4, 6}, {4}, {3}, {}, {2, 5}, {2}, {4}, {6, 4, 2, 3}, {1, 5}});
   std::vector<int> top_order = topological_sort(data);
-  ASSERT_EQ(check_test(data, top_order), true); // Stack []
+  ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
 TEST(TopologySort, OneRootOneLeaf) {
@@ -82,7 +83,7 @@ TEST(TopologySort, OneRootOneLeaf) {
                                       {7, 9, 5},
                                       {1, 0, 5}});
   std::vector<int> top_order = topological_sort(data);
-  ASSERT_EQ(check_test(data, top_order), true); // Stack []
+  ASSERT_EQ(check_test(data, top_order), true);  // Stack []
 }
 
 TEST(TopologySort, Cycle) {
@@ -93,7 +94,7 @@ TEST(TopologySort, Cycle) {
   } catch (std::runtime_error) {
     error = true;
   }
-  ASSERT_EQ(error, true); // Stack []
+  ASSERT_EQ(error, true);  // Stack []
 }
 
 TEST(TopologySort, Cycle2) {
@@ -105,5 +106,5 @@ TEST(TopologySort, Cycle2) {
   } catch (std::runtime_error) {
     error = true;
   }
-  ASSERT_EQ(error, true); // Stack []
+  ASSERT_EQ(error, true);  // Stack []
 }
