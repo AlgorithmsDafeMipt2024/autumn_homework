@@ -4,4 +4,4 @@
 
 void topo_recr(EdgeOrientedGraph& graph, std::stack<int>& vstack, std::vector<int>& vcolor, int current);
 
-std::vector<int> topo_sort(EdgeOrientedGraph graph, int from_key=0);
+std::vector<int> topo_sort(EdgeOrientedGraph graph, int from_key);

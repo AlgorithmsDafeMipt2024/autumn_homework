@@ -15,7 +15,7 @@ void topo_recr(EdgeOrientedGraph& graph, std::stack<int>& vstack, std::vector<in
     vstack.push(current);
 }
 
-std::vector<int> topo_sort(EdgeOrientedGraph graph, int from_key=0) {
+std::vector<int> topo_sort(EdgeOrientedGraph graph, int from_key) {
     std::vector<int> fin_seq;
     std::stack<int> vert_stack;
     // 0 -- white
