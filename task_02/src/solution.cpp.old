@@ -1,0 +1,76 @@
+#include "solution.h"
+#include <iostream>
+#include <list>
+#include <unordered_set>
+
+
+
+std::vector<int> solution(std::vector<node> &nodes){
+  std::deque<node*> gray;
+  std::unordered_set<int> visited;
+  std::vector<int> lockers;
+  int N = nodes.size(),tmp;
+  std::cout<<"~~~~~~~~~~~~~~~~~~~~\n";
+
+  for(int i =0; i<N;i++){
+    nodes[i].id = i;
+    nodes[i].last = nodes[i].neighbours.begin();
+  }
+
+  node start;
+  start.id = -1;
+  start.neighbours.push_back(&nodes[0]);
+  start.last = start.neighbours.begin();
+  gray.push_back(&start);
+  node *current;
+  node *last;
+
+
+  while(gray.size()){
+    current = gray.back();
+    while(current->last != current->neighbours.end()&&(*(current->last))->locked){current->last++;}
+    if(current->locked && current->last == current->neighbours.end()){
+      /*current->locked = true;*/
+      lockers.back()=current->id;
+      gray.pop_back();
+      continue;
+    }
+    while(gray.size()){
+      current = gray.back();
+      std::cout<<current->id<<" start\n";
+      if(!visited.contains(current->id)){
+        visited.insert(current->id);
+        std::cout<<current->id<<" visited\n";
+      }
+      std::cout<<current->id<<" passed 1"<<std::endl;
+      if(current->last == current->neighbours.end()){
+        std::cout<<current->id<<" was locked. break"<<std::endl;
+        current->locked = true;
+        gray.pop_back();
+        lockers.push_back(current->id);
+        break;
+      }
+      std::cout<<current->id<<" passed 2"<<std::endl;
+      if(visited.contains((*(current->last))->id)){
+        std::cout<<current->id<<" neighbot visited. continue"<<std::endl;
+        if(current->id == 0){current->last++;continue;}
+        (*(current->last))->locked = gray[gray.size()-2]; 
+        current->last++;
+        continue;
+      }
+      std::cout<<current->id<<" passed 3"<<std::endl;
+      gray.push_back(*(current->last));
+    }
+    if(gray.size()==1){
+      break;
+    }
+    start.locked = true;
+  }
+  /*1*/
+
+  tmp=0;
+  return lockers;
+
+}
+
+
