@@ -1,5 +1,7 @@
 #include "DeikstraAlgorithm.h"
 
+#include <cfloat>
+
 double DeikstraAlgorithm(const WeightedGraph& graph, int start_id, int end_id) {
   int n = graph.GetVerts();
   std::vector<bool> ended(n);
