@@ -1,6 +1,7 @@
-#ifndef AUTUMN_HOMEWORK_TASK_01_GRAPH_GRAPH_TPP_
-#define AUTUMN_HOMEWORK_TASK_01_GRAPH_GRAPH_TPP_
+#ifndef AUTUMN_HOMEWORK_TASK_02_GRAPH_TPP_
+#define AUTUMN_HOMEWORK_TASK_02_GRAPH_TPP_
 
+#include <cmath>
 #include <vector>
 
 template <typename T>
