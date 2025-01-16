@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "deixtra.h"
+#include <gtest/gtest.h>
 
 TEST(Deixtra, Simple) {
   std::vector<node> nodes;

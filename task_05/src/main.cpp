@@ -1,5 +1,5 @@
-#include <iostream>
 #include "rmq.h"
+#include <iostream>
 
 int main() {
   int a[] = {1, 2, 3, -1, 5, 6};

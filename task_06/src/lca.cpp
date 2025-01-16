@@ -7,7 +7,7 @@ static std::vector<int> tin, tout;
 static int timer;
 static std::vector<std::vector<int>> up;
 
-void dfs(int v, std::vector<std::vector<int>>& g, int p = 0) {
+void dfs(int v, std::vector<std::vector<int>> &g, int p = 0) {
   tin[v] = ++timer;
   up[v][0] = p;
   for (int i = 1; i <= l; ++i)
@@ -20,11 +20,9 @@ void dfs(int v, std::vector<std::vector<int>>& g, int p = 0) {
   tout[v] = ++timer;
 }
 
-bool upper(int a, int b) {
-  return tin[a] <= tin[b] && tout[a] >= tout[b];
-}
+bool upper(int a, int b) { return tin[a] <= tin[b] && tout[a] >= tout[b]; }
 
-std::vector<int> lca(std::vector<std::vector<int>>& g,
+std::vector<int> lca(std::vector<std::vector<int>> &g,
                      std::vector<std::pair<int, int>> dd) {
   tin.clear(), tout.clear(), up.clear();
   l = 0;
@@ -36,7 +34,7 @@ std::vector<int> lca(std::vector<std::vector<int>>& g,
   for (int i = 0; i < g.size(); ++i)
     up[i].resize(l + 1);
   dfs(0, g);
-  for (auto& dds : dd) {
+  for (auto &dds : dd) {
     int a = dds.first, b = dds.second;
     std::cout << "as" << std::endl;
     if (upper(a, b)) {

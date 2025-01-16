@@ -1,5 +1,5 @@
-#include <iostream>
 #include "solution.h"
+#include <iostream>
 
 int main() {
   std::vector<std::vector<int>> expected = {{0, -1, 2, -2, 1},

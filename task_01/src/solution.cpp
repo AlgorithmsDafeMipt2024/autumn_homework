@@ -10,7 +10,7 @@ std::vector<int> solution(std::vector<node> nodes) {
   }
 
   /*gray.push_back(0);*/
-  node* current;
+  node *current;
 
   tmp = 0;
   int i = 0;

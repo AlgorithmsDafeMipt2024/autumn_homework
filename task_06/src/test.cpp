@@ -1,5 +1,5 @@
-#include <gtest/gtest.h>
 #include "lca.h"
+#include <gtest/gtest.h>
 
 TEST(TEST, Simple) {
   std::vector<std::vector<int>> g = {{1, 2}, {3, 4}, {}, {}, {}};

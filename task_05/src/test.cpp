@@ -1,12 +1,12 @@
-#include <gtest/gtest.h>
 #include <cstdlib>
+#include <gtest/gtest.h>
 #include <limits>
 #include <utility>
 #include <vector>
 
 #include "rmq.h"
 
-int ROFLS_KATKA(int* A, int start, int stop) {
+int ROFLS_KATKA(int *A, int start, int stop) {
   int mn = std::numeric_limits<int>::max();
   for (int i = start; i <= stop; i++) {
     mn = std::min(A[i], mn);

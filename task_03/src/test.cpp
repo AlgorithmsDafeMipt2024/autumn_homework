@@ -1,6 +1,6 @@
+#include "solution.h"
 #include <gtest/gtest.h>
 #include <vector>
-#include "solution.h"
 
 TEST(Deixtra, Simple) {
   std::vector<node> nodes;

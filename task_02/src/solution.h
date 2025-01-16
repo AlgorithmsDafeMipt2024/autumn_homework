@@ -8,14 +8,14 @@
 #include <vector>
 
 class node {
- public:
+public:
   std::vector<int> neighbours;
   int id;
-  bool locked = false;  //
-  bool flag = false;    // белая
+  bool locked = false; //
+  bool flag = false;   // белая
 };
 
-std::pair<std::vector<std::pair<int, int>>, std::vector<int>> solution(
-    std::vector<node> nodes);
+std::pair<std::vector<std::pair<int, int>>, std::vector<int>>
+solution(std::vector<node> nodes);
 
-#endif  // __SOLUTION_H__
+#endif // __SOLUTION_H__

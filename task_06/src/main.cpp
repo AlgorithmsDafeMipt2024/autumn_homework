@@ -1,6 +1,6 @@
+#include "lca.h"
 #include <iostream>
 #include <vector>
-#include "lca.h"
 
 int main() {
   std::vector<std::vector<int>> g = {{0, 1, 2}, {3, 4}, {}, {}, {}};

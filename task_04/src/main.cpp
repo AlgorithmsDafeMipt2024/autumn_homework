@@ -1,6 +1,6 @@
+#include "deixtra.h"
 #include <iostream>
 #include <vector>
-#include "deixtra.h"
 
 int main() {
   std::vector<node> nodes;

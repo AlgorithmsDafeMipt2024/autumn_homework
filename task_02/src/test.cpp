@@ -9,7 +9,7 @@ TEST(StackTest, Simple) {
 
   int n, k = 0, tmp, N;
   N = 4;
-  tmp = 4;  // колич
+  tmp = 4; // колич
   nodes.resize(N);
   // список ребер
   std::vector<std::pair<int, int>> loh = {{0, 1}, {1, 2}, {2, 3}, {0, 2}};
@@ -46,7 +46,7 @@ TEST(MinStackTest, SimpleNoBriges) {
   // список ребер
   std::vector<std::pair<int, int>> loh = {
       {0, 1}, {1, 2}, {2, 3}, {0, 2}, {0, 3}};
-  tmp = loh.size();  // колич
+  tmp = loh.size(); // колич
   while (k < tmp) {
     nodes[loh[k].first].neighbours.push_back(loh[k].second);
     nodes[loh[k].second].neighbours.push_back(loh[k].first);

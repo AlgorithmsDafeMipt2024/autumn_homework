@@ -4,20 +4,20 @@
 #include <vector>
 
 class Stack {
- public:
+public:
   void Push(int value);
   int Pop();
 
- private:
+private:
   std::stack<int> data_;
 };
 
 class MinStack {
- public:
+public:
   void Push(int value);
   int Pop();
   int GetMin();
 
- private:
+private:
   std::vector<int> data_;
 };
