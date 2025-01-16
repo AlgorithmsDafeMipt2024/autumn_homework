@@ -74,7 +74,7 @@ void dfs_taryan(Graph& g, std::vector<bool>& visited, std::vector<int>& tin,
   visited[v] = true;
   tin[v] = fup[v] = time++;
   for (size_t i = 0; i < g.adjacents[v].size(); ++i) {
-    int to = g.adjacents[v][i].name;
+    int const to = g.adjacents[v][i].name;
     if (to == p) continue;
     if (visited[to])
       fup[v] = std::min(fup[v], tin[to]);
@@ -87,7 +87,7 @@ void dfs_taryan(Graph& g, std::vector<bool>& visited, std::vector<int>& tin,
 }
 
 std::vector<std::pair<int, int>> get_bridges_taryan(Graph& g) {
-  int time = 0;
+  int const time = 0;
   std::vector<int> tin(g.size(), -1);
   std::vector<int> fup(g.size(), -1);
   std::vector<std::pair<int, int>> bridges;
@@ -125,7 +125,7 @@ void dfs_taryan_verts(Graph& g, std::vector<bool>& visited,
 }
 
 std::vector<int> get_cut_verts_taryan(Graph& g) {
-  int time = 0;
+  int const time = 0;
   std::vector<int> tin(g.size(), -1);
   std::vector<int> fup(g.size(), -1);
   std::vector<int> cut_verts;

@@ -24,9 +24,10 @@ TEST(unorient_graph, Test_1) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 0}, {1, 7}, {2, 9}, {3, 20}, {4, 20}, {5, 11}}) ==
-                 dijkstra(g, 0));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 0}, {1, 7}, {2, 9}, {3, 20}, {4, 20}, {5, 11}}) ==
+       dijkstra(g, 0));
 
   ASSERT_EQ(passed, true);
 }
@@ -52,9 +53,10 @@ TEST(unorient_graph, Test_2) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 7}, {1, 0}, {2, 10}, {3, 15}, {4, 21}, {5, 12}}) ==
-                 dijkstra(g, 1));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 7}, {1, 0}, {2, 10}, {3, 15}, {4, 21}, {5, 12}}) ==
+       dijkstra(g, 1));
 
   ASSERT_EQ(passed, true);
 }
@@ -80,9 +82,10 @@ TEST(unorient_graph, Test_3) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 9}, {1, 10}, {2, 0}, {3, 11}, {4, 11}, {5, 2}}) ==
-                 dijkstra(g, 2));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 9}, {1, 10}, {2, 0}, {3, 11}, {4, 11}, {5, 2}}) ==
+       dijkstra(g, 2));
 
   ASSERT_EQ(passed, true);
 }
@@ -108,9 +111,10 @@ TEST(unorient_graph, Test_4) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 20}, {1, 15}, {2, 11}, {3, 0}, {4, 6}, {5, 13}}) ==
-                 dijkstra(g, 3));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 20}, {1, 15}, {2, 11}, {3, 0}, {4, 6}, {5, 13}}) ==
+       dijkstra(g, 3));
 
   ASSERT_EQ(passed, true);
 }
@@ -136,9 +140,10 @@ TEST(unorient_graph, Test_5) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 20}, {1, 21}, {2, 11}, {3, 6}, {4, 0}, {5, 9}}) ==
-                 dijkstra(g, 4));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 20}, {1, 21}, {2, 11}, {3, 6}, {4, 0}, {5, 9}}) ==
+       dijkstra(g, 4));
 
   ASSERT_EQ(passed, true);
 }
@@ -164,9 +169,10 @@ TEST(unorient_graph, Test_6) {
                  {{5, 4}, 9},
                  {{4, 5}, 9},
              });
-  bool const passed = (std::map<int, double>(
-                     {{0, 11}, {1, 12}, {2, 2}, {3, 13}, {4, 9}, {5, 0}}) ==
-                 dijkstra(g, 5));
+  bool const passed =
+      (std::map<int, double>(
+           {{0, 11}, {1, 12}, {2, 2}, {3, 13}, {4, 9}, {5, 0}}) ==
+       dijkstra(g, 5));
 
   ASSERT_EQ(passed, true);
 }
