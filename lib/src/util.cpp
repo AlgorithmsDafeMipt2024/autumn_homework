@@ -19,8 +19,6 @@ MatrixOrientedGraph::MatrixOrientedGraph(int V) {
 
 MatrixOrientedGraph::MatrixOrientedGraph(std::vector<std::vector<int>> const& connections) : _connections(connections) {}
 
-int OrientedWeightedGraph::size() { return _weights.size(); }
-
 std::vector<int>& MatrixOrientedGraph::operator[](int first) { return _connections[first]; }
 
 
