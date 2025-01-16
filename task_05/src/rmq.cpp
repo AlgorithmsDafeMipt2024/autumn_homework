@@ -14,7 +14,7 @@ RMQ::RMQ(std::vector<double> data) {
   auto end = data.begin();
   for (int i = 0; i < sparse_table.size(); ++i) {
     for (int j = data.size() - 1; j >= 0; --j) {
-      wide = std::pow(2, i);
+      wide = (1 << i);
       end = data.begin() + j + 1;
       start = end - wide;
       if (start >= data.begin()) {

@@ -11,12 +11,13 @@ double get_min_from_sparse_table(std::vector<std::vector<double>>& sparse_table,
                                  int start_ind, int end_ind);
 
 class RMQ {
-public:
-    RMQ(std::vector<double> data);
+ public:
+  RMQ(std::vector<double> data);
 
-    double get_min(int first_ind, int last_ind);
-private:
-    std::vector<std::vector<double>> sparse_table;
+  double get_min(int first_ind, int last_ind);
+
+ private:
+  std::vector<std::vector<double>> sparse_table;
 };
 
 #endif
