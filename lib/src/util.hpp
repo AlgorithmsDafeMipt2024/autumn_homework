@@ -20,26 +20,6 @@ public:
     std::vector<int>& operator[](int key);
 };
 
-class MatrixOrientedGraph {
-    // Matrix of connections.
-    // First index is a key of the beginning vertex;
-    // Second index is a key of the end vertex.
-    // 0  -- vertices are not connected;
-    // >0 -- vertices are connected
-    std::vector<std::vector<int>> _connections;
-public:
-    // Creates empty connection matrix.
-    // int V : amount of vertices. 
-    MatrixOrientedGraph(int V);
-    // Copies `connections` matrix into `_connections`.
-    MatrixOrientedGraph(std::vector<std::vector<int>> const& connections);
-
-    // Returns the integer to tell if an edge exists.
-    // First index is a key of the beginning vertex;
-    // Second index is a key of the end vertex.
-    std::vector<int>& operator[](int first);
-};
-
 
 class OrientedWeightedGraph {
     // Matrix of weights.
