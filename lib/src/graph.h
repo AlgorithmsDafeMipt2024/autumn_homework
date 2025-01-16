@@ -10,6 +10,7 @@ class Graph {
     double lenght;
 
     vert_neigh(int name, double lenght) : name{name}, lenght{lenght} {}
+    vert_neigh(std::pair<int, double> p) : name{p.first}, lenght{p.second} {}
   };
 
  public:
