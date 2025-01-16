@@ -1,9 +1,5 @@
 
 #include <gtest/gtest.h>
-#include <limits>
-#include <vector>
-#include "bell_john.hpp"
-#include "util.hpp"
 
 TEST(Johnson, Simple) {
   // std::vector<double> expected = {-4., -2., 3., 0., -6.};
