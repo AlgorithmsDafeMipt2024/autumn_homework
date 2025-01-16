@@ -13,15 +13,6 @@ int EdgeOrientedGraph::size() { return _ways.size(); }
 std::vector<int>& EdgeOrientedGraph::operator[] (int key) { return _ways[key]; }
 
 
-MatrixOrientedGraph::MatrixOrientedGraph(int V) {
-    _connections = std::vector<std::vector<int>>(V, std::vector<int>(V));
-}
-
-MatrixOrientedGraph::MatrixOrientedGraph(std::vector<std::vector<int>> const& connections) : _connections(connections) {}
-
-std::vector<int>& MatrixOrientedGraph::operator[](int first) { return _connections[first]; }
-
-
 OrientedWeightedGraph::OrientedWeightedGraph(int V) {
     _weights = std::vector<std::vector<double>>(V, 
         std::vector<double>(V, std::numeric_limits<double>::infinity()));
