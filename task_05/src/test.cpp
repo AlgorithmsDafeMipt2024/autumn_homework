@@ -7,7 +7,7 @@ TEST(sparse_table_get_min, Test_1) {
   std::vector<double> data({1, 5, 8, 6, 7, 4, 3, 2});
   auto sp_table = rmq_sparse_table(data);
 
-  std::vector<std::vector<double>> check_sparse_table = {
+  std::vector<std::vector<double>> const check_sparse_table = {
       {1, 5, 8, 6, 7, 4, 3, 2},
       {std::numeric_limits<double>::infinity(), 1, 5, 6, 6, 4, 3, 2},
       {std::numeric_limits<double>::infinity(),

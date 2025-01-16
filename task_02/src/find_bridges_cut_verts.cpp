@@ -133,5 +133,8 @@ std::vector<int> get_cut_verts_taryan(Graph& g) {
   std::vector<bool> visited(g.size(), false);
   for (int i = 1; i < g.size(); ++i)
     if (!visited[i]) dfs_taryan_verts(g, visited, tin, fup, cut_verts, time, i);
+  std::sort(cut_verts.begin(), cut_verts.end());
+  cut_verts.erase(std::unique(cut_verts.begin(), cut_verts.end()),
+                  cut_verts.end());
   return cut_verts;
 }
