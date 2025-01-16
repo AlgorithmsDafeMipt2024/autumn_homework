@@ -3,12 +3,11 @@
 #include <vector>
 #include "solution.h"
 
-
 int main() {
   std::vector<node> nodes;
   std::vector<int> ans;
 
-  int N=5;
+  int N = 5;
   nodes.resize(N);
   // список ребер
   /*nodes[1 2);*/
@@ -19,12 +18,12 @@ int main() {
   nodes[3].neighbours.push_back(4);
   nodes[4].neighbours.push_back(1);
   nodes[4].neighbours.push_back(2);
-  for(int i =0; i<N;i++){
+  for (int i = 0; i < N; i++) {
     nodes[i].id = i;
   }
 
-  for(int i = 0;i<ans.size();i++){
-    std::cout<<ans[i]<<"\n";
+  for (int i = 0; i < ans.size(); i++) {
+    std::cout << ans[i] << "\n";
   }
 
   bool flag = true;
@@ -47,10 +46,9 @@ int main() {
   /**/
   /*ans = solution(nodes);*/
 
-  for(int i = ans.size()-1;i>=0;i--){
-    std::cout<<ans[i]<<" ";
+  for (int i = ans.size() - 1; i >= 0; i--) {
+    std::cout << ans[i] << " ";
   }
-
 
   return 0;
 }
