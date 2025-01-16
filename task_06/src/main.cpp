@@ -1,4 +1,4 @@
-#include <LCA.h>
+#include <Lca.h>
 
 #include <iostream>
 

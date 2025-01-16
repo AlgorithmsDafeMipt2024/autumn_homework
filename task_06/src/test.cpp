@@ -1,4 +1,4 @@
-#include <LCA.h>
+#include <Lca.h>
 #include <gtest/gtest.h>
 
 TEST(LCATest, Simple) {
