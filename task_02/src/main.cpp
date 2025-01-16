@@ -1,8 +1,7 @@
+#include <SearchWeakVE.h>
 #include <includes.h>
 
 #include <iostream>
-
-#include "SearchWeakVE.h"
 
 int main() {
   NonOrientedGraph graph;

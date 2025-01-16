@@ -1,9 +1,8 @@
+#include <SearchWeakVE.h>
 #include <gtest/gtest.h>
 #include <includes.h>
 
-#include "SearchWeakVE.h"
-
-TEST(TopologicalSort, Simple) {
+TEST(SearchWeakVETest, Simple) {
   NonOrientedGraph graph;
   graph.AddEdge(0, 1);
   graph.AddEdge(0, 2);

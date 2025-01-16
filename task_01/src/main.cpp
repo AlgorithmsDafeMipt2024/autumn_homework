@@ -1,6 +1,5 @@
 #include <includes.h>
-
-#include "topologicalSort.h"
+#include <topologicalSort.h>
 
 std::ostream& operator<<(std::ostream& os, const std::vector<int>& vec) {
   for (int i = 0; i < vec.size(); ++i) os << vec[i] << ", ";

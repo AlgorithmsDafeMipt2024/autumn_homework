@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
 #include <includes.h>
+#include <topologicalSort.h>
 
-#include "topologicalSort.h"
-
-TEST(TopologicalSort, Simple) {
+TEST(TopologicalSortTest, Simple) {
   OrientedGraph graph;
   graph.AddEdge(0, 3);
   graph.AddEdge(3, 1);

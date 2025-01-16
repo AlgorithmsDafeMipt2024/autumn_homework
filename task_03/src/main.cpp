@@ -1,10 +1,9 @@
+#include <BellmanForlAlgorithm.h>
+#include <DeikstraAlgorithm.h>
+#include <JonsonAlgorithm.h>
 #include <includes.h>
 
 #include <iostream>
-
-#include "BellmanForlAlgorithm.h"
-#include "DeikstraAlgorithm.h"
-#include "JonsonAlgorithm.h"
 
 int main() {
   WeightedNonOrientedGraph graph;

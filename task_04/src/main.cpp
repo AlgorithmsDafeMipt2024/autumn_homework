@@ -1,6 +1,6 @@
-#include <iostream>
+#include <DeikstraAlgorithm.h>
 
-#include "DeikstraAlgorithm.h"
+#include <iostream>
 
 int main() {
   WeightedNonOrientedGraph graph;

@@ -1,7 +1,6 @@
+#include <JonsonAlgorithm.h>
 #include <gtest/gtest.h>
 #include <includes.h>
-
-#include "JonsonAlgorithm.h"
 
 bool operator==(const OrientedWeightedGraphWithZeroWeight& first,
                 const OrientedWeightedGraphWithZeroWeight& second) {
@@ -14,7 +13,7 @@ bool operator==(const OrientedWeightedGraphWithZeroWeight& first,
   return true;
 }
 
-TEST(TopologicalSort, Simple) {
+TEST(JonsonAlgorithmTest, Simple) {
   WeightedOrientedGraph test_graph;
   test_graph.AddEdge(0, 1, 2);
   test_graph.AddEdge(0, 2, 3);

@@ -9,7 +9,7 @@ bool operator==(const DeikstraReturn& first, const DeikstraReturn& second) {
   return true;
 }
 
-TEST(TopologicalSort, Simple) {
+TEST(DeikstraAlgorithmTest, Simple) {
   WeightedNonOrientedGraph graph;
   graph.AddEdge(0, 1, 10);
   graph.AddEdge(0, 2, 2);
