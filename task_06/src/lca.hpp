@@ -21,7 +21,6 @@ class LCA {
  private:
   std::vector<std::vector<int>> sparse_table;
   std::vector<int> depth;
-  int n;
 
   void dfs_mark_depth(const Graph& g, int v, int p);
 };

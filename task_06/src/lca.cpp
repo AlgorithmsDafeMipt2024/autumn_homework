@@ -65,7 +65,7 @@ std::vector<std::vector<double>> rmq_sparse_table(std::vector<double>& data) {
   auto end = data.begin();
   for (int i = 0; i < sparse_table.size(); ++i) {
     for (int j = data.size() - 1; j >= 0; --j) {
-      wide = std::pow(2, i);
+      wide = (1 << i);
       end = data.begin() + j + 1;
       start = end - wide;
       if (start >= data.begin()) {
@@ -92,7 +92,7 @@ double get_min_from_sparse_table(std::vector<std::vector<double>>& sparse_table,
 
 std::vector<std::vector<double>> lca_sparse_table(Graph& g,
                                                   std::vector<int>& top_sort) {
-  int root = top_sort[0];
+  int const root = top_sort[0];
   std::vector<double> data_for_sparse_table(g.size(), -1);
 
   int depth = 0;
@@ -120,7 +120,7 @@ std::vector<std::vector<double>> lca_sparse_table(Graph& g,
 }
 
 LCA::LCA(const Graph& g, int root) {
-  const int height = std::floor(log2(g.size()) + 1);
+  const int height = std::floor(std::log2(g.size()) + 1);
   sparse_table =
       std::vector<std::vector<int>>(g.size(), std::vector<int>(height, -1));
   depth = std::vector<int>(g.size(), -1);
@@ -137,7 +137,7 @@ int LCA::get_parent(int u, int v) {
   if (depth[u] < depth[v]) {
     int t = v;
     v = u;
-    u = v;
+    u = t;
   }
   int height = sparse_table[0].size();
   for (int i = height - 1; i >= 0; i--) {
