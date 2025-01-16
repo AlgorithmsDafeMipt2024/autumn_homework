@@ -52,11 +52,11 @@ std::vector<int>* topological_sort_dfs_rec(Graph& g) {
 
 std::vector<double> belllman_ford(Graph& g, int start_vert) {
   std::vector<double> dists(g.size(), std::numeric_limits<double>::max());
-  std::vector<int> top_order = *topological_sort_dfs_rec(g);
+  std::vector<int> const top_order = *topological_sort_dfs_rec(g);
   dists[start_vert] = 0;
 
   for (int i = 0; i < g.size() - 1; ++i) {
-    for (int v : top_order) {
+    for (int const v : top_order) {
       for (auto child : g.adjacents[v]) {
         if (dists[v] > dists[child.name] + child.lenght) {
           dists[v] = dists[child.name] + child.lenght;
@@ -65,7 +65,7 @@ std::vector<double> belllman_ford(Graph& g, int start_vert) {
     }
   }
 
-  for (int v : top_order) {
+  for (int const v : top_order) {
     for (auto child : g.adjacents[v]) {
       if (dists[start_vert] > dists[child.name] + child.lenght) {
         throw std::runtime_error("Graph contains negative cycles!");
