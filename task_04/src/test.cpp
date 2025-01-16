@@ -1,6 +1,5 @@
-
 #include <gtest/gtest.h>
-#include "main.cpp"
+#include "dijkstra.hpp"
 
 TEST(DijkstraTest, Simple) {
   std::vector<std::map<int, double>> data = {{{1, 8}, {2, 2}}, {{3, 4}}, {{1, 3}}, {}};
