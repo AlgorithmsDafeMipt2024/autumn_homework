@@ -23,8 +23,8 @@ void weak_edge(std::vector<std::vector<int>> &data, std::vector<bool> &visited,
   }
 }
 
-std::vector<std::pair<int, int>>
-cutting_edge(std::vector<std::vector<int>> &data) {
+std::vector<std::pair<int, int>> cutting_edge(
+    std::vector<std::vector<int>> &data) {
   int const time = 0;
   std::vector<int> time_in(data.size(), -1);
   std::vector<int> min_time_in(data.size(), -1);
