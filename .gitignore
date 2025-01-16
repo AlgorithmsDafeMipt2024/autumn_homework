@@ -13,3 +13,7 @@ _deps
 .cache/*
 .vscode/*
 build/*
+.vs
+WeightedGraph.i
+out
+CMakeSettings.json

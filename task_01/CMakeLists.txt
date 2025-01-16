@@ -17,7 +17,7 @@ list(REMOVE_ITEM source_list ${test_list})
 
 include_directories(${PROJECT_NAME} PUBLIC src)
 
-add_executable(${PROJECT_NAME} ${source_list})
+add_executable(${PROJECT_NAME} ${source_list} "../lib/src/topologicalSort.cpp")
 
 # Locate GTest
 enable_testing()
@@ -29,7 +29,7 @@ find_library(Utils ../)
 target_link_libraries(${PROJECT_NAME} PUBLIC Utils)
 
 # Link runTests with what we want to test and the GTest and pthread library
-add_executable(${PROJECT_NAME}_tests ${test_source_list})
+add_executable(${PROJECT_NAME}_tests ${test_source_list} "../lib/src/topologicalSort.cpp")
 target_link_libraries(
   ${PROJECT_NAME}_tests
   GTest::gtest_main
