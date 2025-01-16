@@ -1,9 +1,5 @@
 
 #include <gtest/gtest.h>
-#include <limits>
-#include <vector>
-#include "dijkstra.hpp"
-#include "util.hpp"
 
 TEST(Dijkstra, Simple) {
   // std::vector<double> expected = {0., 7., 9., 20., 20., 11.};
