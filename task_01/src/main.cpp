@@ -1,7 +1,8 @@
-#include "solution.h"
 #include <cmath>
 #include <iostream>
 #include <vector>
+
+#include "solution.h"
 
 int main() {
   std::vector<node> nodes;

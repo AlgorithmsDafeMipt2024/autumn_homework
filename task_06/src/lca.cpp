@@ -10,12 +10,10 @@ static std::vector<std::vector<int>> up;
 void dfs(int v, std::vector<std::vector<int>> &g, int p = 0) {
   tin[v] = ++timer;
   up[v][0] = p;
-  for (int i = 1; i <= l; ++i)
-    up[v][i] = up[up[v][i - 1]][i - 1];
+  for (int i = 1; i <= l; ++i) up[v][i] = up[up[v][i - 1]][i - 1];
   for (size_t i = 0; i < g[v].size(); ++i) {
     int to = g[v][i];
-    if (to != p)
-      dfs(to, g, v);
+    if (to != p) dfs(to, g, v);
   }
   tout[v] = ++timer;
 }
@@ -29,10 +27,8 @@ std::vector<int> lca(std::vector<std::vector<int>> &g,
   tin.resize(g.size()), tout.resize(g.size()), up.resize(g.size());
   std::vector<int> ret = {};
   l = 0;
-  while ((1 << l) <= g.size())
-    ++l;
-  for (int i = 0; i < g.size(); ++i)
-    up[i].resize(l + 1);
+  while ((1 << l) <= g.size()) ++l;
+  for (int i = 0; i < g.size(); ++i) up[i].resize(l + 1);
   dfs(0, g);
   for (auto &dds : dd) {
     int a = dds.first, b = dds.second;
@@ -46,8 +42,7 @@ std::vector<int> lca(std::vector<std::vector<int>> &g,
       continue;
     }
     for (int i = l; i >= 0; --i)
-      if (!upper(up[a][i], b))
-        a = up[a][i];
+      if (!upper(up[a][i], b)) a = up[a][i];
     ret.push_back(up[a][0]);
   }
   return ret;

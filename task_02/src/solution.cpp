@@ -1,4 +1,5 @@
 #include "solution.h"
+
 #include <utility>
 #include <vector>
 
@@ -18,11 +19,9 @@ void dfs_lockers(std::vector<node> &nodes, int v = 0, int p = -1) {
       else {
         dfs_lockers(nodes, u, v);
         d[v] = std::min(d[v], d[u]);
-        if (h[v] <= d[u]) { // корень (p == -1) обрабатываем отдельно
-          if (h[v] != d[u])
-            bridges.push_back(std::pair<int, int>(v, u));
-          if (p != -1)
-            lockers.push_back(v);
+        if (h[v] <= d[u]) {  // корень (p == -1) обрабатываем отдельно
+          if (h[v] != d[u]) bridges.push_back(std::pair<int, int>(v, u));
+          if (p != -1) lockers.push_back(v);
         }
         children++;
       }
@@ -37,9 +36,9 @@ void dfs_bridges(std::vector<node> &nodes, int v = 0, int p = -1) {
   d[v] = h[v] = (p == -1 ? 0 : h[p] + 1);
   for (auto u : nodes[v].neighbours) {
     if (u != p) {
-      if (used[u]) // если ребро обратное
+      if (used[u])  // если ребро обратное
         d[v] = std::min(d[v], h[u]);
-      else { // если ребро прямое
+      else {  // если ребро прямое
         dfs_bridges(nodes, u, v);
         d[v] = std::min(d[v], d[u]);
         if (h[v] < d[u]) {
@@ -50,8 +49,8 @@ void dfs_bridges(std::vector<node> &nodes, int v = 0, int p = -1) {
   }
 }
 
-std::pair<std::vector<std::pair<int, int>>, std::vector<int>>
-solution(std::vector<node> nodes) {
+std::pair<std::vector<std::pair<int, int>>, std::vector<int>> solution(
+    std::vector<node> nodes) {
   used.resize(nodes.size());
   h.resize(nodes.size());
   d.resize(nodes.size());

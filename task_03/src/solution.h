@@ -4,12 +4,12 @@
 #include <vector>
 
 class node {
-public:
-  std::vector<std::pair<int, int>> neighbours; // {id, size}
+ public:
+  std::vector<std::pair<int, int>> neighbours;  // {id, size}
   int id;
   int len = 0;
   int pot = 0;
-  bool locked = false; //
+  bool locked = false;  //
   bool wisited = false;
 };
 
@@ -19,4 +19,4 @@ bool bellford(std::vector<node> &nodes /*, int start*/);
 
 std::vector<std::vector<int>> jonson(std::vector<node> nodes);
 
-#endif // !__DEIXTRA_H__
+#endif  // !__DEIXTRA_H__

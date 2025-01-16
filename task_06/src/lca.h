@@ -5,4 +5,4 @@
 std::vector<int> lca(std::vector<std::vector<int>> &g,
                      std::vector<std::pair<int, int>> dd);
 
-#endif // !__LCA_H__
+#endif  // !__LCA_H__

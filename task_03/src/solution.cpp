@@ -1,11 +1,12 @@
 #include "solution.h"
+
 #include <cmath>
 #include <limits>
 #include <queue>
 #include <vector>
 
 void deixtra(std::vector<node> &nodes, int start) {
-  std::priority_queue<std::pair<int, int>> qqe; // {len, id}
+  std::priority_queue<std::pair<int, int>> qqe;  // {len, id}
   node *current;
   int tmp;
   for (auto &i : nodes) {

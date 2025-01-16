@@ -1,7 +1,8 @@
-#include "solution.h"
 #include <cmath>
 #include <iostream>
 #include <vector>
+
+#include "solution.h"
 
 /*
  ______________________
@@ -26,7 +27,7 @@ int main() {
 
   int n, k = 0, tmp, N;
   N = 4;
-  tmp = 4; // колич
+  tmp = 4;  // колич
   nodes.resize(N);
   // список ребер
   std::vector<std::pair<int, int>> loh = {{0, 1}, {1, 2}, {2, 3}, {0, 2}};

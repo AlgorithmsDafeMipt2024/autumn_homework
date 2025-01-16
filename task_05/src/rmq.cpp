@@ -1,4 +1,5 @@
 #include "rmq.h"
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -18,9 +19,7 @@ std::vector<int> rmq(int *A, int sz, std::vector<std::pair<int, int>> brd) {
     minn.push_back({});
     for (int i = 1; i < minn[tmp - 1].size(); i += 2) {
       minn[tmp].push_back(std::min(minn[tmp - 1][i - 1], minn[tmp - 1][i]));
-      /*std::cout<<std::min(minn[tmp-1][i-1], minn[tmp-1][i])<<" ";*/
     }
-    /*std::cout<<"\n";*/
     minn[tmp].push_back(std::numeric_limits<int>::max());
     tmp++;
   }
@@ -41,7 +40,6 @@ std::vector<int> rmq(int *A, int sz, std::vector<std::pair<int, int>> brd) {
     }
     j--;
     int start = i.first / powers[j], stop = i.second / powers[j];
-    /*std::cout <<start<<" "<<stop<<" "<<j<<"\n";*/
 
     for (int k = start + 1; k < stop; k++) {
       minC = std::min(minC, minn[j][k]);
@@ -60,10 +58,7 @@ std::vector<int> rmq(int *A, int sz, std::vector<std::pair<int, int>> brd) {
     if (minC > minn[k][start] && k > 0) {
       start = (start + 1) * powers[j];
       while ((--k) >= 0) {
-        /*std::cout<<start<<"s ";*/
         for (; start >= i.first; start -= powers[k]) {
-          /*std::cout<< "\n"<<k<<" "<<start/powers[k]<<" " <<
-           * minn[k][start/powers[k]]<<"\n";*/
           minC = std::min(minC, minn[k][start / powers[k]]);
         }
       }
