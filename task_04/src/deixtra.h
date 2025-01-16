@@ -4,21 +4,15 @@
 #include <queue>
 #include <vector>
 
-
 class node {
-public:
-  std::vector<std::pair<int, int>> neighbours; // {id, size}
+ public:
+  std::vector<std::pair<int, int>> neighbours;  // {id, size}
   int id;
   int len;
-  bool locked = false; //
+  bool locked = false;  //
   bool wisited = false;
 };
 
+void deixtra(std::vector<node>& nodes, int start);
 
-void deixtra(std::vector<node> &nodes, int start);
-
-
-
-
-
-#endif // !__DEIXTRA_H__
+#endif  // !__DEIXTRA_H__
