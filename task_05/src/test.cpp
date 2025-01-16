@@ -5,27 +5,11 @@
 
 TEST(sparse_table_get_min, Test_1) {
   std::vector<double> data({1, 5, 8, 6, 7, 4, 3, 2});
-  auto sp_table = rmq_sparse_table(data);
-
-  std::vector<std::vector<double>> const check_sparse_table = {
-      {1, 5, 8, 6, 7, 4, 3, 2},
-      {std::numeric_limits<double>::infinity(), 1, 5, 6, 6, 4, 3, 2},
-      {std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(), 1, 5, 4, 3, 2},
-      {std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(),
-       std::numeric_limits<double>::infinity(), 1}};
-
-  ASSERT_EQ(sp_table == check_sparse_table, true);
+  RMQ rmq(data);
 
   for (int i = 0; i < data.size(); ++i) {
     for (int j = i; j < data.size(); ++j) {
-      ASSERT_EQ(get_min_from_sparse_table(sp_table, i, j),
+      ASSERT_EQ(rmq.get_min(i, j),
                 *std::min_element(data.begin() + i, data.begin() + j + 1));
     }
   }
@@ -33,11 +17,11 @@ TEST(sparse_table_get_min, Test_1) {
 
 TEST(get_min, Test_1) {
   std::vector<double> data({3, 8, 6, 4, 2, 5, 9, 0, 7, 1});
-  auto sp_table = rmq_sparse_table(data);
+  RMQ rmq(data);
 
   for (int i = 0; i < data.size(); ++i) {
     for (int j = i; j < data.size(); ++j) {
-      ASSERT_EQ(get_min_from_sparse_table(sp_table, i, j),
+      ASSERT_EQ(rmq.get_min(i, j),
                 *std::min_element(data.begin() + i, data.begin() + j + 1));
     }
   }
@@ -129,11 +113,11 @@ TEST(get_min_big_array, Test_1) {
        427,  2809, 851,  788,  2022, 775,  2266, 3301, 563,  310,  3616, 1939,
        1538, 3531, 1294, 1654, 2073, 2074, 139,  2995, 2151, 2942, 3049, 2734,
        1165, 3072, 293,  347});
-  auto sp_table = rmq_sparse_table(data);
+  RMQ rmq(data);
 
   for (int i = 0; i < data.size(); ++i) {
     for (int j = i; j < data.size(); ++j) {
-      ASSERT_EQ(get_min_from_sparse_table(sp_table, i, j),
+      ASSERT_EQ(rmq.get_min(i, j),
                 *std::min_element(data.begin() + i, data.begin() + j + 1));
     }
   }
