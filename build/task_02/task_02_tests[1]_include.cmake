@@ -1,0 +1,5 @@
+if(EXISTS "/workspaces/autumn_homework/build/task_02/task_02_tests[1]_tests.cmake")
+  include("/workspaces/autumn_homework/build/task_02/task_02_tests[1]_tests.cmake")
+else()
+  add_test(task_02_tests_NOT_BUILT task_02_tests_NOT_BUILT)
+endif()
